@@ -1,0 +1,1 @@
+﻿angular.module('helpers', ['angular.filter',/* 'transformModule', */'signalRModule', 'radialModule', 'clock', 'timer', 'imageTemplates', 'scoreTemplates', 'priorityTemplates', 'fastWidth', 'daterangepicker', 'ajaxHtml', 'anywhereButHere', 'fcsa-number', 'elementReady', 'rightClick', 'tableSort', "LiveSearch", "ngMaterial", 'md.data.table', 'vs-repeat']);

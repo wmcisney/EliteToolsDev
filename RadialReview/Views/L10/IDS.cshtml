@@ -1,0 +1,108 @@
+﻿@model RadialReview.Models.L10.VM.L10MeetingVM
+@{
+    ViewBag.Title = "IDS";
+    Layout = "~/Views/L10/BasePage.cshtml";
+    var guid = Guid.NewGuid().ToString();
+}
+
+<div class="meeting-page ids prioritization-@Model.Recurrence.Prioritization">
+    <div class="row">
+        <div class="col-md-8">
+            <hgroup class="page-header  listing fixed-pos">
+                <div class="pull-right">
+                    <div class="btn-group  smallBreak">
+                        <a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="icon fontastic-icon-thumbnails fontastic-ic1on-star-3"></span> <span class="mode-button">Columns </span>
+                        </a>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a class="clickable " onclick="changeMode('Reorder')"><span class="icon fontastic-icon-thumbnail1s fontastic-icon-align-righ1t"></span> 1 Column</a></li>
+                            <li><a class="clickable " onclick="changeMode('Prioritize (2 Columns)')"><span class="icon fontastic-icon-thumbnail1s"></span> 2 Columns</a></li>
+                            <li><a class="clickable " onclick="changeMode('Prioritize (3 Columns)')"><span class="icon fontastic-icon-thumbnail1s"></span> 3 Columns</a></li>
+                            <li><a class="clickable " onclick="changeMode('Prioritize (4 Columns)')"><span class="icon fontastic-icon-thumbnail1s"></span> 4 Columns</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group smallBreak">
+                        <a class="btn btn-default btn-xs unstar-all " onclick="unstarAll()">
+                            @*<span class="icon fontastic-icon-star-2"></span>*@ <span class="sort-button">Clear Selection</span>
+                        </a>
+                    </div>
+                    <div class="btn-group smallBreak">
+                        <a class="btn btn-default btn-xs" onclick="sortIssueByCurrent(recurrenceId,$('.issues-list'))">
+                            <span class="icon fontastic-icon-sort-amount-two"></span> <span class="sort-button">Sort</span>
+                        </a>
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" style="padding:1px 3px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a class="clickable show-priority" onclick="sortIssueBy(recurrenceId,$('.issues-list'),'data-priority','Votes',-1)"> By Votes</a></li>
+                            <li><a class="clickable show-rank " onclick="sortIssueBy(recurrenceId,$('.issues-list'),'data-rank','Priority')"> By Priority (1,2 &amp; 3)</a></li>
+                            <li><a class="clickable " onclick="sortIssueBy(recurrenceId,$('.issues-list'),'data-owner','Owner')"> By Owner</a></li>
+                            <li><a class="clickable " onclick="sortIssueBy(recurrenceId,$('.issues-list'),'data-createtime','Date Created',1)"> By Date Created (Oldest First)</a></li>
+                            <li><a class="clickable " onclick="sortIssueBy(recurrenceId,$('.issues-list'),'data-createtime','Date Created',-1)"> By Date Created (Newest First)</a></li>
+                            <li><a class="clickable " onclick="sortIssueBy(recurrenceId,$('.issues-list'),'data-message','Alphabetically',1)"> Alphabetically</a></li>
+                        </ul>
+                    </div>
+                    @Html.Partial("partial/ButtonBar", Model)
+                </div>
+                <h2 class="l10-page-title">@ViewBag.Heading<small class="hidden-md hidden-sm">@(new MvcHtmlString(ViewBag.Subheading))</small></h2>
+            </hgroup>
+            <div class="issues-container prioritization-@Model.Recurrence.Prioritization" style="margin-bottom:128px;">
+                <ol class="issues-list sortable init-@(guid)">
+                    @foreach (var i in Model.Issues.OrderBy(x => x.Ordering).ThenByDescending(x => x.CreateTime)) {@Html.Partial("~/Views/L10/partial/IssueRow.cshtml", i, new ViewDataDictionary() { { "CanEdit", Model.CanEdit }, { "MeetingId", Model.Meeting.Id } })}
+                </ol>
+            </div>
+
+        </div>
+        <div class="col-md-4 hidden-xs hidden-sm">
+            <div style="">
+                <div class="fixed-pos">
+                    <div class="hidden-lg hidden-md" style="height: 25px;"></div>
+                    <hgroup class="page-header details">
+                        <h4>Notes</h4>
+                    </hgroup>
+                    <div class="component" id="issueDetails"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*@if (Model.IsPreview) {
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" id="exit_preview_meeting_button" class="btn btn-primary center btn-lg concludeButton"><i class="icon fontastic-icon-projection-screen pull-left"></i> Exit Preview</button>
+        </div>
+    </div>
+}*@
+<script>
+	window.recurrenceId = @Model.Recurrence.Id;
+	window.meetingId = @Model.Meeting.Id;
+	var oldContainer;
+	var oldIssueList;
+
+    $(function () {
+		refreshCurrentIssueDetails();
+		$(".issues-list").sortable({
+			group: 'nested',
+			handle: '.move-icon',
+			onDrop: function($item, container, _super, event) {
+				if ($item.hasClass("issue-row")) {
+					_super($item, container);
+					updateIssuesList(@Model.Recurrence.Id, $(".issues-list"));
+					refreshCurrentIssueDetails();
+				} else {
+					_super($item, container);
+					updateTodoList(@Model.Recurrence.Id, $(".todo-list"));
+					refreshCurrentTodoDetails();
+				}
+			}
+		});
+        oldIssueList = getIssueOrder();
+
+        /*$('#exit_preview_meeting_button').click(function () {
+            window.location.reload();
+        });*/
+	});
+
+</script>

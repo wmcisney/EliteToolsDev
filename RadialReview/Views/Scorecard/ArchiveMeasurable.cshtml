@@ -1,0 +1,152 @@
+﻿@model RadialReview.Controllers.ScorecardController.ArchiveMeasurablesVM
+
+@{
+	var adminAll = Model.Items.All(x => x.CanAdmin);
+	var archiveTitle = "Remove this measurable from all meetings and archive it.";
+	if (adminAll && !ViewBag.CanArchive) {
+		archiveTitle = "You cannot archive this measurable because you aren't allowed to edit this measurable.";
+	} else if (!adminAll && ViewBag.CanArchive) {
+		archiveTitle = "You cannot archive this measurable because you aren't allowed to edit all the meetings it is attached to.";
+	}
+
+	if (Model.Items.Count == 1 ) {
+		Model.ArchiveAll = true;
+		Model.Selected["" + Model.Items.First().RecurrenceId] = "true";
+	}
+
+	if (Model.Items.Count == 0) {
+		Model.ArchiveAll = true;
+	}
+
+	object archiveHelperOptions = new { };
+	if (!ViewBag.CanArchive) {
+		archiveHelperOptions = new {
+			disabled = true,
+			@class = "disabled"
+		};
+	}
+
+	var guid = Html.NewGuid();
+
+}
+<div class="checkbox-form archive-measurable-modal modal-@(guid)">
+	@Html.HiddenFor(x => x.MeasurableId)
+	@if (Model.Items.Any()) {
+
+		<div class="row smallBreak2">
+			<div class="col-md-7"><b>Remove from meetings:</b></div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-1">
+				@foreach (var item in Model.Items) {
+					<div>
+						<input type="checkbox"
+							   id="@("Selected[" + item.RecurrenceId + "]")"
+							   title="@(item.CanAdmin ? "" : "You cannot edit this meeting.")" @(item.CanAdmin ? "" : "disabled")
+							   class="@(item.CanAdmin ? "" : "disabled") pull-left meeting-boxes"
+							   name="@("Selected[" + item.RecurrenceId + "]")"
+							   @(Model.Selected["" + item.RecurrenceId] == "true" ? "checked" : "") />
+						<label for="@("Selected[" + item.RecurrenceId + "]")" class="control-label alignLeft">@(item.RecurrenceName)</label>
+					</div>
+				}
+			</div>
+		</div>
+		<br />
+		<div class="row smallBreak2">
+			<div class="col-md-7"><b>More actions:</b></div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-1">
+				<div class="@(ViewBag.CanArchive?"":"disabled")" title="@(archiveTitle)">
+					@Html.CheckBoxFor(x => x.ArchiveAll, archiveHelperOptions)
+					<label for="@(Html.IdFor(x=>x.ArchiveAll))">
+						Move measurable to the archives
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-1">
+				<br />
+				<div class="description gray"></div>
+			</div>
+		</div>
+	} else {
+		@Html.HiddenFor(x => x.ArchiveAll)
+		<div class="row">
+			<div class="col-md-6">
+				<b>Are you sure you want to <abbr title='Removes this measurable from the workspace and remove it from its owner'>Archive</abbr> this measurable?</b>
+			</div>
+		</div>
+	}
+
+</div>
+
+
+<style>
+	.archive-measurable-modal .subHead {
+		font-size: 120%;
+		margin-bottom: 15px;
+	}
+</style>
+
+<script>
+	function update@(guid)() {
+		var archiveBox = $(".modal-@(guid) #@(Html.IdFor(x=>x.ArchiveAll))");
+		var meetingBoxes = $(".modal-@(guid) .meeting-boxes");
+
+		var archiveChecked = archiveBox.is(":checked");
+		var checkLength = $(".modal-@(guid) .meeting-boxes:checked").length;
+
+		var message = "";
+		debugger;
+		if (archiveChecked) {
+			var archive = "<abbr title='Removes this measurable from the workspace and remove it from its owner'>Archives</abbr>";
+			if (checkLength == 0) {
+				message = archive+" this measurable in the software.";
+			}else if (checkLength == 1) {
+				message = "Remove the measurable from the selected meeting <i>and</i> "+archive+" it.";
+			} else {
+				message = "Remove the measurable from the selected meetings <i>and</i> "+archive+" it.";
+			}
+		} else {
+			var archive = "<abbr title='Leave this measurable on the workspace and keep it attached to its owner'>Archive</abbr>";
+			if (checkLength == 0) {
+
+			} else if (checkLength == 1) {
+				message = "Remove the measurable from the selected meeting, but <i>don't</i> " + archive +" it.";
+			} else {
+				message = "Remove the measurable from the selected meetings, but <i>don't</i> " + archive + " it.";
+			}
+		}
+		console.log("updated message: " + message);
+		$(".modal-@(guid) .description").html(message);
+	}
+	update@(guid)();
+
+
+	(function () {
+		$(".modal-@(guid)").on("click", "[type=checkbox]", function () {
+			var archiveBox = $(".modal-@(guid) #@(Html.IdFor(x=>x.ArchiveAll))");
+			var meetingBoxes = $(".modal-@(guid) .meeting-boxes");
+			var archiveChecked = archiveBox.is(":checked");
+			var allMeetingChecked = meetingBoxes.length != $(".modal-@(guid) .meeting-boxes:checked").length;
+
+			if (archiveBox.is(this)) {
+				meetingBoxes.attr('checked', true);
+				meetingBoxes.prop('checked', true);
+			} else {
+				if (archiveChecked) {
+					if (allMeetingChecked) {
+						archiveBox.attr('checked', false);
+						archiveBox.prop('checked', false);
+					}
+				}
+			}
+			update@(guid)();
+		});
+
+		$("#modalTitle").html("Archive '@(Html.Raw(HttpUtility.JavaScriptStringEncode(Model.MeasurableName)))'");
+
+	})();
+</script>

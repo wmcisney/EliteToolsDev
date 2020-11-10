@@ -1,0 +1,131 @@
+﻿@model RadialReview.Models.ViewModels.OrgPositionsViewModel
+
+@{
+	ViewBag.Title = "Positions";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Page = "Positions";
+}
+
+@section top{
+	<div class="jumbotron">
+		<h1>Manage</h1>
+	</div>
+}
+
+@*@section header{
+		@Html.Partial("Partial/manageheader")
+	}*@
+
+
+@using (var v = Html.BeginStyles()) {
+	<style>
+		.viewEdit {
+			opacity: .1;
+		}
+
+		span:hover .viewEdit {
+			opacity: 1;
+		}
+	</style>
+	@Styles.Render("~/Content/ManageCSS")
+}
+
+<div class="panel panel-primary">
+	@if (Model.CanEdit) {
+		<div class="panel-heading-button">
+			<button class="btn btn-default fullWidth plus" onclick="@Html.ShowModal("Create Position", "/Position/Modal", "/Position/Modal")">Add</button>
+		</div>
+	}
+	<div class="panel-heading">
+		<h3 class="panel-title">Manage Positions</h3>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-condensed table-hover">
+			<thead>
+				<tr>
+					<th style="width:100px" class="nowrap">Position Title</th>
+					@*<th style="">Job Class</th>
+						<th style="width:1px" class="">Questions</th>*@
+					<th style="width:100%" class="alignLeft">People with this position</th>
+					<th style="width:1px;">
+					</th>
+					<th style="width:1px" class=""></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var p in Model.Positions.OrderBy(x => x.Name)) {
+					<tr class="row_@p.Id ">
+						<td class="nowrap" style="padding-right:10px;">
+							@p.Name
+						</td>
+						<td class="alignLeft" style="padding-right:15px;">
+							@p.NumPeople
+						</td>
+						<td>
+							@if (Model.CanEdit) {
+								<span onclick="@Html.ShowModal("Edit Position", "/Position/Modal/" + p.Id, "/Position/Modal")" class="editButton clickable glyphicon glyphicon-pencil alignCenter"></span>
+							}
+						</td>
+						<td class="alignRight">
+							<span class="glyphicon glyphicon-trash @(p.NumPeople==0?"clickable":"gray")" style="@(p.NumPeople==0?"":"cursor:not-allowed;")" onclick="deleteRow(@p.Id,@(p.NumPeople==0),'@p.Name')" title="@(p.NumPeople == 0 ? "Delete Position" : "Position still has employees attached to it.")"></span>
+
+							@*@if (p.TemplateId == null)
+					{
+						<a href="@Url.Action("Create","UserTemplate",new {type="position",id=p.Id})">Create</a>
+					}
+					else
+					{
+						<a href="@Url.Action("Edit","UserTemplate",new {id=p.TemplateId})">Edit</a>
+					}*@
+						</td>
+						@*<td>@p.SimilarTo</td>
+				<td class="">
+					<a href="@Url.Action("Edit", "Responsibilities", new { id=p.Id})" class="fullWidth">
+						<span>
+							@Html.ViewOrEdit(Model.CanEdit) @p.NumAccountabilities
+						</span>
+					</a>
+				</td>*@
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<style>
+	.gray{
+		color:rgba(0,0,0,.3);
+	}
+</style>
+
+@using (Html.BeginScripts()) {
+<script>
+	function deleteRow(id, canDelete, name) {
+		if (canDelete) {
+			showModal({
+				title: "Are you sure you want to delete \"" + name + "\".",
+				icon: "danger",
+				success: function () {
+					$.get('/Position/Delete/' + id, function (data) {
+						if (showJsonAlert(data)) {
+							$(".row_" + id).remove();
+						}
+					});
+				}
+			});
+
+		} else {
+			showModal({
+				title: "Cannot delete position attached to users.",
+				icon: "warning"
+			});
+		}
+	}
+
+	$(function () {
+		$("table").tablesorter();
+	});
+
+</script>
+}

@@ -1,0 +1,67 @@
+﻿body.cb-redblind,
+body.cb-greenblind,
+body.cb-blueblind {
+
+	@success: #001eff;
+	@danger: #bdb00a;
+	@neutral: #767676;
+
+	/*General*/
+	.label-danger {
+		background-color: @danger;
+	}
+	.label-success {
+		background-color: @success;
+	}
+
+	/*Scorecard*/
+	.scorecard-table .score.success input,
+	.scorecard-table .score input.success,
+	.scorecard-table .score.success {
+		color: @success;
+		background-color: #accbff !important;
+	}
+	.scorecard-table .score.danger input,
+	.scorecard-table .score.danger,
+	.scorecard-table .score input.danger {
+		color: #817800;
+		background-color: #e5ca70;
+	}
+
+	/*Rocks*/
+	.rockstate input[value='AtRisk'] ~ .fill.cursor {
+		background-color: @danger;
+	}
+	.rockstate input[value='OnTrack'] ~ .fill.cursor {
+		background-color: @neutral;
+	}
+	.rockstate input[value='Complete'] ~ .fill.cursor {
+		background-color: @success;
+	}
+
+	/*Ids*/
+	.ids [data-awaitingsolve='true'][data-markedforclose='true']:not([data-checked="true"]):not([data-checked="True"]):before,
+	.ids [data-awaitingsolve='True'][data-markedforclose='true']:not([data-checked="true"]):not([data-checked="True"]):before,
+	.ids [data-awaitingsolve='true'][data-markedforclose='True']:not([data-checked="true"]):not([data-checked="True"]):before,
+	.ids [data-awaitingsolve='True'][data-markedforclose='True']:not([data-checked="true"]):not([data-checked="True"]):before {
+		background-color: fade(#001eff,50%);
+	}
+
+	/*People Tools*/
+	.people-analyzer .people-analyzer-table tbody .resp.resp-yes {
+		color: @success !important;
+	}
+	.people-analyzer .people-analyzer-table tbody .resp.resp-no {
+		color: @danger!important;
+	}
+	
+	.people-analyzer .people-analyzer-table tbody .resp.resp-often {
+		color:@success!important;
+	}
+	.people-analyzer .people-analyzer-table tbody .resp.resp-sometimes {
+		color:#c1c1c1 !important;
+	}
+	.people-analyzer .people-analyzer-table tbody .resp.resp-not-often {
+		color:@danger!important;
+	}
+}

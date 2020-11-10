@@ -1,0 +1,59 @@
+﻿@model System.Collections.Generic.List<RadialReview.Models.PhoneActionMap>
+
+@{
+	ViewBag.Title = "Phone Actions";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="text-align: right;margin-bottom: 3px;">
+	<div onclick="@Html.ShowModal("Add phone action", "/TwilioApi/ModalRecurrence", "/TwilioApi/Modal")" class="btn btn-primary" href="/Twilio/Edit">Create new phone action</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-primary startHiddennGroup">
+			<div class="panel-heading">
+				<h3 class="panel-title">Actions:</h3>
+			</div>
+			@if (Model.Any())
+			{
+				<div class="table-responsive">
+					<table class="table table-condensed tablesorter tablefilter tablesorter-default">
+						<thead>
+							<tr>
+								<th style="width: 1px;">Caller Number</th>
+								<th style="width: 1px;">Service Number</th>
+								<th style="">L10</th>
+								<th style="width: 120px">Action</th>
+								<th style="width:100px" class="alignCenter">Edit</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var map in Model)
+							{
+
+								<tr class="startHiddenn">
+									<td>@map.CallerNumber.ToPhoneNumber()</td>
+									<td>@map.SystemNumber.ToPhoneNumber()</td>
+									<td class="ForId_@map.ForId">@map._Recurrence.NotNull(x=>x.Name)</td>
+									<td>Create @map.Action.ToUpper()</td>
+									<td class="alignCenter">
+										<a href="/TwilioApi/Delete/@(map.Id)">Delete</a>
+									</td>
+
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+
+			}
+			else
+			{
+				<div class="panel-body gray">
+					There are no phone actions.
+				</div>
+			}
+		</div>
+	</div>
+</div>

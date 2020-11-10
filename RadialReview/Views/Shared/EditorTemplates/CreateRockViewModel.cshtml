@@ -1,0 +1,307 @@
+﻿@model RadialReview.Models.ViewModels.EditRockViewModel
+@{
+	var guid = Guid.NewGuid().ToString().Replace("-", "");
+	var modalClass = "col-xs-12";
+	if (ViewBag.AnyL10sWithMilestones == true) {
+		modalClass = "col-xs-7";
+	}
+}
+<style>
+
+	.cmvm .select2-search__field{
+		min-width:150px;
+	}
+
+	.cmvm .milestone-table {
+		width:100%;
+	}
+
+
+	.cmvm .milestone-section.disabled input{
+		pointer-events: none;
+		border: none;
+		box-shadow: none;
+		border-bottom: 1px solid lightgray;
+		border-radius: 0;
+	}
+
+	.cmvm .milestone-section.disabled .delete,
+	.cmvm .milestone-section.disabled .add-btn{
+		display:none;
+	}
+
+	.cmvm .milestone-section.disabled input[type='checkbox']:before{
+		background-color: #9e9e9e69;
+		width: calc(100% - 2px);
+		height: calc(100% - 2px);
+		display: inline-block;
+		content: "";
+		border-radius: 2px;
+	}
+
+	.cmvm .milestone-table .checkbox{
+		margin: 10px;
+		top: 14px;
+	}
+	.cmvm .ms-row{
+		padding-bottom:4px;
+	}
+
+	.cmvm .delete{
+		font-family: monospace;
+		padding: 3px 14px;
+		top: 2px;
+		position: relative;
+		text-align: center;
+		font-size: 18px;
+		color: lightgray;
+		left: -20px;
+		cursor: pointer;
+		font-weight: bold;
+	}
+</style>
+
+<style>
+	.cmvm-@(guid) .tiny {
+		font-size: 11px;
+		color: #888;
+		top: -3px;
+		position: relative;
+		cursor:pointer;
+	}
+
+	.cmvm-@(guid) .tiny:hover {
+		color: #005ed7;
+	}
+
+	.cmvm-@(guid) .full.form-control.blend{
+		max-width:100%;
+	}
+</style>
+<div class="cmvm cmvm-@(guid) @guid">
+	<div class="row">
+		<div class="@modalClass">
+			<div class="row">
+				<div class="form-group">
+					<div class="col-sm-10">
+						<div class="form-group">
+							<label>Name</label>
+							@Html.TextBoxFor(x => x.Title, new { placeholder = "Rock Name", @class = "form-control" })
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="form-group">
+							<label>Status</label>
+							<select name="@Html.NameFor(x => x.Completion)" class="form-control">
+				@foreach (var u in ViewBag.RockStates) {
+					<option value="@u.id" @(u.id == Model.Completion.ToString() ? "selected" : "")>@u.name</option>
+				}
+			</select>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="form-group row">
+				<div class="col-sm-12">
+					<label>Details</label>
+					@Html.TextAreaFor(x => x.Notes, new { @class = "fullWidth form-control verticalOnly", style = "min-height:144px;", placeholder = "Enter details here (optional)" })
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-4">
+					<label>Due Date</label>
+					@Html.EditorFor(x => x.DueDate, new ViewDataDictionary() { { "name", "DueDate" }, { "id", "Rock_DueDate" }, { "localize", true } })
+				</div>
+				<div class="col-sm-4">
+					<label>Accountable Owner</label>
+					@Html.DropDownListFor(x => x.AccountableUser, Model.PotentialUsers, new { placeholder = "Owner", @class = "fullWidth form-control" })
+				</div>
+				<div class="col-sm-4">
+					<label>Rock Type</label>
+					<select name="@Html.NameFor(x => x.AddToVTO)" class="form-control">
+						@foreach (var u in ViewBag.RockTypes) {
+							<option value="@u.id">@u.name</option>
+						}
+						@*<option value="False" selected>Individual</option>
+							<option value="True">Departmental (Added to your team's V/TO)</option>*@
+					</select>
+					@*@Html.CheckBoxFor(x => x.AddToVTO, new { @class = "fullWidth checkbox" })*@
+				</div>
+			</div>
+			@*<div class="form-group">
+					<label>Add to V/TO™:</label>
+					@Html.CheckBoxFor(x => x.AddToVTO, new { @class = "fullWidth checkbox" })
+				</div>*@
+			<div class="form-group row">
+				<div class="col-sm-12">
+					<label>Attach to meeting(s)</label>
+					@Html.ListBoxFor(x => x.RecurrenceIds, Model.PossibleRecurrences, new { @class = "form-control select-recur", multiple = true, style = "display:block;width:100% !important" }).DisableToReadonly()
+				</div>
+			</div>
+		</div>
+
+		@try {
+			if (ViewBag.AnyL10sWithMilestones == true) {
+				<div class="col-xs-5">
+					<div class="milestone-section">
+						<div class="btn btn-default btn-sm add-btn" onclick="addMilestone@(guid)()"><i class="glyphicon glyphicon-plus">&nbsp;</i>Add a milestone</div>
+						<div class="row">
+							<div class="col-xs-7 col-xs-offset-1"><label>Milestones</label></div>
+							<div class="col-xs-3 has-milestones @(Model.Milestones.Any()?"":"hidden")"><label>Due Date</label></div>
+						</div>
+						<div class="milestone-table">
+							@for (var i = 0; i < Model.Milestones.Count(); i++) {
+
+								<div class="row ms-row ms-row-@i">
+									<div class="col-xs-1">@Html.CheckBoxFor(x => Model.Milestones[i].Complete, new { @class = "checkbox" }) </div>
+									<div class="col-xs-7">@Html.TextBoxFor(x => Model.Milestones[i].Name, new { @class = "form-control" }) </div>
+									<div class="col-xs-3">
+										@Html.EditorFor(x => Model.Milestones[i].DueDate, new ViewDataDictionary() { { "name", "DueDate" }, { "id", "Rock_DueDate" }, { "localize", true } })
+									</div>
+									<div class="col-xs-1"><span class="delete" onclick='removeMilestone@(guid)(@i)'>x</span></div>
+									@Html.HiddenFor(x => Model.Milestones[i].Id)
+								</div>
+
+
+							}
+						</div>
+
+						<div class="row">
+							<div class="col-xs-5 col-xs-offset-1"><label class="gray no-milestones @(Model.Milestones.Any()?"hidden":"")">No milestones.</label></div>
+						</div>
+					</div>
+				</div>
+			}
+
+		} catch (Exception e) {
+			<span>Error: @e.Message </span>
+		}
+
+	</div>
+
+
+
+</div>
+
+
+
+<script>
+
+	function a@(guid)() {
+		@*var c = $(".cmvm-@(guid)");
+		var goalDir = c.find(".goal-direction");
+
+		function adjInputs() {
+			if (goalDir.val()==-3){
+				$(".goal-container").addClass("col-xs-3").removeClass("col-xs-6");
+				$(".alt-goal-container").removeClass("hidden");
+			}else{
+				$(".goal-container").removeClass("col-xs-3").addClass("col-xs-6");
+				$(".alt-goal-container").addClass("hidden");
+			}
+		}
+		goalDir.on("change", function () { adjInputs(); });
+		adjInputs();
+
+		c.find(".add-admin").on("click", function () {
+			$(this).remove();
+			c.find(".admin-container").removeClass("hidden");
+		});*@
+
+	}
+
+	function removeMilestone@(guid)(n) {
+		$(".@guid .ms-row-" + n).remove();
+		@*$(".@guid .delete-indicator-" + n).val("True");*@
+		refreshIds@(guid)();
+		if ($(".@(guid) .ms-row").length == 0) {
+			$(".@guid .no-milestones").removeClass("hidden");
+			$(".@guid .has-milestones").addClass("hidden");
+		}
+
+	}
+
+	function refreshIds@(guid)() {
+		$(".@(guid) .ms-row").each(function (a,b) {
+			$(this).find("[name]").each(function () {
+				var curName = $(this).attr("name")
+				var ending = curName.substr(curName.indexOf("."));
+				//$(this).attr("name", "Milestones[" + a + "]" + ending);
+				var atr = "Object" + ending;
+				$(this).attr("name", atr);
+			});
+		});
+	}
+
+	function addMilestone@(guid)() {
+
+		$(".@guid .no-milestones").addClass("hidden");
+		$(".@guid .has-milestones").removeClass("hidden");
+		var g = generateGuid();
+		var dg = "date-" + g;
+		var n = $(".milestone-table .ms-row-placeholder").length;
+		var row = $("<div class='row ms-row ms-row-"+g+"'>");
+		var name = "Object.Milestones[" + n + "]";
+		row.append("<div class='col-xs-1'><input name='" + name + ".Complete' type='checkbox' class='checkbox'/></div>");
+		row.append("<div class='col-xs-7'><input name='" + name + ".Name' type='text' class='form-control'/></div>");
+		row.append("<div class='col-xs-3 " + dg + "'></div>");
+		row.append("<div class='col-xs-1'><span class='delete' onclick='removeMilestone@(guid)(\""+g+"\")'>x</span></div>");
+		row.append("<input type=hidden name='" + name + ".Id' value='0' />");
+		//row.append("<span class='ms-row-placeholder'/>");
+		$(".@(guid) .milestone-table").append(row);
+		Time.createClientDatepicker({
+			selector: "."+dg,
+			name: name + ".DueDate",
+			serverTime: new Date()
+		});
+		refreshIds@(guid)();
+	}
+
+	function a@(guid)() {
+		var select2 = $(".@guid .select-recur").select2({
+								closeOnSelect: true,
+			//allowClear: true,
+
+			placeholder:  "Select meeting..." ,
+			escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+			templateResult: function (d) {
+									return "<div><div class='searchresult clearfix' data-value='" + d.id + "'>" + d.text + "</div></div>";
+								},
+			templateSelection: function (d, e) {
+									if (d.disabled || d.readonly) {
+					$(e).addClass("selected-disabled");
+									}
+									if (d.readonly) {
+					$(e).addClass("selected-readonly");
+									}
+
+									return "<div class='searchresult searchresult-selected'>" + d.text + "</div>";
+								}
+							}).on("change", function (e) { });
+
+					@*var select3 = $(".@guid .select-accountable").select2({
+								closeOnSelect: true,
+			allowClear: true,
+
+			placeholder:  "Select an owner..." ,
+			escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+			templateResult: function (d) {
+				return "<div><div class='searchresult clearfix' data-value='" + d.id + "'>" + d.text + "</div></div>";
+			},
+			templateSelection: function (d) {
+				return "<div class='searchresult searchresult-selected'>" + d.text + "</div>";
+			}
+		}).on("change", function (e) {});*@
+	}
+
+	function defer@(guid)() {
+		if (window.jQuery)
+			a@(guid)();
+		else
+			setTimeout(function () { defer@(guid)() }, 50);
+	}
+		defer@(guid)();
+
+</script>

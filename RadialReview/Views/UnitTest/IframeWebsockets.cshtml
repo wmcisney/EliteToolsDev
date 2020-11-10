@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "IframeWebsockets";
+}
+
+<h2>IframeWebsockets</h2>
+
+<iframe src="/l10/wizard/1" style="width:100%;height:60vh"></iframe>
+
+<style>
+	body{
+		background:lightblue;
+	}
+</style>
+@using (Html.BeginScripts()) {
+<script>
+	window.Name = "main";
+	window.RealTime.PAGE = "main";
+
+	RealTime.client.update = function () {
+		debugger;
+		showAlert("hello");
+	};
+</script>
+}

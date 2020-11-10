@@ -1,0 +1,101 @@
+﻿@{
+	var headers = (ViewBag.AddHeaders == null || ((bool)ViewBag.AddHeaders) == true);
+	var controller = (ViewBag.AddController == null || ((bool)ViewBag.AddController) == true);
+	var selector = (ViewBag.Selector as string ?? "(model.Scorecard)").Replace("'","\\'");
+	// var scorecardKey = ViewBag.ScorecardKey as string ?? "model.Scorecard.Key";
+	var scorecardKey = "(" + selector + ").Key";
+	var guid = Html.NewGuid();
+}
+<div @(headers ? "ng-app=L10App" : "") class="scorecard-tile meeting-page app scroller" style="clear: both;">
+	<div @(headers || controller ? "ng-controller=L10Controller" : "")>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="component">
+					<div class="clearfix"></div>
+					{{selected@(guid) = $eval('@(selector)');"" }}
+					{{scorecardKey@(guid) = selected@(guid).Key;"" }}
+					{{weeks@(guid) =  $eval('(selected@(guid)).Weeks | filter:{IsCurrentWeek:true}');""}}
+					{{measurables@(guid)=$eval('(selected@(guid)).Measurables | filter:{IsDivider:false} | orderBy: [\'Ordering\']');""}}
+
+					<div style="position: relative;" ng-hide="(selected@(guid)).Measurables.length==0">
+
+						<div ng-repeat="week in (selected@(guid)).Weeks  " class="score-week zover alignCenter" ng-if="week.IsCurrentWeek">
+							<span class="score-week-label">{{functions.topDate(week,selected@(guid))}} - {{functions.bottomDate(week,selected@(guid))}}</span>
+						</div>
+
+						<div class="scorecard-table ng-cloak " ng-repeat="measurable in measurables@(guid)">
+							<div ng-repeat="week in weeks@(guid)" class="score zover" ng-if="week.IsCurrentWeek">
+
+								<div class="ellipsis alignCenter zover measurable-name" title="{{measurable.Name}}">{{measurable.Name}}</div>
+								<input ng-class="{'inlineEdit': measurable.Disabled!=true}"
+									   style="width:99.9%;"
+									   data-goal="{{measurable.Target}}"
+									   data-goal-dir="{{measurable.Direction}}"
+									   data-row="{{$parent.$index}}"
+									   data-col="{{$index}}"
+									   type="text"
+									   placeholder="N/A"
+									   ng-model-options="{debounce: 75}"
+									   ng-model="functions.lookupScore(week.ForWeekNumber,measurable.Id,scorecardKey@(guid)).Measured"
+									   class="grid rt zover {{functions.scorecardColor(functions.lookupScore(week.ForWeekNumber,measurable.Id))}}"
+									   data-scoreid="{{Id}}"
+									   data-measurable="{{measurable.Id}}"
+									   data-week="{{week.ForWeekNumber}}"
+									   fcsa-number="{{functions.getFcsa(measurable)}}"
+									   ng-change="functions.sendUpdate(functions.lookupScore(week.ForWeekNumber,measurable.Id,scorecardKey@(guid)))"
+									   id="{{functions.scorecardId(functions.lookupScore(week.ForWeekNumber,measurable.Id,scorecardKey@(guid)),$parent.$index,$index)}}" />
+								<span class="glyphicon glyphicon-pencil edit-indicator"></span>
+								@*<div class="fill"></div>*@
+							</div>
+							<div style="margin-top: 4px;margin-bottom: 0px;" />
+						</div>
+					</div>
+					<div class="gray" style="padding: 30px 15px;" ng-show="(selected@(guid)).Measurables.length==0">
+						No measurables fit your search criteria.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.scorecard-tile .scorecard-table {
+		position: relative;
+	}
+
+	.scorecard-tile .zover {
+		position: relative;
+		z-index: 1;
+	}
+
+	.scorecard-tile input:focus {
+		outline: none !important;
+		border: none !important;
+	}
+
+	.scorecard-tile input:hover {
+		text-decoration: underline;
+	}
+
+
+	.scorecard-tile .measurable-name {
+		color: #444;
+	}
+
+	.scorecard-tile .fill {
+		width: 100%;
+		position: absolute;
+		top: 0;
+		bottom: -4px;
+		z-index: 0;
+	}
+
+	.scorecard-tile .success ~ .fill {
+		background-color: #DFF0D8 !important;
+	}
+
+	.scorecard-tile .danger ~ .fill {
+		background-color: #F9F2F4 !important;
+	}
+</style>

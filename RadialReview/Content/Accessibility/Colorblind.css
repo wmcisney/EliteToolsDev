@@ -1,0 +1,97 @@
+﻿body.cb-redblind,
+body.cb-greenblind,
+body.cb-blueblind {
+  /*General*/
+  /*Scorecard*/
+  /*Rocks*/
+  /*Ids*/
+  /*People Tools*/
+}
+body.cb-redblind .label-danger,
+body.cb-greenblind .label-danger,
+body.cb-blueblind .label-danger {
+  background-color: #bdb00a;
+}
+body.cb-redblind .label-success,
+body.cb-greenblind .label-success,
+body.cb-blueblind .label-success {
+  background-color: #001eff;
+}
+body.cb-redblind .scorecard-table .score.success input,
+body.cb-greenblind .scorecard-table .score.success input,
+body.cb-blueblind .scorecard-table .score.success input,
+body.cb-redblind .scorecard-table .score input.success,
+body.cb-greenblind .scorecard-table .score input.success,
+body.cb-blueblind .scorecard-table .score input.success,
+body.cb-redblind .scorecard-table .score.success,
+body.cb-greenblind .scorecard-table .score.success,
+body.cb-blueblind .scorecard-table .score.success {
+  color: #001eff;
+  background-color: #accbff !important;
+}
+body.cb-redblind .scorecard-table .score.danger input,
+body.cb-greenblind .scorecard-table .score.danger input,
+body.cb-blueblind .scorecard-table .score.danger input,
+body.cb-redblind .scorecard-table .score.danger,
+body.cb-greenblind .scorecard-table .score.danger,
+body.cb-blueblind .scorecard-table .score.danger,
+body.cb-redblind .scorecard-table .score input.danger,
+body.cb-greenblind .scorecard-table .score input.danger,
+body.cb-blueblind .scorecard-table .score input.danger {
+  color: #817800;
+  background-color: #e5ca70;
+}
+body.cb-redblind .rockstate input[value='AtRisk'] ~ .fill.cursor,
+body.cb-greenblind .rockstate input[value='AtRisk'] ~ .fill.cursor,
+body.cb-blueblind .rockstate input[value='AtRisk'] ~ .fill.cursor {
+  background-color: #bdb00a;
+}
+body.cb-redblind .rockstate input[value='OnTrack'] ~ .fill.cursor,
+body.cb-greenblind .rockstate input[value='OnTrack'] ~ .fill.cursor,
+body.cb-blueblind .rockstate input[value='OnTrack'] ~ .fill.cursor {
+  background-color: #767676;
+}
+body.cb-redblind .rockstate input[value='Complete'] ~ .fill.cursor,
+body.cb-greenblind .rockstate input[value='Complete'] ~ .fill.cursor,
+body.cb-blueblind .rockstate input[value='Complete'] ~ .fill.cursor {
+  background-color: #001eff;
+}
+body.cb-redblind .ids [data-awaitingsolve='true'][data-markedforclose='true']:not([data-checked="true"]):not([data-checked="True"]):before,
+body.cb-greenblind .ids [data-awaitingsolve='true'][data-markedforclose='true']:not([data-checked="true"]):not([data-checked="True"]):before,
+body.cb-blueblind .ids [data-awaitingsolve='true'][data-markedforclose='true']:not([data-checked="true"]):not([data-checked="True"]):before,
+body.cb-redblind .ids [data-awaitingsolve='True'][data-markedforclose='true']:not([data-checked="true"]):not([data-checked="True"]):before,
+body.cb-greenblind .ids [data-awaitingsolve='True'][data-markedforclose='true']:not([data-checked="true"]):not([data-checked="True"]):before,
+body.cb-blueblind .ids [data-awaitingsolve='True'][data-markedforclose='true']:not([data-checked="true"]):not([data-checked="True"]):before,
+body.cb-redblind .ids [data-awaitingsolve='true'][data-markedforclose='True']:not([data-checked="true"]):not([data-checked="True"]):before,
+body.cb-greenblind .ids [data-awaitingsolve='true'][data-markedforclose='True']:not([data-checked="true"]):not([data-checked="True"]):before,
+body.cb-blueblind .ids [data-awaitingsolve='true'][data-markedforclose='True']:not([data-checked="true"]):not([data-checked="True"]):before,
+body.cb-redblind .ids [data-awaitingsolve='True'][data-markedforclose='True']:not([data-checked="true"]):not([data-checked="True"]):before,
+body.cb-greenblind .ids [data-awaitingsolve='True'][data-markedforclose='True']:not([data-checked="true"]):not([data-checked="True"]):before,
+body.cb-blueblind .ids [data-awaitingsolve='True'][data-markedforclose='True']:not([data-checked="true"]):not([data-checked="True"]):before {
+  background-color: rgba(0, 30, 255, 0.5);
+}
+body.cb-redblind .people-analyzer .people-analyzer-table tbody .resp.resp-yes,
+body.cb-greenblind .people-analyzer .people-analyzer-table tbody .resp.resp-yes,
+body.cb-blueblind .people-analyzer .people-analyzer-table tbody .resp.resp-yes {
+  color: #001eff !important;
+}
+body.cb-redblind .people-analyzer .people-analyzer-table tbody .resp.resp-no,
+body.cb-greenblind .people-analyzer .people-analyzer-table tbody .resp.resp-no,
+body.cb-blueblind .people-analyzer .people-analyzer-table tbody .resp.resp-no {
+  color: #bdb00a !important;
+}
+body.cb-redblind .people-analyzer .people-analyzer-table tbody .resp.resp-often,
+body.cb-greenblind .people-analyzer .people-analyzer-table tbody .resp.resp-often,
+body.cb-blueblind .people-analyzer .people-analyzer-table tbody .resp.resp-often {
+  color: #001eff !important;
+}
+body.cb-redblind .people-analyzer .people-analyzer-table tbody .resp.resp-sometimes,
+body.cb-greenblind .people-analyzer .people-analyzer-table tbody .resp.resp-sometimes,
+body.cb-blueblind .people-analyzer .people-analyzer-table tbody .resp.resp-sometimes {
+  color: #c1c1c1 !important;
+}
+body.cb-redblind .people-analyzer .people-analyzer-table tbody .resp.resp-not-often,
+body.cb-greenblind .people-analyzer .people-analyzer-table tbody .resp.resp-not-often,
+body.cb-blueblind .people-analyzer .people-analyzer-table tbody .resp.resp-not-often {
+  color: #bdb00a !important;
+}

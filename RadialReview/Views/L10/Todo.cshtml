@@ -1,0 +1,106 @@
+﻿@model RadialReview.Models.L10.VM.L10MeetingVM
+@{
+    ViewBag.Title = "Todo";
+    Layout = "~/Views/L10/BasePage.cshtml";
+
+    var guid = Guid.NewGuid().ToString();
+}
+
+<div class="todo">
+    <div class="row">
+        <div class="col-md-8">
+            <hgroup class="page-header listing fixed-pos">
+                <div class="pull-right">
+                    <div class="btn-group smallBreak">
+                        <a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="icon fontastic-icon-sort-alpha-two"></span> <span class="sort-button">Sort </span>
+                        </a>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a class="clickable" onclick="sortTodoBy(recurrenceId,$('.todo-list'),'data-name','Owner')"> By Owner</a></li>
+                            <li><a class="clickable" onclick="sortTodoBy(recurrenceId,$('.todo-list'),'data-checked','Incomplete',1)"> Incomplete</a></li>
+                            <li><a class="clickable" onclick="sortTodoBy(recurrenceId,$('.todo-list'),'data-duedate','Due Date',-1)"> By Due Date (Desc)</a></li>
+                            <li><a class="clickable" onclick="sortTodoBy(recurrenceId,$('.todo-list'),'data-duedate','Due Date',1)"> By Due Date (Asc)</a></li>
+                            <li><a class="clickable" onclick="sortTodoBy(recurrenceId,$('.todo-list'),'data-createtime','Date Created',1)"> By Date Created (Oldest First)</a></li>
+                            <li><a class="clickable" onclick="sortTodoBy(recurrenceId,$('.todo-list'),'data-createtime','Date Created',-1)"> By Date Created (Newest First)</a></li>
+                        </ul>
+                    </div>
+
+                    @Html.Partial("partial/ButtonBar", Model)
+                </div>
+                <h2 class="l10-page-title">@ViewBag.Heading <small class="todo-completion-percentage"></small></h2>
+            </hgroup>
+            <div class="todo-container " style="margin-bottom:128px;">
+                <ol class="todo-list sortable init-@(guid)">
+                    @foreach (var i in Model.Todos.OrderBy(x => x.Ordering)) {
+                        var vm = new ViewDataDictionary { { "MeetingId", Model.Meeting.Id }, { "Organization", ViewBag.Organization }, { "MeetingStart", Model.Meeting.StartTime }, { "CanEdit", Model.CanEdit } };
+                        @Html.Partial("~/Views/L10/partial/TodoRow.cshtml", i, vm)
+                    }
+                </ol>
+            </div>
+        </div>
+        <div class="col-md-4 hidden-xs hidden-sm">
+            <div class="hidden-lg hidden-md" style="height: 25px;"></div>
+            <div style="">
+                <div class="fixed-pos">
+                    <hgroup class="page-header details">
+                        <h4>Notes</h4>
+                    </hgroup>
+                    <div class="component" id="todoDetails"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="fireworks-template">
+    <div id="fw" class="firework"></div>
+    <div id="fp" class="fireworkParticle"><img src="~/Content/img/particles.gif" alt="" /></div>
+</div>
+
+@*@if (Model.IsPreview) {
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" id="exit_preview_meeting_button" class="btn btn-primary center btn-lg concludeButton"><i class="icon fontastic-icon-projection-screen pull-left"></i> Exit Preview</button>
+        </div>
+    </div>
+}*@
+
+<script>
+	window.recurrenceId = @Model.Recurrence.Id;
+	window.meetingId = @Model.Meeting.Id;
+	var oldContainer;
+	var oldTodoList;
+
+	var seenFireworks = @(Model.SeenTodoFireworks.ToJavascript());
+
+    $(function() {
+
+        checkFireworks();
+
+        $("body").on("change",".todo-checkbox",function(){
+            checkFireworks();
+        });
+
+		$(".todo-list").sortable({
+			group: 'nested',
+			handle: '.move-icon',
+			onDrop: function($item, container, _super, event) {
+				if ($item.hasClass("issue-row")) {
+					_super($item, container);
+					updateIssuesList(@Model.Recurrence.Id, $(".issues-list"));
+					refreshCurrentIssueDetails();
+				} else {
+					_super($item, container);
+					updateTodoList(@Model.Recurrence.Id, $(".todo-list"));
+					refreshCurrentTodoDetails();
+				}
+			}
+		});
+        oldTodoList = getTodoOrder();
+
+        /*$('#exit_preview_meeting_button').click(function () {
+            window.location.reload();
+        });*/
+	});
+</script>

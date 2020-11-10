@@ -1,0 +1,216 @@
+﻿@model RadialReview.Controllers.BackendViewModel
+
+@{
+	ViewBag.Title = "Dashboard";
+	ViewBag.LayoutClass = (ViewBag.LayoutClass ?? "") + " dashboard";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.AnyL10s = ViewBag.AnyL10s ?? false;
+	//ViewBag.FullWidth = true;
+}
+
+@section top{
+	<div class="jumbotron">
+		<h1>@Html.ProductName() @*<small>Dashboard</small>*@</h1>
+	</div>
+}
+@using (Html.BeginStyles())
+{
+	@*<link href="~/Content/bootstrap/custom/dashboard.css" rel="stylesheet" />*@
+	<style>
+	.welcome a {
+		color: #4A79FF;
+	}
+
+	h3 {
+		color: #6D6D6D;
+	}
+
+	.todo-pane {
+		max-height: 360px;
+		overflow: auto;
+		width: 100%;
+	}
+</style>
+}
+
+<div ng-app="L10App" class="meeting-review ng-cloak">
+	<div ng-controller="L10Controller">	
+		@if (Model.IncludeTodos || Model.IncludeScorecard || Model.IncludeRocks || ViewBag.IsManager)
+		{
+			@Html.Partial("~/Views/Angular/_L10App.cshtml", (long)ViewBag.UserId, new ViewDataDictionary(){
+					{ "IncludeComplete", false}
+			})
+		} 
+		
+		<div class="row">
+			<div class="col-md-4 alignCenter">
+				<div class="hidden-sm hidden-xs">
+					<div>
+						@Html.Partial("_UserModel", Model.User.User, new ViewDataDictionary() { { "onclick", "window.location='" + Url.Action("Manage", "Account") + "'" } })
+					</div>
+					@if (!Model.User.GetCompletion().FullyComplete)
+{
+						<div class="clickable" onclick="window.location='@Url.Action("Manage", "Account")'">
+							<h4>Profile Completion</h4>
+							@Html.Partial("_Completion", Model.User)
+						</div>
+}
+				</div>
+				<div class="smallBreak2 hidden-md"></div>
+				@if (ViewBag.UserId != null && ViewBag.UserId != 0)
+{
+					<div class="button-container uid_@ViewBag.UserId">
+						<div class="button empty"></div>
+
+						<a href="/tasks" class="button icon fontastic-icon-checkbox" title="To-Do List"></a>
+						<a href="/User/Details/@ViewBag.UserId" class="button icon fontastic-icon-torso" title="View Details"></a>
+						@if (((int?)ViewBag.Organizations ?? 0) > 1)
+{
+							<a href="/Account/Role?ReturnUrl=%2F" class="button icon fontastic-icon-torsos" title="Change Roles"></a>
+}
+						@if (ViewBag.ShowL10 as bool? == true)
+{
+							<div onclick="@Html.ShowModal("Create Issue", "/Issues/CreateIssueRecurrence/", "/Issues/CreateIssueRecurrence/")" class="button icon fontastic-icon-pinboard" title="Create an Issue"><span class="plus">+</span></div>
+}
+						<a href="/Account/Manage" class="button icon fontastic-icon-cog" title="Edit Settings"></a>
+						<div class="button empty"></div>
+						<span></span>
+					</div>
+}
+
+				@if (ViewBag.IsManager)
+{
+					<div class="review smallBreak2 loading tiny" style="min-height:30px;">
+						<div class="heading" @*="margin:7px;"*@>Manage:</div>
+						@Html.Partial("~/Views/Manage/partial/members.cshtml", new ViewDataDictionary(){
+							{ "AddHeaders",false},
+							{ "DisableName",true},
+							{ "RockName", Html.Organization().NotNull(x => x.Settings.NotNull(y => y.RockName))}
+
+						})
+					</div>
+				}
+			</div>
+			<div class="col-md-8 col-sm-12">
+				@if (Model.IncludeScorecard && ViewBag.UserId != null)
+				{
+					<div class="review smallBreak2 loading tiny" style="min-height:30px;">
+						<div class="scorecard-heading heading">Measurables:<a href="/todo/list" class="gray"></a>@if (ViewBag.AnyL10s && false)
+							{
+							                                                                                         <span class="pull-right clickable new">Create New</span>
+							}</div>
+						@Html.Partial("~/Views/Scorecard/Partial/list.cshtml", new ViewDataDictionary(){
+							{"AddHeaders",false},
+							{"DisableName",true}
+						})
+					</div>
+				}
+				<div class ="row">
+					<div class = "col-md-6">
+					@if (Model.IncludeTodos && ViewBag.UserId != null)
+						{
+						<div class="review smallBreak2 loading tiny" style="min-height:30px;"><div class="todo-heading heading">Current To-Dos<a href="/todo/list" class=""> (View all)</a>@if (ViewBag.AnyL10s)
+								{<span class="clickable pull-right new" onclick="@Html.ShowModal("Create To-Do", "/Todo/CreateTodoRecurrence", "/Todo/CreateTodoRecurrence")">Create New</span>}</div>@Html.Partial("~/Views/Todo/Partial/list.cshtml", new ViewDataDictionary(){
+																								  { "AddHeaders", false },
+																								  { "AddCompletion", false },
+																								  { "AddDatePicker", false },
+																							
+																							  })</div>
+						<div class="smallBreak2 hidden-md"></div>
+						}
+				
+					</div>
+					<div class = "col-md-6">
+						@if (Model.IncludeRocks && ViewBag.UserId != null)
+						{
+						<div class="review smallBreak2 loading tiny" style="min-height:30px"><div class="rock-heading heading">Current @(Html.Organization().NotNull(x => x.Settings.NotNull(y => y.RockName)) ?? "Rocks")<a href="/todo/list" class="gray"></a>@if (ViewBag.AnyL10s && false)
+									{<span class="pull-right clickable new">Create New</span>}</div>@Html.Partial("~/Views/Rocks/Partial/list.cshtml", new ViewDataDictionary(){
+																								 { "AddHeaders", false },
+																								 { "AddCompletion", false },
+																								 { "AddDatePicker", false },
+																								 { "RockName", Html.Organization().NotNull(x => x.Settings.NotNull(y => y.RockName.NotNull(z=>z.ToLower())))}
+																							 })</div>
+						<div class="smallBreak2 hidden-md"></div>
+						}
+					</div>
+				</div>
+				
+
+				@*@if (Model.OutstandingReview != null)
+				{
+					foreach (var m in Model.OutstandingReview){
+						 <div class="review review-container smallBreak2">
+							 <h5 class="alignCenter noMargin gray">@Html.ReviewName():</h5>
+							 <hgroup class="alignCenter"><h1 style="margin-top: 0px;">@m.Name</h1></hgroup>
+							 @Html.Partial("_ReviewStats", m.ReviewContainerId)
+						 </div>
+					 }
+				}*@
+	
+
+				<div class="review welcome" style="min-height:30px">
+					<h2 class="alignCenter">Welcome to @Html.ProductName()</h2>
+					<div id="lipsum">
+						@if (((int?)ViewBag.Organizations ?? 0) == 0)
+						{
+							<h4>Instructions to access your organization:</h4>
+							<p>
+								Welcome to @Html.ProductName()
+
+								You'll need to enter your access code to begin. You should have received a code in your inbox.
+								If you haven't found the email, check your spam folder and remove us from your spam filter.
+								Enter it here to begin:
+							</p>
+							<form class="form-group" method="post" action="/Organization/Join">
+								<input class="form-control smallBreak2" type="text" name="id" value="" placeholder="Access code" />
+
+								<div class="row">
+									<button class="btn btn-primary col-md-2 col-md-offset-5" type="submit">Submit</button>
+								</div>
+							</form>
+						}
+						@if (((int?)ViewBag.Organizations ?? 0) != 0)
+						{
+							<p>
+								Welcome to @Html.ProductName(),
+
+								To begin taking your review, click on the 'To-Dos' button above or click <a href="@Url.Action("Index","Tasks")">here</a>.
+								After your coworkers have completed their @Html.ReviewName().ToLower(), @Html.ProductName() will aggregate the results for you and your supervisor to discuss.
+							</p>
+							<p>
+								Your name and profile image are an important way for you to ensure you are accurately evaluated. You can edit your profile image by clicking
+								<a href="@Url.Action("Manage","Account")">here.</a>
+							</p>
+							if (ViewBag.IsManager && false)
+							{
+								<h3>Instructions for management:</h3>
+								<p>
+									As a supervisor you can manage the organization from the 'Manage' tab, or by clicking <a href="@Url.Action("Index","Manage")">here</a>.
+									From the manage menu, you can add direct reports, job descriptions, questions, and teams for the organization.
+								</p>
+								<p>
+									A company should have a set of goals that govern the actions of it's employees.
+									Before @Html.ReviewName().ToLower()s can be issued, you and your employees should construct a set of personal goals that align with your company's goals.
+									A set of questions should be generated that gauge how well the employee is meeting their goals.
+									The employee's co-workers will evaluate the employee on these questions.
+
+									Every user evaluating the employee will rate the person on how well they are meeting their responsibilities.
+								</p>
+								<p>
+									Once all the questions are in place, you can issue a @Html.ReviewName().ToLower() and specify a due date.
+									An e-mail will be sent to employees to let them know that they have a task to complete.
+								</p>
+								<p>
+									After everyone's @Html.ReviewName().ToLower()s are complete, you can view the results and create a report in the
+									<a href="@Url.Action("Index","Reports")">Reports</a> tab. Reports consist of charts and anonymous feedback,
+									as well as historical changes. You can autorize your employees to view the report once they are authorized.
+								</p>
+							}
+						}
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>

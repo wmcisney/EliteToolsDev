@@ -1,0 +1,35 @@
+﻿
+@model long?
+@{
+    string filter = null;
+    if (Model.HasValue) {
+        filter = "| filter:filters.byRange('CompleteTime',model.dataDateRange.todoStart,model.dataDateRange.todoEnd) | filter:{Owner:{Id:" + Model + "}}";
+        //filter = "| filter:filters.byRange('CompleteTime',model.dataDateRange.startDate,model.dataDateRange.endDate) | filter:{Owner:{Id:" + Model + "}}";
+    }
+}
+
+<div class="review smallBreak2 loading tiny" style2="min-height:30px;">
+	<div class="milestone-heading heading tile-title">
+		@*<span class="clickable pull-right new hidden-width-1" style="font-size: 12px;" onclick="@Html.ShowModal("Create To-Do", "/Todo/CreateTodoRecurrence", "/Todo/CreateTodoRecurrence")">Create New <span class='glyphicon glyphicon-plus'></span></span>
+		<span class="clickable pull-right new visible-width-1" style="text-decoration: none;font-size: 12px;" onclick="@Html.ShowModal("Create To-Do", "/Todo/CreateTodoRecurrence", "/Todo/CreateTodoRecurrence")"><span class='glyphicon glyphicon-plus'></span></span>*@
+		<span class="handle">Milestones</span> @*<a href="/todo/list" class=""> (View all)</a>*@
+		<span class="tile-buttons">
+			@*<a href="javascript:void(0)" class="tile-button" onclick="printTileData(@(Model))"><span class="glyphicon glyphicon-print"></span></a>
+			<a href="/l10/details/@(Model)#Todos" class="tile-button tile-button-view-all" title="View All"><span class="glyphicon glyphicon-th-large"></span></a>
+			<a href="javascript:void(0)" class="tile-button tile-button-add-new todosModal" data-method="CreateTodoRecurrence" data-id="@(Model)" data-context="L10" data-recurrenceId="@Model" title="Create New"><span class="glyphicon glyphicon-plus-sign"></span></a>*@
+		</span>
+	</div><div class="tile personal-milestone-list-container">
+        @{ Html.RenderPartial("~/Views/Todo/Partial/list.cshtml", new ViewDataDictionary(){
+                                   {"AddHeaders", false},
+                                   {"AddController", false},
+                                   {"AddCompletion", false},
+                                   {"AddDatePicker", false},
+                                   {"DefaultSort","'DueDate'"},
+                                   {"Filter",filter},
+                                   {"Selector","model.Milestones"  },
+                                   {"UsePopup",true},
+                                   {"RecurrenceId", -1},
+                                   {"OnEmpty","No milestones fit your search criteria." }
+                               }); }<div ng-show="model.Milestones===undefined" class="gray alignCenter" style="padding-bottom: 16px;" elem-ready="functions.reload(model.Milestones===undefined)">Please wait</div>
+</div>
+</div>

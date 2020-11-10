@@ -1,0 +1,65 @@
+﻿@model RadialReview.Controllers.UploadController.UploadRocksSelectedDataVM
+
+
+@using (Html.BeginForm("SubmitRocks", "upload", FormMethod.Post)) {
+    <input type="hidden" name="Path" value="@Model.Path" />
+
+
+    <div class="clearfix"></div>
+    <div class="table-responsive">
+        <table class="table table-bordered resultTable">
+            <thead>
+                <tr>
+                    <th style="min-width: 120px;">Owner</th>
+                    @if (Model.IncludeUsers) {
+                        <th style="min-width: 120px;">Mapped to</th>
+                    }
+                    <th style="min-width: 280px;">Rock</th>
+                    <th style="min-width: 380px;">Details</th>
+                    <th style="width: 130px;">Due Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{var i = 0;}
+                @foreach (var row in Model.Rocks) {
+                    
+					var bestGuess = new SelectListGroup() { Name = "Best Guess" };
+					var everyone = new SelectListGroup() { Name = "Everyone" };
+					List<SelectListItem> users;
+					if (!Model.IncludeUsers) {
+						users = Model.AllUsers.Select((x, ii) => { x.Selected = (ii == 0); return x; }).OrderBy(x => x.Text).ToList();
+					} else {
+						users = Model.UserLookup[Model.Users[i]].GetProbabilities()
+							.OrderByDescending(x => x.Value)
+							.Select(x => x.Key)
+							.Select(x => new SelectListItem {
+								Text = x.FirstName + " " + x.LastName,
+								Value = "" + x.UserOrgId,
+								Group = bestGuess
+							}).ToList();
+
+						users.AddRange(Model.AllUsers.Select(x => new SelectListItem {
+							Text = x.Text,
+							Value = x.Value,
+							Group = everyone
+						}));
+					}
+
+					var todo = Model.Rocks[i];
+					var details = Model.DetailsStrings[i];
+					var due = Model.DueDates[i];
+                    <tr>
+                        @if (Model.IncludeUsers) {
+                            <td style="font-style:italic">@Model.Users[i]</td>
+                        }
+                        <td>@Html.DropDownList("m_user_" + i, users,new { @class = "form-control" })</td>
+                        <td>@Html.TextBox("m_rock_" + i, todo, new { style = "width:100%;" , @class="form-control"})</td>
+                        <td>@Html.TextBox("m_details_" + i, details, new { style = "width:100%;" , @class="form-control"})</td>
+                        <td style="width:200px;"><input name="m_due_@i" type="date" class="form-control" value="@(Math2.Max(new DateTime(DateTime.UtcNow.AddYears(-2).Year,1,1),due).ToString("yyyy-MM-dd"))" /></td>
+                    </tr>
+                        i++;
+                }
+            </tbody>
+        </table>
+    </div>
+}

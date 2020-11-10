@@ -1,0 +1,42 @@
+﻿@{
+    var stepper = (ViewBag.Stepper as bool?) ?? false;
+    var fileUpload = (ViewBag.FileUpload as bool?) ?? false;
+}
+
+@using (Html.BeginStyles()) {
+    <!--Begin Angular Styles-->
+	@Styles.Render("~/styles/AngularMaterial")
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material-data-table/0.10.8/md-data-table.min.css" />
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	if (stepper) {
+		@Styles.Render("~/Content/MdStepper")
+	}
+	if (fileUpload) {
+		@Styles.Render("~/Content/MdFile")
+	}
+	@Styles.Render("~/styles/Angular")
+    <!--End Angular Styles-->
+}@using (Html.BeginScripts()) {
+    <!--Begin Angular Scripts-->
+    if (RadialReview.Utilities.Config.IsLocal()) {
+       <script src="~/Scripts/Angular/angular.js"@*"https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.js"*@></script>
+    }else{
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    }
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+
+	@Scripts.Render("~/bundles/AngularMaterial")
+	
+     if (stepper) {
+        @Scripts.Render("~/bundles/MdStepper")
+     }
+    if (fileUpload) {
+        @Scripts.Render("~/bundles/MdFile")
+     }
+    @Scripts.Render("~/bundles/Angular")
+    <!--End Angular Scripts-->
+}

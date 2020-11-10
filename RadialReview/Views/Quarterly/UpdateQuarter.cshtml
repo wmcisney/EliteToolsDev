@@ -1,0 +1,78 @@
+﻿@model RadialReview.Models.ViewModels.QuarterVM
+
+@Html.HiddenFor(x => x.OrganizationId)
+@{
+	var guid = Html.NewGuid();
+
+}
+<div class="@guid">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="form-group">
+				@Html.LabelFor(x => x.Name)
+				@Html.TextBoxFor(x => x.Name, new {
+					@class = "form-control",
+					placeholder = "Enter a name for the quarter...",
+					autocomplete = "off"
+				})
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(x => x.Quarter)
+				@Html.DropDownListFor(x=>x.Quarter,Model.AvailableQuarters,new { @class = "form-control", autocomplete = "off" })
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				@Html.LabelFor(x => x.Year)
+				@Html.DropDownListFor(x => x.Year, Model.AvailableYears, new { @class = "form-control", autocomplete = "off" })
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="form-group">
+				<label>Quarter Start Date</label>
+				@Html.EditorFor(x => x.StartDate, new { localize = true , endDate = DateTime.UtcNow.Date.AddDays(1) })
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+				<label>Quarter End Date</label>
+				@Html.EditorFor(x => x.EndDate, new { localize = true , startDate = DateTime.UtcNow.Date.AddDays(-1), allowEmpty=true })
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.modal-dialog {
+		max-width: 600px;
+	}
+</style>
+
+<script>
+	ModalValidation = function (d) {
+		if (!Time.parseJsonDate(d.StartDate)) {
+			return "Please specify a start date.";
+		}
+		if (!Time.parseJsonDate(d.EndDate)) {
+			return "Please specify an end date.";
+		}
+
+		if (Time.parseJsonDate(d.StartDate) >= Time.parseJsonDate(d.EndDate)) {
+			return "Quarter start date should be before it's end date.";
+		}
+		if (!d.Name || d.Name.trim() == "") {
+			var date = new Date();
+			var year = date.getFullYear();
+			return "Please specify a name for the quarter (ex. 'Q@(Model.Quarter) @(Model.Year)')";
+		}
+
+
+
+	}
+</script>

@@ -1,0 +1,60 @@
+﻿@model long
+
+<div class="review smallBreak2 loading tiny " style2="min-height:30px;">
+	<div class="scorecard-heading heading tile-title tile-title-3" style="@(ViewBag.HeadingStyle)" data-style="@(ViewBag.HeadingStyle)">
+		<span class="handle">{{(model.L10Scorecards | filter:{KeyId:@(Model)})[0].Title}}&nbsp;</span>
+		<span class="tile-buttons">
+			<a href="javascript:void(0)" onclick="exportScorecardL10ScorecardTile(@Model)" class="tile-button tile-button-download"><span class="glyphicon glyphicon-download-alt" title="Download"></span></a>
+			<a href="/l10/details/@(Model)#Scorecard" target="_blank" class="tile-button tile-button-view-all" title="View All"><span class="glyphicon glyphicon-th-large"></span></a>
+			<a href="javascript:void(0)" class="tile-button tile-button-add-new scorecardModal" data-controller="L10"  data-hidemeetings="true" data-method="AddMeasurableModal" data-showusers="false" data-meetingId="@Model" title="Add Measurable"><span class="glyphicon glyphicon-plus-sign"></span></a>
+		</span>
+
+	</div><div class="l10-scorecard-tile">
+		<div class="specialDiv tile hidden-width-1" fix-head-scroller="top" fix-head-parent>
+			@{
+				Html.RenderPartial("~/Views/Measurable/partial/list.cshtml", new ViewDataDictionary(){
+				{"AddHeaders", false},
+				{"AddController", false},
+				{"ViewParent",".l10-scorecard-tile" },
+				{"RecurrenceId", Model},
+				{"Reorderable", true},
+				//{"DisableName", true},
+				{"Localization", Html.Organization().Settings.NumberFormat.Angular() },
+				{"Selector", "((model.L10Scorecards)| filter:{KeyId:"+Model+"})[0].Contents "},
+				{ "ForceMin", ViewBag.NumberOfWeeks??13*7 }
+			}); }
+	</div><div class="tile visible-width-1">
+		@{
+			Html.RenderPartial("~/Views/Scorecard/Partial/tile.cshtml", new ViewDataDictionary(){
+			{"AddHeaders",false},
+			{"AddController",false},
+			{"DisableName",true},
+			{"ViewParent",".l10-scorecard-tile" },
+			{"RecurrenceId", Model},
+			{"Selector", "((model.L10Scorecards)| filter:{KeyId:"+Model+"})[0].Contents "},
+		});}
+</div><div ng-show="(model.L10Scorecards | filter:{KeyId:@(Model)}).length==0" class="gray alignCenter" elem-ready="functions.reload((model.L10Scorecards | filter:{KeyId:@(Model)}).length==0)"></div>
+</div>
+</div>
+
+<script>
+	var exportScorecardL10ScorecardTile = function (id) {
+		var start = new Date();
+		start.setDate(start.getDate() - 90);
+		var end = new Date();
+		end.setDate(end.getDate() + 7);
+
+		showModal({
+			icon:{title:"Export range"},
+			fields: [{ type: "date", text: "Start", name: "start", value: start }, { type: "date", text: "End", name: "end" , value: end}],
+			success: function (d) {
+				$.ajax({
+					url: "/L10/ExportScorecard/"+id+"?type=csv&start=" + (+new Date(d.start)) + "&end=" + (+new Date(d.end)) + "&connectionId=" + RealTime.connectionId,
+					success: function (a) {
+						showAlert(a);
+					}
+				});
+			}
+		});
+	}
+</script>

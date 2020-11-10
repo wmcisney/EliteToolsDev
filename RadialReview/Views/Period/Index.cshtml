@@ -1,0 +1,69 @@
+﻿@model IEnumerable<RadialReview.Controllers.PeriodController.PeriodVM>
+
+@{
+    ViewBag.Title = "Periods";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section top{
+	<div class="jumbotron">
+		<h1>Periods</h1>
+	</div>
+}
+<div class="panel panel-primary">
+	<div class="panel-heading-button">
+		<button class="btn btn-default fullWidth plus" onclick="@Html.ShowModal("Create Period", "/Period/Modal/0", "/Period/Modal")">Add</button>
+	</div>
+	<div class="panel-heading">
+		<h3 class="panel-title">@Html.ReviewName() Periods</h3>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-condensed">
+			<tr>
+				<th>Name</th>
+				<th class="alignCenter" style="width:1px">Starts</th>
+				<th class="alignCenter" style="width:1px">Ends</th>
+				<th class="alignCenter" style="width:1px"></th>
+			</tr>
+			@foreach (var p in Model)
+			{
+				<tr class="pRow" data-id="@p.PeriodId">
+					<td>
+						@p.Name
+						@if (p.CanEdit)
+						{
+							<span onclick="@Html.ShowModal("Edit Period", "/Period/Modal/" + p.PeriodId, "/Period/Modal")" class="editButton clickable glyphicon glyphicon-pencil alignCenter"></span>
+						}
+					</td>
+					<td class="alignCenter">
+						@p.StartTime.ToShortDateString()
+					</td>
+					<td class="alignCenter">
+						@p.EndTime.ToShortDateString()
+					</td>
+					<td>
+						<span style="padding-left: 8px;" class="glyphicon glyphicon-trash deleteRow clickable" title="Delete"></span>
+					</td>
+				</tr>
+			}
+
+		</table>
+	</div>
+</div>
+
+@using (Html.BeginScripts()){
+	<script>
+		$(document).on("click", "span.deleteRow", function () {
+			var parent = $(this).parents(".pRow:first");
+
+			var id = $(parent).data("id");
+			$.ajax({
+				url: "/Period/Delete/" + id,
+				success: function (data) {
+					$(parent).hide();
+				}
+			});
+			return false;
+		});
+	</script>
+}

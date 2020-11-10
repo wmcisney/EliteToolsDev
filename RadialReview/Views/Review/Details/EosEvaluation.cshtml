@@ -1,0 +1,165 @@
+﻿@using RadialReview.Models
+@using RadialReview.Models.Charts
+@using RadialReview.Models.Enums
+@model RadialReview.Controllers.ReviewController.ReviewDetailsViewModel
+
+<!--EosEvaluation.cshtml-->
+@{
+	var gwcs = Model.AnswersAbout.Where(x => x.Askable.GetQuestionType() == QuestionType.GWC).Cast<GetWantCapacityAnswer>().GroupBy(x => x.Askable.Id);
+	var rocks = Model.AnswersAbout.Where(x => x.Askable.GetQuestionType() == QuestionType.Rock).Cast<RockAnswer>().GroupBy(x => x.Askable.Id);
+
+}
+<div class="flex-wrap">
+
+	@Html.Partial("~/Views/Review/Details/GWC.cshtml", Model)
+
+	@if (Model.CompanyValuesTable((long)ViewBag.ReviewId).Rows.Any()) {
+		<div class="subsection subsection-values">
+			@Html.Partial("Table", Model.CompanyValuesTable((long)ViewBag.ReviewId))
+			<div class="btn btn-default valueTableBtn" onclick="toggleValueTable()">Details</div>
+			<div id="valueTable" class="valueFlip clearfix hidden">
+				@Html.Partial("~/Views/Review/Details/_ValueTable.cshtml", Model)
+			</div>
+			<div class="evaluation-heading">Company Values</div>
+		</div>
+	}
+	@{
+		var rrs = Model.AnswersAbout.Where(x => x.Askable.GetQuestionType() == QuestionType.Rock).Cast<RockAnswer>();
+		var first = true;
+	}
+	@if (rrs.Any()) {
+		<div class="subsection subsection-rocks">
+			@foreach (var r in rrs.GroupBy(x => x.Askable.Id).Select(x => x.First())) {
+				<div class="row">
+					<div class="col-xs-3 alignRight noPadLeft">
+						@if (first) {
+							<div style="height: 25px;"></div>
+						}
+						<div style="height: 8px;"></div>
+						<div class="bold alignRight">
+							@r.Askable.GetQuestion()
+
+
+						</div>
+					</div>
+					<div class="col-xs-9">
+						<div class="row">
+							<div class="col-sm-6">
+								@if (first) {
+									<div class="hidden-sm hidden-xs alignCenter bold" style="border-bottom: 2px solid #494949;color: #494949;">Supervisor</div>
+									<div class="hidden-sm hidden-xs fullWidth" style="height: 10px;"></div>
+								}
+								<div class="row">
+									<div class="col-xs-4 alignCenter ">
+										@{
+											var state = Tristate.Indeterminate;
+											if (r.ManagerOverride == RockState.AtRisk) {
+												state = Tristate.False;
+											} else if (r.ManagerOverride == RockState.Complete) {
+												state = Tristate.True;
+											}
+										}
+										<div style="padding-top:5px;"></div>
+										@Html.EditorFor(x => state, "ApproveReject", new { name = "ar_" + r.Id })
+									</div>
+									<div class="col-xs-8 noPadRight">
+										<textarea style="height: 80px;" name="arr_@r.Id" class="fullWidth verticalOnly reason" placeholder="Add Comment">@r.OverrideReason</textarea>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								@if (first) {
+									<div class="hidden-sm hidden-xs alignCenter bold" style="border-bottom: 2px solid #494949;color: #494949;">@Model.Review.ReviewerUser.GetName()</div>
+									<div class="hidden-sm hidden-xs fullWidth" style="height: 10px;"></div>
+								}
+								@{first = false;}
+
+								<div class="row">
+									<div class="col-xs-4 alignCenter noPadRight">
+										@Html.DisplayFor(x => r.Completion)
+									</div>
+									<div class="col-xs-8 noPadLeft" style="padding-left: 7px;">
+										@if (!String.IsNullOrWhiteSpace(r.Reason)) {
+											<i>"@r.Reason"</i>
+										} else {
+											<span class="gray italic">No comment provided.</span>
+										}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr style="margin:4px;" class="visible-xs1" />
+									}
+
+			@*<h3>Next Quarters Rocks:</h3>*@
+
+
+
+
+			<div class="evaluation-heading">@Html.Organization().Settings.RockName</div>
+		</div>
+									}
+</div>
+@using (Html.BeginScripts()) {
+	<style>
+		.approvereject .reject:after {
+			content: "Not Done";
+		}
+
+		.approvereject .approve:after {
+			content: "Done";
+		}
+	</style>
+}
+
+
+@using (Html.BeginScripts()) {
+	@Scripts.Render("~/bundles/filtertable")
+	<script>
+		var request;
+		$(function () {
+			$(document).on("click", ".table-io.companyValues > tbody > tr > td > .fill:not(.score)", function () {
+				$(".table-io.companyValues .fill.selected").removeClass("selected");
+				//$("#companyValues-details").html("<div style='text-align:center;'><img src='/Content/img/ajax-loader.gif' alt='Loading...' /></div>");
+				var that = $(this);
+				if (request)
+					request.abort();
+
+				showModal("Value Details", "/Review/ValueDetails?reviewId=" + $(this).data("reviewid") + "&userId=" + $(this).data("byuserid") + "&valueId=" + $(this).data("valueid"), "");
+
+				//request = $.ajax({
+				//	url: "/Review/ValueDetails?reviewId=" + $(this).data("reviewid") + "&userId=" + $(this).data("byuserid") + "&valueId=" + $(this).data("valueid"),
+				//	success: function (data) {
+				//		$(".table-io.companyValues .fill.selected").removeClass("selected");
+				//		$(that).addClass("selected");
+				//		$("#companyValues-details").html(data);
+				//	},
+				//	error: function (a, b, c) {
+				//		$("#companyValues-details").html("<div style='text-align:center;' class='gray'>An error has occurred.</div>");
+				//	}
+				//});
+			});
+			$(document).on("click", ".table-io.rocks > tbody > tr > td > .fill", function () {
+				$(".table-io.rocks .fill.selected").removeClass("selected");
+				$("#rocks-details").html("<div style='text-align:center;'><img src='/Content/img/ajax-loader.gif' alt='Loading...' /></div>");
+				var that = $(this);
+				if (request)
+					request.abort();
+
+				request = $.ajax({
+					url: "/Review/RockDetails?reviewId=" + $(this).data("reviewid") + "&userId=" + $(this).data("byuserid") + "&rockId=" + $(this).data("rockid"),
+					success: function (data) {
+						$(".table-io.rocks .fill.selected").removeClass("selected");
+						$(that).addClass("selected");
+						$("#rocks-details").html(data);
+					},
+					error: function (a, b, c) {
+						$("#rocks-details").html("<div style='text-align:center;' class='gray'>An error has occurred.</div>");
+					}
+				});
+			});
+		});
+	</script>
+}

@@ -1,0 +1,16 @@
+﻿@model List<RadialReview.Models.Application.NameId>
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Readonly/_ReadonlyLayout.cshtml";
+}
+
+<h1>Meetings</h1>
+<section>
+	<table>
+		@foreach (var meeting in Model) {
+			<tr>
+				<td style="background-color:transparent"><a style="color:orange" href="/readonly/meeting/@meeting.Id">@meeting.Name</a></td>
+			</tr>
+		}
+	</table>
+</section>

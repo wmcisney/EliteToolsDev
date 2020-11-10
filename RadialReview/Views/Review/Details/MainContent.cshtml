@@ -1,0 +1,35 @@
+﻿@model RadialReview.Controllers.ReviewController.ReviewDetailsViewModel
+@using RadialReview.Models;
+<!--MainContent.cshtml-->
+<div class="" style=" min-width 650px;padding-top:5px;">	
+	<div class="row clearfix">
+		<div class="col-md-12 ">
+			<div class="alignRight" style="position: absolute;right: 20px;top: -16px;">
+				@if (Model.Review.ClientReview.SignedTime == null) {
+					@*<span class="unsigned">Unsigned</span>*@
+				} else {
+					<span class="glyphicon glyphicon-ok strokeGreen green"></span>
+					@:Signed @Model.Review.ClientReview.SignedTime.Value.ToShortDateString()!
+                }
+			</div>
+			<div class="row">
+				<div class="col-sm-6"><a class="pull-right clickable" onclick="expandAll()">Expand All</a></div>
+				<div class="col-sm-6"><a class="pull-left clickable" onclick="collapseAll()">Collapse All</a></div>
+			</div>
+			@Html.CollapseSection("Charts", "Details/ChartBuilder3", Model, "includeScatter")
+			@Html.CollapseSection("Evaluation", "Details/EosEvaluation", Model, "includeEvaluation")
+			@********************************************
+					HEY THERE'S AN ANGULAR APP IN HERE
+				**********************************************@
+			@Html.CollapseSection("Scorecard", "Details/Scorecard", Model, "includeScorecard")
+
+			@Html.CollapseSection("Notes", "Details/Notes", Model, "includeNotes")
+			@Html.CollapseSection("Feedback", "Details/Feedback", Model)
+			
+			@Html.CollapseSection("Bar Charts", "Details/BarCharts", Model, "includeRadios")
+
+			@Html.CollapseSection("Next Session Rocks", "Details/NextSession", Model)
+						
+		</div>
+	</div>
+</div>

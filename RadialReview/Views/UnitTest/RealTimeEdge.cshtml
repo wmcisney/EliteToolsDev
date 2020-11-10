@@ -1,0 +1,19 @@
+﻿@{
+	Layout = null;
+	var options = new List<Tuple<string, string>> {
+		Tuple.Create("true","true"),
+		Tuple.Create("true","false"),
+		Tuple.Create("false","true"),
+		Tuple.Create("false","false"),
+	};
+}
+@foreach (var i in options) {
+	<iframe src="/unittest/realtimeedgepart?start=@i.Item1&join=@i.Item2"></iframe>
+}
+
+<style>
+	iframe{
+		width:100%;
+		height:500px;
+	}
+</style>

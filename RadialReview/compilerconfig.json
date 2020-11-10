@@ -1,0 +1,158 @@
+﻿[
+  {
+    "outputFile": "Content/AccountabilityChart/AccountabilityChart.css",
+    "inputFile": "Content/AccountabilityChart/AccountabilityChart.less"
+  },
+  {
+    "outputFile": "Content/L10/Archive/Archive.css",
+    "inputFile": "Content/L10/Archive/Archive.less"
+  },
+  {
+    "outputFile": "Content/bootstrap/custom/modal.css",
+    "inputFile": "Content/bootstrap/custom/modal.less"
+  },
+  {
+    "outputFile": "Content/bootstrap/bootstrap.css",
+    "inputFile": "Content/bootstrap/bootstrap.less"
+  },
+  {
+    "outputFile": "Content/bootstrap/custom/Site.css",
+    "inputFile": "Content/bootstrap/custom/Site.less"
+  },
+  {
+    "outputFile": "Content/Manage/Manage.css",
+    "inputFile": "Content/Manage/Manage.less"
+  },
+  {
+    "outputFile": "Content/bootstrap/custom/dashboard.css",
+    "inputFile": "Content/bootstrap/custom/dashboard.less"
+  },
+  {
+    "outputFile": "Content/bootstrap/custom/XEditable.css",
+    "inputFile": "Content/bootstrap/custom/XEditable.less"
+  },
+  {
+    "outputFile": "Content/bootstrap/buttons.css",
+    "inputFile": "Content/bootstrap/buttons.less"
+  },
+  {
+    "outputFile": "Content/L10/L10Wizard.css",
+    "inputFile": "Content/L10/L10Wizard.less"
+  },
+  {
+    "outputFile": "Content/Angular/LineChart.css",
+    "inputFile": "Content/Angular/LineChart.less"
+  },
+  {
+    "outputFile": "Content/GettingStarted/GettingStarted.css",
+    "inputFile": "Content/GettingStarted/GettingStarted.less"
+  },
+  {
+    "outputFile": "Content/L10/L10Headlines.css",
+    "inputFile": "Content/L10/L10Headlines.less"
+  },
+  {
+    "outputFile": "Content/ReportsIndex/Reports.css",
+    "inputFile": "Content/ReportsIndex/Reports.less"
+  },
+  {
+    "outputFile": "Content/Reports/Reports.css",
+    "inputFile": "Content/Reports/Reports.less"
+  },
+  {
+    "outputFile": "Content/Reports/ReportDetails.css",
+    "inputFile": "Content/Reports/ReportDetails.less"
+  },
+  {
+    "outputFile": "Content/Reports/ClientDetails.css",
+    "inputFile": "Content/Reports/ClientDetails.less"
+  },
+  {
+    "outputFile": "Content/L10/L10.css",
+    "inputFile": "Content/L10/L10.less"
+  },
+  {
+    "outputFile": "Content/Angular/ngsortable.css",
+    "inputFile": "Content/Angular/ngsortable.less"
+  },
+  {
+    "outputFile": "Content/VTO/VTO2.css",
+    "inputFile": "Content/VTO/VTO2.less"
+  },
+  {
+    "outputFile": "Content/VTO/VTO.css",
+    "inputFile": "Content/VTO/VTO.less"
+  },
+  {
+    "outputFile": "Content/L10/L10IDS.V2.css",
+    "inputFile": "Content/L10/L10IDS.V2.less"
+  },
+  {
+    "outputFile": "Content/L10/l10-ie-only.css",
+    "inputFile": "Content/L10/l10-ie-only.less"
+  },
+  {
+    "outputFile": "Content/L10/L10Rocks.css",
+    "inputFile": "Content/L10/L10Rocks.less"
+  },
+  {
+    "outputFile": "Content/SnackbarAlerts.css",
+    "inputFile": "Content/SnackbarAlerts.less"
+  },
+  {
+    "outputFile": "Content/People/QuarterlyConversation.css",
+    "inputFile": "Content/People/QuarterlyConversation.less"
+  },
+  {
+    "outputFile": "Content/L10/L10ChatLog.css",
+    "inputFile": "Content/L10/L10ChatLog.less"
+  },
+  {
+    "outputFile": "Content/People/PeopleAnalyzer.css",
+    "inputFile": "Content/People/PeopleAnalyzer.less"
+  },
+  {
+    "outputFile": "Content/People/rzslider.css",
+    "inputFile": "Content/People/rzslider.less"
+  },
+  {
+    "outputFile": "Content/People/MaterialRadio.css",
+    "inputFile": "Content/People/MaterialRadio.less"
+  },
+  {
+    "outputFile": "Content/Swagger/CustomSwaggerStyle.css",
+    "inputFile": "Content/Swagger/CustomSwaggerStyle.less"
+  },
+  {
+    "outputFile": "Content/Inputs/TagInput.css",
+    "inputFile": "Content/Inputs/TagInput.less"
+  },
+  {
+    "outputFile": "Content/Chart/metric-graphics.css",
+    "inputFile": "Content/Chart/metric-graphics.less"
+  },
+  {
+    "outputFile": "Content/L10/L10Scorecard.css",
+    "inputFile": "Content/L10/L10Scorecard.less"
+  },
+  {
+    "outputFile": "Content/Angular/angular-material.css",
+    "inputFile": "Content/Angular/angular-material.less"
+  },
+  {
+    "outputFile": "Content/Inputs/IOSwitch.css",
+    "inputFile": "Content/Inputs/IOSwitch.less"
+  },
+  {
+    "outputFile": "Content/Accessibility/Colorblind.css",
+    "inputFile": "Content/Accessibility/Colorblind.less"
+  },
+  {
+    "outputFile": "Content/Upload/Upload.css",
+    "inputFile": "Content/Upload/Upload.less"
+  },
+  {
+    "outputFile": "Content/MaterialDesign/Components/Inputs.css",
+    "inputFile": "Content/MaterialDesign/Components/Inputs.less"
+  }
+]

@@ -1,0 +1,82 @@
+﻿@model RadialReview.Models.Todo.TodoVM
+@{
+	var guid = Html.NewGuid();
+}
+
+@Html.SecuredHiddenFor(x => x.MeetingId)
+@Html.SecuredHiddenFor(x => x.ByUserId)
+@Html.HiddenFor(x => x.ForModelId)
+@Html.HiddenFor(x => x.ForModelType)
+
+@{ 
+	var meetingWidth = (ViewBag.ShowRecurrenceDropdown == true && ViewBag.ShowUserDropdown == true) ? "col-sm-12" : "col-sm-7";
+}
+
+<div class="@(guid)">
+	<div class="form-group">
+		@Html.LabelFor(x => x.Message)
+		@Html.TextBoxFor(x => x.Message, new { @class = "form-control", placeholder = "Enter To-do message", autocomplete = "off" })
+	</div>
+	<div id="upload-btn-@guid" class="pull-right"></div>
+	<div class="form-group">
+		@Html.LabelFor(x => x.Details)
+		@Html.TextAreaFor(x => x.Details, new { @class = "form-control verticalOnly", rows = "6", placeholder = "Enter details (optional)" })
+	</div>
+	<div class="row">
+		@if (ViewBag.ShowRecurrenceDropdown == true) {
+			<div class="@meetingWidth">
+				<div class="form-group">
+					<label>Meeting</label>
+					<select name="@Html.NameFor(x => x.RecurrenceId)" class="form-control" style="width: 100%;">
+						@foreach (var u in ViewBag.PossibleMeetings) {
+							<option value="@u.id" @(u.id == Model.RecurrenceId ? "selected" : "")>@u.name</option>
+						}
+					</select>
+				</div>
+			</div>
+		} else {
+			@Html.HiddenFor(x => x.RecurrenceId)
+		}
+		@if (ViewBag.ShowUserDropdown == true) {
+			<div class="col-sm-7">
+				<div class="form-group">
+					@Html.LabelFor(x => x.AccountabilityId)
+					<select name="@Html.NameFor(x => x.AccountabilityId)" class="select-user form-control" style="width: 100%;height:64px;" multiple="multiple">
+						@foreach (var u in Model.PossibleUsers.OrderBy(x => x.name)) {
+							<option data-img="@u.imageUrl" value="@u.id" @(Model.AccountabilityId.Any(x => x == u.id) ? "selected" : "")>@u.name</option>
+						}
+					</select>
+				</div>
+			</div>
+		} else {
+			@Html.HiddenFor(x => x.AccountabilityId[0])
+		}
+		<div class="col-sm-5">
+			<div class="form-group">
+				<label>Due Date</label>
+				<div class="due-date"></div>
+				@Html.ClientDateFor(x => x.DueDate, TimeOfDay.End)
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+
+	$(".@guid .select-user").select2({
+		templateResult: imageListFormat,
+		templateSelection: imageListFormat,
+	});
+
+	TT.Html.UploadButton({
+		container:"#upload-btn-@(guid)",
+		url: "/upload/uploadfile",
+		success: function (data) {
+			var url = data.url;
+			var ta = $(".@guid textarea");
+			ta.val(ta.val() + "\n" + url+"\n");
+		}
+	});
+
+</script>

@@ -1,0 +1,62 @@
+﻿@model RadialReview.Models.Issues.ScoreCardTodoVM
+@{
+	var guid = Html.NewGuid();
+}
+
+@Html.SecuredHiddenFor(x => x.ByUserId)
+@Html.SecuredHiddenFor(x => x.MeetingId)
+@Html.SecuredHiddenFor(x => x.MeasurableId)
+@Html.SecuredHiddenFor(x => x.RecurrenceId)
+
+<div class="@(guid)">
+	<div class="form-group">
+		@Html.LabelFor(x => x.Message)
+		@Html.TextBoxFor(x => x.Message, new { @class = "form-control", placeholder = "Enter the To-do", autocomplete = "off" })
+	</div>
+	<div id="upload-btn-@guid" class="pull-right"></div>
+	<div class="form-group">
+		@Html.LabelFor(x => x.Details)
+		@Html.TextAreaFor(x => x.Details, new { @class = "form-control verticalOnly", rows = "6", placeholder = "Enter details (optional)" })
+	</div>
+	<div class="row">
+		<div class="col-sm-7">
+			<div class="form-group">
+				@Html.LabelFor(x => x.AccountabilityId)
+				<select name="@Html.NameFor(x => x.AccountabilityId)" class="select-user form-control" style="width: 100%;height:64px;" multiple="multiple">
+					@foreach (var u in Model.PossibleUsers.OrderBy(x => x.name)) {
+						<option data-img="@u.imageUrl" value="@u.id" @(Model.AccountabilityId.Any(x => x == u.id) ? "selected" : "")>@u.name</option>
+					}
+				</select>
+			</div>
+		</div>
+		<div class="col-sm-5">
+			<div class="form-group">
+				<label>Due Date:</label>
+				@Html.ClientDateFor(x => x.DueDate, TimeOfDay.End)
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<script>
+	$(".select-user").select2({
+		templateResult: imageListFormat,
+		templateSelection: imageListFormat,
+	});
+
+	var now = new Date();
+	now = Date.UTC(now.getYear() + 1900, now.getMonth(), now.getDate(), 0, 0, 0);
+
+	TT.Html.UploadButton({
+		container:"#upload-btn-@(guid)",
+		url: "/upload/uploadfile",
+		success: function (data) {
+			var url = data.url;
+			var ta = $(".@guid textarea");
+			ta.val(ta.val() + "\n" + url+"\n");
+		}
+	});
+</script>

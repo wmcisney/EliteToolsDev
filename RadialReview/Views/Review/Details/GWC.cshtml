@@ -1,0 +1,194 @@
+﻿@using RadialReview.Models
+@using RadialReview.Models.Charts
+@using RadialReview.Models.Enums
+@using RadialReview.Utilities.DataTypes
+@using WebGrease.Css.Extensions
+@model RadialReview.Controllers.ReviewController.ReviewDetailsViewModel
+
+
+@{
+	var gwcs = Model.AnswersAbout.Where(x => x.Askable.GetQuestionType() == QuestionType.GWC).Cast<GetWantCapacityAnswer>().GroupBy(x => x.Askable.Id);
+}
+<!--GWC.cshtml-->
+@if (gwcs.Any())
+{
+	<div class="subsection subsection-roles noBreak">
+		<div class="table-responsive">
+			<table class="table-io gwc">
+				<thead class="alignCenter">
+					<tr>
+						<th></th>
+						<th>Gets It</th>
+						<th>Wants It</th>
+						<th>Capacity To Do It</th>
+						<th class="remainingWidth"></th>
+					</tr>
+				</thead>
+				<tbody style="vertical-align: top;">
+					@{
+							var g = true;
+							var w = true;
+							var c = true;
+							var first = true;
+							var qs = new[]{
+								new Tuple<string, string, Func<GetWantCapacityAnswer, FiveState>, Func<GetWantCapacityAnswer, string>>("get", "getIt", x => x.GetIt, x => x.GetItReason),
+								new Tuple<string, string, Func<GetWantCapacityAnswer, FiveState>, Func<GetWantCapacityAnswer, string>>("want", "wantIt", x => x.WantIt, x => x.WantItReason),
+								new Tuple<string, string, Func<GetWantCapacityAnswer, FiveState>, Func<GetWantCapacityAnswer, string>>("capacity", "hasCapacity", x => x.HasCapacity, x => x.HasCapacityReason),
+							};
+
+					}
+
+					@foreach (var r in gwcs)
+					{
+						<tr>
+							<td class="row-header fixedWidth" style="vertical-align: middle;">@r.First().Askable.GetQuestion()</td>
+
+							@foreach (var q in qs)
+							{
+								<td>
+									@{
+										//var positiveG = r.Count(x => q.Item3(x) == FiveState.True);
+										//var negativeG = r.Count(x => q.Item3(x) == FiveState.False);
+										var ratio = new Ratio();
+										r.ForEach(x => ratio.Merge(q.Item3(x).Ratio()));
+										var clzG = "Indeterminate";
+										;
+										if (ratio.GetValue(-1) ==-1){
+											clzG = "Indeterminate";
+										}else if (ratio.GetValue(-1) < 0.8m){
+											clzG = "False";
+										}else{
+											clzG = "True";
+										}
+										var hasReason = r.Any(x => !String.IsNullOrWhiteSpace(q.Item4(x))) ? "hasReason" : "";
+
+									}
+									<span data-roleid="@r.First().Askable.Id" data-gwc="@q.Item1" data-reviewid="@Model.Review.Id" class="fill roles @hasReason @q.Item2 @clzG noSelect">@(ratio.ToPercentage("n/a"))</span>
+								</td>
+							}
+							@if (first)
+							{
+								first = false;
+								<td class="remainingWidth" rowspan="@gwcs.Count()" style="vertical-align: top;overflow-y:auto;">
+									<div id="roleDetails" class="roleFlip"></div>
+
+								</td>
+							}
+						</tr>
+					}
+				</tbody>
+
+			</table>
+		</div>
+		@if (ViewBag.RoleDetails ?? false)
+		{
+			<div class="btn btn-default roleTableBtn" onclick="toggleRoleTable()">Details</div>
+			<div id="roleTable" class="roleFlip clearfix hidden">
+				@Html.Partial("~/Views/Review/Details/_GwcTable.cshtml", Model)
+			</div>
+		}
+		@if (ViewBag.Client ?? false)
+		{
+			var gwcs2 = Model.AnswersAbout.Where(x => x is GetWantCapacityAnswer).Cast<GetWantCapacityAnswer>();
+			var feedbacks = new List<Tuple<string, string, string, FiveState, string>>();
+			foreach (var f in gwcs2)
+			{
+				if (f.IncludeGetItReason)
+				{
+					feedbacks.Add(Tuple.Create(f.ReviewerUser.GetName(), "Gets It", f.Askable.GetQuestion(), f.GetIt, f.GetItReason));
+				}
+				if (f.IncludeWantItReason)
+				{
+					feedbacks.Add(Tuple.Create(f.ReviewerUser.GetName(), "Wants It", f.Askable.GetQuestion(), f.WantIt, f.WantItReason));
+				}
+				if (f.IncludeHasCapacityReason)
+				{
+					feedbacks.Add(Tuple.Create(f.ReviewerUser.GetName(), "Capacity To Do It", f.Askable.GetQuestion(), f.HasCapacity, f.HasCapacityReason));
+				}
+			}
+			if (feedbacks.Any())
+			{
+				<table class="tablesorter roleTable" style="width: calc(100% - 10px); margin-left: 10px;">
+					<thead>
+						<tr>
+							<th colspan="2">Role:</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var r in feedbacks)
+						{
+							<tr style="border-top:1px solid #ddd;">
+								<td rowspan="2" style="padding-right: 0px;"><div class="fill @r.Item4"></div></td>
+								<td class="roleTableQuestion"><span class="bold">@r.Item2 :</span> @r.Item3</td>
+							</tr>
+							<tr>
+								<td class="roleTableReason" style="padding-left:6px; white-space: normal;">
+									<span class="italic">"@r.Item5"</span>
+									@if (!Model.ReviewContainer.AnonymousByDefault)
+									{
+										@:- @r.Item1
+									}
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			}
+		}
+
+		<div class="evaluation-heading">Roles</div>
+	</div>
+
+}
+
+@if (ViewBag.RoleDetails ?? false)
+{
+	using (Html.BeginScripts())
+	{
+		<script>
+
+			var request;
+
+			function toggleRoleTable() {
+				$("#roleTable").toggleClass("hidden");
+				$(".roleTableBtn").toggleClass("on");
+			}
+			function toggleValueTable() {
+				$("#valueTable").toggleClass("hidden");
+				$(".valueTableBtn").toggleClass("on");
+			}
+
+			$("#roleDetails").css("height", 100);
+
+			$(document).on("click", ".table-io.gwc > tbody > tr > td > .fill", function () {
+				$("#roleDetails").removeClass("hidden");
+
+				$(".table-io.gwc .fill.selected").removeClass("selected");
+				var roleId = $(this).data("roleid");
+				var gwc = $(this).data("gwc");
+				var reviewId = $(this).data("reviewid");
+				//$("#roleDetails").html("<div style='text-align:center;'><img src='/Content/img/ajax-loader.gif' alt='Loading...' /></div>");
+				var that = $(this);
+				if (request)
+					request.abort();
+
+
+				showModal("Role Details", "/Review/GWCDetails?reviewId=" + reviewId + "&gwc=" + gwc + "&roleId=" + roleId, "");
+
+				//request = $.ajax({
+				//	url: "/Review/GWCDetails?reviewId=" + reviewId + "&gwc=" + gwc + "&roleId=" + roleId,
+				//	success: function (data) {
+
+				//		$(".table-io.gwc .fill.selected").removeClass("selected");
+				//		$(that).addClass("selected");
+				//		$("#roleDetails").html(data);
+				//	},
+				//	error: function (a, b, c) {
+				//		$("#roleDetails").html("<div style='text-align:center;' class='gray'>An error has occurred.</div>");
+
+				//	}
+				//});
+			});
+		</script>
+	}
+}

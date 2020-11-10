@@ -1,0 +1,112 @@
+﻿@model RadialReview.Models.ViewModels.OrganizationViewModel
+@{
+	ViewBag.Title = "Organization";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Page = "Settings";
+}
+
+@section top{
+	<div class="jumbotron">
+		<h1>Manage</h1>
+	</div>
+}
+
+@section header{
+	@Html.Partial("Partial/manageheader")
+}
+<div class="smallBreak2"></div>
+<div class="panel panel-primary">
+	<div class="headerButton btn-link" onclick="@Html.ShowModal("Edit Company Values", "/CompanyValues/Modal/"+Model.Id, "/CompanyValues/Modal"@*, onComplete: "location.reload()"*@)">Edit</div>
+	<div class="panel-heading">
+		<h3 class="panel-title">Company Values:</h3>
+	</div>
+	<div class="panel-body numbers">
+		@if (Model.CompanyValues.Any()) {
+			int i = 1;
+			<table class="table table-condensed">
+				@*<tr>
+					<th></th>
+					<th>Value</th>
+					<th colspan="2">The Bar</th>
+				</tr>*@
+				@foreach (var r in Model.CompanyValues) {
+					<tr class="font-size:19px;vertical-align:top;">
+						<td style="width:20px">@(i). </td>
+						<td><b>@r.CompanyValue</b></td>
+						@*<td class="alignCenter" style="width:20px">@(r.MinimumPercentage)%</td>*@
+						@*<td class="alignCenter" style="width:28px"><span style="display: block;width: 26px;margin-top: 2px;background-color:@r.Minimum.GetRgbColor()" class="label label-default">@r.Minimum.ToShortKey()</span></td>*@
+					</tr>
+					if (!String.IsNullOrWhiteSpace(r.CompanyValueDetails)) {
+						<tr class="font-size:14px;">
+							<td></td>
+							<td>@r.CompanyValueDetails</td>
+							@*<td></td>*@
+							@*<td></td>*@
+						</tr>
+					}
+					i++;
+				}
+			</table>
+		} else {
+			<span class="gray">No Company Values. Click edit to add some.</span>
+		}
+	</div>
+</div>
+@*<div class="panel panel-primary">
+	<div class="headerButton btn-link" onclick="@Html.ShowModal("Edit Company " + @Html.Organization().Settings.RockName, "/Rocks/CompanyRockModal/" + Model.Id, "/Rocks/CompanyRockModal", onComplete: "location.reload()")">Edit</div>
+	<div class="panel-heading">
+		<h3 class="panel-title">Company @Html.Organization().Settings.RockName:</h3>
+	</div>
+	<div class="panel-body numbers">
+		@if (Model.CompanyRocks.Any()) {
+			foreach (var rg in Model.CompanyRocks.GroupBy(x => x.PeriodId).OrderByDescending(x => x.First().Period.NotNull(y => y.EndTime))) {
+				<b>@rg.First().Period.NotNull(x => x.Name):</b>
+				<ul>
+					@foreach (var r in rg) {
+						<li class="font-size:19px;">
+							@r.Rock
+						</li>
+					}
+				</ul>
+			}
+		} else {
+			<span class="gray">No Company @Html.Organization().Settings.RockName. Click edit to add some.</span>
+		}
+	</div>
+</div>*@
+@if (ViewBag.ShowReview == true) {
+	<div class="panel panel-primary">
+		<div class="headerButton btn-link" onclick="@Html.ShowModal("Edit Organization Questions", "/OrganizationQuestion/Modal/" + Model.Id, "/OrganizationQuestion/Modal", onComplete: "location.reload()")">Edit</div>
+		<div class="panel-heading">
+			<h3 class="panel-title">Company Questions for reviews:</h3>
+		</div>
+		<div class="panel-body numbers">
+			@if (Model.CompanyQuestions.Any()) {
+
+				<table style="width:100%">
+					<tr>
+						<th></th>
+						<th>Question</th>
+						<th>Question Type</th>
+					</tr>
+
+					@{ var i = 1;}
+					@foreach (var r in Model.CompanyQuestions) {
+						<tr>
+							<td style="width:20px">@(i).</td>
+							<td>@r.Question</td>
+							<td class="bold1 alignCenter" style="width:96px">@r.QuestionType</td>
+						</tr>
+						i++;
+					}
+				</table>
+						} else {
+							<span class="gray">No Company Questions. Click edit to add some.</span>
+						}
+		</div>
+	</div>
+}
+
+@using (Html.BeginStyles()) {
+	@Styles.Render("~/Content/ManageCSS")
+}

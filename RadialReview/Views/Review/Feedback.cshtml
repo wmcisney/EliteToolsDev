@@ -1,0 +1,43 @@
+﻿@model Tuple<List<RadialReview.Models.FeedbackAnswer>, bool>
+
+<div class="startHiddenGroup">
+    @foreach (var f in Model.Item1)
+    {
+        ViewData["I"] = ((int)ViewData["I"]) + 1;
+        <div class="startHidden row">
+            <div class="col-md-6 alignRight startHidden">
+                @*@if (f.Required)
+                {
+                    <div class="pull-left star @((ViewBag.Incomplete != null && !f.Complete) ? "red" : "")"><span class="glyphicon glyphicon-asterisk"></span></div>
+                }*@
+				<h4 class="alignRight question hidden-xs hidden-sm">@f.Askable.GetQuestion()</h4>
+				<h4 class="alignLeft question visible-xs visible-sm">@f.Askable.GetQuestion()</h4>
+            </div>
+            <div class="col-md-6 alignRight startHidden">
+                <textarea placeholder="@(f.Required ? "" : "Optional")"
+                          class="feedback changeable"
+                          @if (Model.Item2) { 
+							  @: name="question_@(RadialReview.Models.Enums.QuestionType.Feedback)_@(f.Identifier)"
+						  } else { 
+							  @: disabled
+						  }>@f.Feedback</textarea>
+
+            </div>
+        </div>
+        if ((int)ViewData["I"] < (int)ViewData["Max"])
+        {
+            <div class="smallBreak2" style="margin-top: 16px;"></div>
+        }
+    }
+</div>
+
+@using (var s = Html.BeginStyles())
+{
+    <style>
+        .feedback {
+            width: 100%;
+            height: 200px;
+            resize: vertical;
+        }
+    </style>
+}

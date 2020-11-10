@@ -1,0 +1,282 @@
+﻿@model RadialReview.Models.ViewModels.ReviewsViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Page = "Edit";
+}
+
+@*
+    @section header{
+        @Html.Partial("Partial/manageheader")
+    }
+*@
+
+@using (Html.BeginStyles()) {
+    <style>
+		html,body{
+			background-color:#eee;
+		}
+
+        .bar {
+        }
+
+        .toggle-completion:not(.on) {
+            display: none;
+        }
+
+        .shift5050 {
+            -webkit-transform-origin: 50% 50%;
+            -moz-transform-origin: 50% 50%;
+            -ms-transform-origin: 50% 50%;
+            -o-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+        }
+
+        .expandButton {
+            cursor: pointer;
+            opacity: .25;
+            -webkit-transition: opacity .25s ease;
+            -moz-transition: opacity .25s ease;
+            -ms-transition: opacity .25s ease;
+            -o-transition: opacity .25s ease;
+            transition: opacity .25s ease;
+        }
+
+            .expandButton:hover {
+                opacity: 1;
+            }
+
+        .table thead > tr:first-child > th {
+            border-bottom: 0px solid #DDD;
+        }
+
+        .table thead > tr:nth-child(2) > th {
+            border-top: 0px solid #DDD;
+        }
+
+        tr.managing {
+            cursor: pointer;
+        }
+
+        tr.not-managing {
+            background-color: #aaaaaa;
+        }
+
+        .equalWidth td {
+            width: 16.6%;
+        }
+
+        .equalWidth {
+            width: 100%;
+        }
+    </style>
+}
+
+@using (Html.BeginScripts()) {
+    <script>
+        function newTitle(item, about) {
+            var progressBar = $(item).find(".progress-bar");
+            var oldTitle = progressBar.attr("title");
+
+            var newTitle = "Answers about " + about + " [" + oldTitle + "]";
+
+            progressBar.attr("title", newTitle);
+            return newTitle;
+
+        }
+
+        function deleteReview(id) {
+            if (window.confirm("Are you sure you want to delete this review?")) {
+                $.ajax({
+                    url: "/Reviews/Delete/@(Model.Review.Id)",
+                    success: function (data) {
+                        StoreJsonAlert(data);
+                        document.location.href = "/Reviews/";
+                    }
+                });
+            }
+        }
+
+        function duedateModal() {
+            var ids = $.map($("input[type='checkbox']:checked"), function (a) { return +$(a).attr("name").substr(4); });
+
+            var later = new Date();
+            later.setDate(later.getDate() + 2);
+
+            showModal({
+                title: "Edit Due Date",
+                pushUrl: "/Reviews/EditDueDateModal",
+                fields: { name: "dueDate", type: "Date", value: later },
+                reformat: function (data) {
+                    debugger;
+                    data.reviews = ids;
+                    return data;
+                },
+                success: function (data) {
+                    if (showJsonAlert(data)) {
+                        for (var i in data.Object.ids) {
+                            $("#row-" + data.Object.ids[i] + " .duedate").html(data.Object.due)
+                        }
+                    }
+                }
+            });           // showModal(, "/Reviews/EditDueDateModal/", , "duedateUpdate");
+        }
+
+        function duedateUpdate(data) {
+            if (showJsonAlert(data)) {
+                for (var i in data.Object.ids) {
+                    $("#row-" + data.Object.ids[i] + " .duedate").html(data.Object.due)
+                }
+            }
+        }
+
+        function goToReview() {
+            document.location.href = "/Reviews/";
+        }
+        function updateTabs() {
+            var checked = $("input[type='checkbox']:checked");
+            if (checked.length) {
+                $(".globalButtons").hide();
+                $(".selectionButtons").show();
+            } else {
+                $(".globalButtons").show();
+                $(".selectionButtons").hide();
+            }
+        }
+        $(function () {
+            $("input[type='checkbox']").on("change", updateTabs);
+
+            $(".bar.Self").attr("title", function () {
+                return newTitle(this, "self");
+            });
+
+            $(".bar.Manager").attr("title", function () {
+                return newTitle(this, "managers");
+            });
+
+            $(".bar.Subordinate").attr("title", function () {
+                return newTitle(this, "subordinates");
+            });
+
+            $(".bar.Peer").attr("title", function () {
+                return newTitle(this, "peers");
+            });
+
+            $(".bar.Teammate").attr("title", function () {
+                return newTitle(this, "teammates");
+            });
+        });
+
+        function toggleComplete() {
+            $('.toggle-completion').toggleClass('on');
+        }
+    </script>
+}
+
+<div class="panel panel-primary" style="border: none;">
+    <div class="panel-heading">
+        <h3 class="panel-title">@Html.ReviewName() : @Model.Review.ReviewName</h3>
+    </div>
+
+    <div class="table-responsive">
+        <table class="fullWidth equalWidth btn-bar" style="background-color: #eee;">
+            <tbody>
+                <tr class="globalButtons">
+                    <td>
+                        <div class="btn btn-default fullWidth duedate-btn" onclick="@Html.ShowModal("Change due date", "/Reviews/DueDate/" + Model.Review.Id, "/Reviews/DueDate/")">
+                            Change Due Date
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn btn-default fullWidth reviewname-btn" onclick="@Html.ShowModal("Edit Review Name", "/Reviews/EditNameModal/" + Model.Review.Id, "/Reviews/EditNameModal/")">
+                            Edit @Html.ReviewName() Name
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn btn-default fullWidth addquestion-btn" onclick="@Html.ShowModal("Add Question", "/Reviews/AddQuestion/" + Model.Review.Id, "/Reviews/AddQuestion/")">
+                            Add Question
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn btn-default fullWidth removequestion-btn" onclick="@Html.ShowModal("Remove question", "/Reviews/RemoveQuestion/" + Model.Review.Id, "/Reviews/RemoveQuestion/", preSubmitCheck: "validateRemoval")">
+                            <span style="font-size: 90%;"> Remove Question</span> &nbsp;
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn btn-default  fullWidth adduser-btn" onclick="@Html.ShowModal("Add user", "/Reviews/Update/" + Model.Review.Id, "/Reviews/Update/")">
+                            Add User
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn btn-default fullWidth removeuser-btn" onclick="@Html.ShowModal("Remove user", "/Reviews/RemoveUser/" + Model.Review.Id, "/Reviews/RemoveUser/")">
+                            Remove User
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn btn-default fullWidth deletereview-btn" onclick="@Html.ShowModal("Delete Review", "/Reviews/Delete/" + Model.Review.Id, "/Reviews/Delete/",onCompleteFunction:"goToReview")">
+                            Delete @Html.ReviewName()
+                        </div>
+                    </td>
+                </tr>
+                <tr class="selectionButtons" style="display:none">
+                    <td>
+                        <div class="btn btn-default fullWidth deletereview-btn" onclick="$('input[type=checkbox]:checked').prop('checked', null); updateTabs();">
+                            Deselect all
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn btn-default fullWidth deletereview-btn" onclick="$('input[type=checkbox]:not(:checked)').prop('checked', 'true'); updateTabs();">
+                            Select all
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn btn-default fullWidth deletereview-btn" onclick="duedateModal()">
+                            Due Date
+                        </div>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @try{
+                <tr>
+                    <td colspan="2" class="alignCenter"><b>@Html.ReviewName() Created:</b>&nbsp; @Html.Partial("~/Views/Shared/DisplayTemplates/DateTime.cshtml", Model.Review.DateCreated)</td>
+                    <td colspan="2" class="alignCenter"><b>@Html.ReviewName()s due:</b>&nbsp;@Html.Partial("~/Views/Shared/DisplayTemplates/DateTime.cshtml",Model.Review.DueDate.Subtract(TimeSpan.FromDays(1))) (End of day)</td>
+                    <td colspan="2" class="alignCenter">
+                        <b>Reports due:</b>&nbsp;
+                        @if (Model.Review.ReportsDueDate != null) {
+                            @Html.Partial("~/Views/Shared/DisplayTemplates/DateTime.cshtml",Model.Review.ReportsDueDate.Value.Subtract(TimeSpan.FromDays(1)))
+                        } else {
+                            <span class="gray">No due date</span>
+                        }
+                    </td>
+                </tr>
+                }catch(Exception e){
+                    <tr><td>Error with dates.</td></tr>
+                }
+        </table>
+		<table class="table table-condensed table-hover">
+            <thead>
+                <tr style="height:30px;">
+                    <th style="width:1px;"></th>
+                    <th>User</th>
+                    <th style="width:1px;">Due Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Review.Reviews.ToListAlive().OrderBy(x => x.ReviewerUser.GetPersonallyManaging()).ThenBy(x => x.ReviewerUser.GetNameAndTitle())) {
+                    <tr id="row-@r.Id">
+                        <td><input type="checkbox" name="box-@r.Id" /></td>
+                        <td class="">@r.ReviewerUser.GetNameAndTitle()</td>
+                        <td class="">
+                            <span style="padding: 0;" class="btn btn-link duedate"
+                                  onclick="@Html.ShowModal("Edit Due Date", "/Reviews/EditDueDateModal/" + r.Id, "/Reviews/EditDueDateModal",onComplete:"duedateUpdate")">
+                                @Html.DisplayFor(x=>r.DueDate)
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

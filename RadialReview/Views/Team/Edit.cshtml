@@ -1,0 +1,114 @@
+﻿@model RadialReview.Controllers.TeamController.TeamViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Page = "Edit Team";
+    ViewBag.ExtraTabs = ExtraTab.Create("Edit Team", "/Team/Edit/" + Model.Team.Id);
+}
+
+@section header{
+    @Html.Partial("Partial/manageheader")
+}
+
+@section top{
+    <div class="jumbotron">
+        <h1>Manage</h1>
+    </div>
+}
+
+
+<div class="panel panel-primary">
+	<div class="panel-heading-button">
+		<button class="btn btn-default fullWidth plus" onclick="@Html.ShowModal(
+							                                              "Add user to "+Model.Team.GetName(),
+							                                              Url.Action("AddModal", "Team", new { id = Model.Team.Id }),
+							                                              Url.Action("AddModal", "Team")
+							                                              )">Add</button>
+	</div>
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			Edit team: <i>@Model.Team.GetName()</i>
+			@if (Model.Team.Type != RadialReview.Models.Enums.TeamType.Standard)
+			{
+				<small>(Auto-generated)</small>
+			}
+		</h3>
+	</div>
+	<table class="table table-condensed table-hover">
+		<thead>
+			<tr>
+				<th>Team</th>
+				<th style="width: 90px;" class="alignCenter">Start</th>
+				<th style="width: 90px;" class="alignCenter">End</th>
+				<th style="width: 1px;"></th>
+				@*@if (Model.Team.Type == RadialReview.Models.Enums.TeamType.Standard)
+				{
+					<th class="rightButton rightButton">
+
+						<a class="btn btn-default fullWidth" onclick="@Html.ShowModal(
+							                                              "Add user to "+Model.Team.GetName(),
+							                                              Url.Action("AddModal", "Team", new { id = Model.Team.Id }),
+							                                              Url.Action("AddModal", "Team")
+							                                              )">Add</a>
+
+					</th>
+				}*@
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var p in Model.Members.OrderBy(x => x.DeleteTime).ThenBy(x => x.CreateTime))
+			{
+				<tr @*onclick="window.location='/Manage/UserDetails/@p.UserId';"*@ id="row_@p.Id" class="@(p.DeleteTime != null ? "danger" : "")">
+					<td class="position ">
+						<a href="@Url.Action("Details","User",new {id=p.User.Id})">@p.User.GetNameAndTitle()</a>
+					</td>
+					<td class="alignCenter">@p.CreateTime.ToShortDateString()</td>
+					<td class="alignCenter endTime">@(p.DeleteTime.HasValue ? p.DeleteTime.Value.ToShortDateString() : "Present")</td>
+					@if (Model.Team.Type == RadialReview.Models.Enums.TeamType.Standard)
+					{
+						<td class="deletebutton">
+
+							@if (p.DeleteTime == null)
+							{
+								<a onclick="Delete(@p.Id)" class="fullWidth glyphicon glyphicon-trash clickable"></a>
+							}
+							else
+							{
+								<div class="fullWidth alignCenter" style="color: #929292">Deleted</div>
+							}
+
+						</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
+
+@using (var s = Html.BeginScripts())
+{
+    <script>
+        function Delete(id)//id=teamDurationId
+        {
+            $.ajax({
+                url: "/User/RemoveTeam/" + id,
+                success: function (data) {
+                    $("#row_" + id).addClass("danger");
+                    $("#row_" + id + " .deleteButton").html("<div class='fullWidth alignCenter' style='color: #929292'>Deleted</div>");
+                    $("#row_" + id + " .endTime").html("Just now");
+                }
+            })
+        }
+    </script>
+}
+
+@using (var s = Html.BeginStyles())
+{
+    <style>
+        tr.danger .position {
+            text-decoration: line-through;
+        }
+    </style>
+}

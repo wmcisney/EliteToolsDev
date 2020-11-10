@@ -1,0 +1,329 @@
+﻿@model RadialReview.Models.ViewModels.UserOrganizationDetails
+
+@using (Html.BeginStyles()) {
+	<style>
+		.numbers ul li {
+			list-style-type: decimal;
+		}
+	</style>
+	@Styles.Render("~/styles/snackbar")
+}
+@{
+	var edit = Model.Editable;//Model.User.GetPersonallyManaging() || Model.ManagingOrganization;
+
+	var jobDescription = "";
+	if (String.IsNullOrWhiteSpace(Model.User.JobDescription)) {
+		jobDescription += @"<span class=""gray"">None entered.";
+		if (edit) {
+			jobDescription += "<span> Click 'Edit' to add a job description.</span>";
+		}
+		jobDescription += "</span>";
+	} else {
+		if (Model.User.JobDescriptionFromTemplateId.HasValue) {
+			jobDescription += @"<span class=""icon fontastic-icon-link-2 template-link job-description-link"" title=""This job description was created by a template.""></span>";
+		}
+		jobDescription += Model.User.JobDescription;
+	}
+}
+
+
+
+<div class="revieww">
+	<div class="row">
+		<div class="col-sm-3">
+			@Html.Partial("_User", Model.User)
+			<div class="smallBreak"></div>
+			<div class="smallBreak"></div>
+			@if (edit) {
+				<hr />
+				<div class="alignCenter smallBreak2">
+					<a class="btn btn-link alignCenter" href="/Todo/List/@Model.User.Id">View To-Dos</a>
+				</div>
+				<div class="alignCenter smallBreak2">
+					<a class="btn btn-link alignCenter" href="/Rocks/Archive/@Model.User.Id">View Archived Rocks</a>
+				</div>
+				<div class="alignCenter smallBreak2">
+					<a class="btn btn-link alignCenter" href="/people/quarterlyconversation/surveys/@Model.User.Id">View Quarterly Conversations</a>
+				</div>
+			}
+
+			@if (Model.CanEditUserDetails) {
+				<div class="alignCenter smallBreak2">
+					<a href="#" onclick="editUserDetails(@Model.User.Id)">Edit User</a>
+				</div>
+			}
+
+			@if (ViewBag.IsRadialAdmin ?? false) {
+				<div class="alignCenter smallBreak2">
+					<a class="btn btn-link alignCenter" href="/admin/ResetPassword/@Model.User.Id" style="color: darkred;font-style: italic;">Password Reset</a>
+				</div>
+				<div class="alignCenter smallBreak2">
+					<a class="btn btn-link alignCenter" href="/user/UpdateCache/@Model.User.Id" style="color: darkred;font-style: italic;">Clear cache</a>
+				</div>
+			}
+
+		</div>
+		<div class="col-sm-9">
+			@if (!String.IsNullOrWhiteSpace(Model.User.JobDescription) || ViewBag.ShowReview == true) {
+				<div class="panel panel-default">
+					@if (edit) {<a class="headerButton clickable" onclick="@Html.ShowModal("Edit Job Description", "/JobDescription/Modal/" + Model.User.Id, "/JobDescription/Modal?refresh=true&silent=true")">Edit</a>}<div class="panel-heading"><h3 class="panel-title">Job Description</h3></div>
+					<div class="panel-body" style="white-space: pre-line;">@(new HtmlString(jobDescription))</div>
+				</div>
+			}
+
+
+			<div class="panel panel-default">
+				@if (edit) {
+					<a class="headerButton clickable" onclick="@Html.ShowModal("Edit Roles", "/Roles/Modal/" + Model.User.Id, "/Roles/Modal?refresh=true&silent=true")">Edit</a>
+				}
+				<div class="panel-heading">
+					<h3 class="panel-title">Roles</h3>
+				</div>
+				<div class="panel-body numbers">
+					@if (Model.Roles.Any()) {
+						<ul>
+							@foreach (var r in Model.Roles.OrderBy(x => x == null ? 0 : (long)x._Attach.Type)) {
+								<li class="font-size:19px;">
+									@r.Role
+									@if (r._Attach != null && r._Attach.Type != RadialReview.Models.Enums.AttachType.User) {
+										<span class="icon fontastic-icon-link-2 template-link" title="This role is attached to a @(r._Attach.Type.ToString().ToLower())."></span>
+									}
+								</li>
+							}
+						</ul>
+					} else {
+						<div class="gray">
+							No roles.
+							@if (edit) {
+								@:Click 'Edit' to add a role.
+							}
+						</div>
+					}
+				</div>
+			</div>
+
+			<div id="rock-list" class="rock-table"></div>
+
+			@using (Html.BeginScripts()) {
+				var rocks = Model.Rocks.NotNull(y => y.Where(x => Model.CanViewRocks));
+				var noRocks = Model.CanViewRocks ? (edit ? "No rocks. Click 'Add' to create one." : "No rocks.") : "Cannot view this employee's rocks";
+
+				<script>
+					var rockTable = DataTable({
+						container: "#rock-list",
+						data: @Html.ArrayToString(rocks),
+						cells: [
+							{
+								contents: function (x) {
+									return "<span class='label label-" + (x.RecurrenceIds.length == 0 ? "default" : "info") + " meeting-count'>In " + (x.RecurrenceIds.length == 0 ? "no" : x.RecurrenceIds.length) + "  L10" + (x.RecurrenceIds.length != 1 ? "s" : "") + "</span>";
+								}, classes: "nowrap"
+							},
+							{contents:function(x){ return x.Title;}, classes:"fullWidth" } ,
+							{edit:true},
+							{contents: function (x) {return "<span title='Archive' class='icon fontastic-icon-archive gray clickable' onclick='removeRock(" + x.Id + ")'></span>";}}
+						],
+						title:"Quarterly Rocks",
+						nodataText:"No rocks",
+						panel:{ classes:"panel panel-default", },
+						addButton:{ classes:"btn btn-default",text:"Add" },
+						clickAdd:"/rocks/create?userId=@(Model.User.Id)",
+						clickEdit:"/rocks/edit?id={0}&recurrenceId=-3",
+						postAdd:"/rocks/edit",
+						postEdit:"/rocks/edit/",
+						//clickRemove:"/rocks/archive/{0}",
+						//table:{
+						//	removeText:function(x){return "<span title='Archive' class='icon fontastic-icon-archive gray clickable' onclick='removeRock("+x.Id+")'></span>";},
+						//}
+
+						});
+				</script>
+			}
+
+			<div class="panel panel-default">
+				@if (edit && Model.CanViewMeasurables) {
+					<a class="headerButton clickable" onclick="@Html.ShowModal("Edit Measurables", "/Measurable/Modal/" + Model.User.Id, "/Measurable/Modal?refresh=true&silent=true")">Edit</a>
+				}
+				<div class="panel-heading">
+					<h3 class="panel-title">Scorecard Measurables</h3>
+				</div>
+				<div class="panel-body numbers">
+
+					@if (Model.CanViewMeasurables) {
+
+						if (Model.Measurables.Any() || Model.AdminMeasurables.Any()) {
+							if (Model.Measurables.Any()) {
+								<table class="fullWidth table-hover">
+									<thead>
+										<tr>
+											<th style="width: 40px;"></th>
+											<th>Measurable</th>
+											<th style="width: 90px;" class="alignCenter">Weekly Goal</th>
+											<th style="width: 160px;" class="alignCenter">Admin</th>
+											<th style="width:20px"></th>
+										</tr>
+									</thead>
+									<tbody>
+										@{ var i = 1; }
+										@foreach (var r in Model.Measurables) {
+											<tr class="meas_row meas_@r.Id">
+												<td class="alignRight num" style="padding-right: 8px;">@i.</td>
+												<td>
+													@r.Title
+													@if (r.FromTemplateItemId.HasValue) {
+														<span class="icon fontastic-icon-link-2 template-link" title="This measurable was created by a template."></span>
+													}
+												</td>
+												<td class="alignCenter">@r.GoalDirection.GetDisplayName() @r.Goal.ToString("0.#####")</td>
+												<td class="alignCenter"><a href="/Manage/UserDetails/@r.AdminUserId">@r.AdminUser.NotNull(x => x.GetName())</a></td>
+												<td>
+													@if (edit && Model.CanViewMeasurables) {
+														<span class="glyphicon glyphicon-trash clickable gray clickable" onclick="removeMeasurable(@r.Id)"></span>
+													}
+												</td>
+
+											</tr>
+											{
+												i++;
+											}
+										}
+									</tbody>
+								</table>
+							}
+
+							if (Model.AdminMeasurables.Any()) {
+								<br />
+								<table class="fullWidth adminMeasurablesTable">
+									<thead>
+										<tr>
+											<th style="width: 40px;"></th>
+											<th>Admin for measurables</th>
+											<th></th>
+											<th style="width: 90px;" class="alignCenter">Weekly Goal</th>
+											<th style="width: 160px;" class="alignCenter">Owner</th>
+											<th style="width:20px"></th>
+										</tr>
+									</thead>
+									<tbody>
+										@{ var i = 1; }
+										@foreach (var r in Model.AdminMeasurables) {
+											<tr class="measurable_@r.Id">
+												<td class="alignRight ids" style="padding-right: 8px;">@i.</td>
+												<td>
+													@r.Title
+													@if (r.FromTemplateItemId.HasValue) {
+														<span class="icon fontastic-icon-link-2 template-link" title="This measurable was created by a template."></span>}
+												</td>
+												<td class="shift-hidden"></td>
+												<td class="shift-visible gray small nowrap"><span class="clickable" onclick="showFormula(@r.Id)">(edit formula)</span></td>
+												<td class="alignCenter">@r.GoalDirection.GetDisplayName() @r.Goal.ToString("0.#####")</td>
+												<td class="alignCenter"><a href="/Manage/UserDetails/@r.AccountableUserId">@r.AccountableUser.NotNull(x => x.GetName())</a></td>
+												<td>
+													@if (edit && Model.CanViewMeasurables) {
+														<span class="glyphicon glyphicon-trash clickable gray clickable" title="Remove as admin" onclick="removeAdminMeasurables(@r.Id)"></span>
+
+													}
+												</td>
+
+											</tr>
+											{
+												i++;
+											}
+										}
+									</tbody>
+								</table> }
+						} else {
+							<div class="gray">
+								No measurables.
+								@if (edit) {
+									@:Click 'Edit' to add a measurable.
+								}
+							</div> }
+					} else {
+						<div class="gray">
+							Cannot view this employee's measurables.
+						</div>}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+
+	function editUserDetails(id){
+		showModal("Edit User","@Url.Action("EditUserDetails", "User")/"+id,"@Url.Action("EditUserDetails", "User")/"+id,null,null,null,null,"enctype=\"multipart/form-data\"");
+	}
+
+	function removeRock(id) {
+		$.ajax("/api/v1/rocks/" + id, {
+			method: "delete",
+			success: function () {
+				rockTable.removeRowById(id);
+				//debugger;
+
+				//var parent = $(".rock-item[data-id=" + id + "]").closest("ul");
+				//$(".rock-item[data-id=" + id + "]").remove();
+
+				//if (parent.find("li").length == 0) {
+				//	$(parent).parent().append("<div class='gray'>No Rocks.</div>");
+				//}
+			}
+		});
+	}
+
+	function removeMeasurable(mid) {
+		showModal("Archive Measurable", "/scorecard/archivemeasurable/" + mid, "/scorecard/archivemeasurable/", null, null, function (data) {
+			debugger;
+			if (data.Object.archived) {
+				$(".meas_" + mid).remove();
+			}
+			$(".meas_row .num").each(function (i) {
+				$(this).html((i+1) + ".");
+			});
+		});
+
+	}
+
+	function removeAdminMeasurables(id) {
+		showModal({
+			icon: "warning",
+			title: "Remove as an admin? The measurable will revert its owner.",
+			success: function () {
+				$.ajax({
+					method: "get",
+					url: "/measurable/removeAdmin/" + id,
+					success: function (d) {
+						$(".measurable_" + id).remove();
+						if ($(".adminMeasurablesTable tbody tr").length == 0) {
+							$(".adminMeasurablesTable").remove();
+						}
+						var i = 1;
+						$(".adminMeasurablesTable .ids").each(function () {
+							$(this).html(i + ".");
+							i += 1;
+						});
+					}
+				});
+			}
+		});
+	}
+
+</script>
+
+<style>
+	.hoverable:hover {
+		/*background-color:#fdece0;*/
+		color: #cf5e0f;
+	}
+
+	.rock-table .fullWidth {
+		padding-left: 13px;
+	}
+
+	.meeting-count {
+		font-size: 80%;
+		width: 70px;
+		display: block;
+	}
+</style>

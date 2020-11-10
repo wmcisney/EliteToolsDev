@@ -1,0 +1,38 @@
+﻿@model RadialReview.Models.L10.VM.L10MeetingVM
+@{
+    Layout = "~/Views/L10/BasePage.cshtml";
+}
+<div class="segue meeting-page">
+    <div class="row">
+        <div class="col-md-12">
+            <hgroup class="page-header">
+                <div class="pull-right">
+                    @Html.Partial("partial/ButtonBar", Model)
+                </div>
+                <h2>&nbsp;</h2>
+            </hgroup>
+            <div class="centered">
+                <div class="component">
+                    <h2>@ViewBag.Heading</h2>
+                    <h4>@(new MvcHtmlString(ViewBag.Subheading))</h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*@if (Model.IsPreview) {
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" id="exit_preview_meeting_button" class="btn btn-primary center btn-lg concludeButton"><i class="icon fontastic-icon-projection-screen pull-left"></i> Exit Preview</button>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('#exit_preview_meeting_button').click(function () {
+            window.location.reload();
+        });
+    });
+</script>*@

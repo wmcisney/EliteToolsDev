@@ -1,0 +1,67 @@
+﻿@model List<RadialReview.Accessors.GroupedFeatureSwitches>
+
+
+
+@using (Html.BeginScripts()) {
+	<script>
+
+		@*@Html.ToDataTable(z =>
+			z.Build("Switch", y => y.FeatureSelector, y => y.Production,x=>x.Beta,x=>x.WHITE_LABEL,x=>x.SuperAdmin)
+			 .CreateUrl("/admin/addswitch")
+			 .EditUrl("/admin/addswitch")
+		)*@
+		var fields = [
+			{text:"FeatureSelector",name:"FeatureSelector", classes:"fullWidth",	contents: function(x){	return x.FeatureSelector;}	},
+			{name:"Disabled:",type:"h3", hideColumn:true	},
+			{text:"Prod",name:"Production",	type:"checkbox",	classes:"flag",		contents: function(x){	return x.Production	?"<span class='hidden'>1</span><span class='glyphicon glyphicon-eye-close'></span>":"<span class='hidden'>0</span>";	}, value: function(x){	return x.Production		;	}},
+			{text:"Beta",name:"Beta",		type:"checkbox",	classes:"flag",		contents: function(x){	return x.Beta		?"<span class='hidden'>1</span><span class='glyphicon glyphicon-eye-close'></span>":"<span class='hidden'>0</span>";	}, value: function(x){	return x.Beta			;	}},
+			{text:"WL",name:"WHITE_LABEL",	type:"checkbox",	classes:"flag",		contents: function(x){	return x.WHITE_LABEL?"<span class='hidden'>1</span><span class='glyphicon glyphicon-eye-close'></span>":"<span class='hidden'>0</span>";	}, value: function(x){	return x.WHITE_LABEL	;	}},
+			{text:"Super",name:"SuperAdmin",type:"checkbox",	classes:"flag",		contents: function(x){	return x.SuperAdmin	?"<span class='hidden'>1</span><span class='glyphicon glyphicon-eye-close'></span>":"<span class='hidden'>0</span>";	}, value: function(x){	return x.SuperAdmin		;	}},
+			{edit:true },
+			{remove:true }
+		];
+
+		DataTable({
+			clickAdd: {
+				title:"Add Switch",
+				fields: fields,
+				pushUrl: "/admin/addswitch",
+				validation:function(x){ 
+					if (!x.FeatureSelector){
+						return "FeatureSelector must be valid";
+					}
+				} 
+			},
+			clickEdit:true,
+			postEdit:"/admin/addswitch",
+			clickRemove:function(x){return "/admin/removeswitch/"+x.FeatureSelector;},
+			//cellId: function(x){return x.FeatureSelector;},
+			cells:fields,
+			data: @Html.ArrayToString(Model),
+		});
+
+		$(function () {
+			$("table").tablesorter();
+		});
+	</script>
+}
+
+<style>
+	.flag {
+		min-width: 54px;
+		text-align: center;
+		border-right: 1px solid lightgray;
+		border-left: 1px solid lightgray;
+	}
+
+	/*.tablesorter-header-inner:after {
+		width: 0px;
+		position: absolute;
+	}*/
+	th{
+		text-align:center;
+	}
+	th:first-of-type{
+		text-align:left;
+	}
+</style>

@@ -1,0 +1,138 @@
+﻿@using RadialReview.Accessors.PDF.Partial
+@using RadialReview.Models.Enums
+@model RadialReview.Accessors.PDF.Partial.RocksPartialViewModel
+@{
+	Layout = "~/Views/Quarterly/_TemplatePartial.cshtml";
+}
+
+<style>
+	.rock-status-done {
+		color: #6CCC7C;
+	}
+
+	.rock-status-notdone {
+		color: #EA6B6F;
+	}
+
+	.rock-status-ontrack {
+		color: darkblue;
+	}
+
+	.rocks-partial, .rocks-partial > th, .rocks-partial > tr > td, .rocks-partial > td, .rocks-partial > td > span {
+		font-size: 11px !important;
+		padding: 0px;
+	}
+
+	.rocks-partial-container .rocks-partial td, .rocks-partial-container .rocks-partial th, .rocks-partial-container .rocks-partial-table-header {
+		padding: 6px !important;
+	}
+</style>
+<!-- QUARTERLY ROCKS SHEET -->
+
+@section head {
+	<div class="swan-flex">
+		<h1>Quarterly Rocks</h1>
+		<!-- RIGHT SWAN SERVICES -->
+		<div>
+			<span>@Model.Company</span>
+			<span>
+				<img src="@Model.Image" alt="Swan Services Logo" width="50" height="50">
+			</span>
+		</div>
+	</div>
+	@*<hr />*@
+	<div class="header-separator"></div>
+
+}
+
+<ul class="tt-qts-list">
+	@if (!string.IsNullOrWhiteSpace(Model.FutureDate)) {
+		<li>
+			<b>Future Date: </b>
+			@Model.FutureDate
+		</li>
+	} @*else {
+		<span class="not-set">not set</span>
+	}*@
+	@foreach (var header in Model.Headers) {
+		<li><b>@Html.Raw(header.Item1)</b>@Html.Raw(header.Item2)</li>
+
+	}
+</ul>
+
+<!-- COMPANY ROCKS -->
+@if (Model.CompanyRockGroup.Rocks.Any()) {
+	<div class="qts-wrapper clearfix rocks-partial-container" style="margin: 0 auto; border: 0;">
+		<table class="printout header-always-present rocks-partial-container">
+			<thead>
+				<tr>
+					<th class="rocks-partial print-color-adjust rocks-partial-table-header" style="width: 70%">COMPANY ROCKS</th>
+					<th class="rocks-partial print-color-adjust rocks-partial-table-header" style="width: 15%">WHO</th>
+					<th class="rocks-partial print-color-adjust rocks-partial-table-header">@Model.CompanyRockGroup.CompletionDisplay</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var rock in Model.CompanyRockGroup.Rocks) {
+					var rockIndex = (Model.CompanyRocks.IndexOf(rock) + 1) + ". ";
+
+					<tr class="rocks-partial print-color-adjust">
+						<td  class="number-pad">@(rockIndex + rock.Description)</td>
+						<td>@rock.Owner</td>
+						@if (rock.Status == RockState.Complete) {
+							<td><span class="rock-status-done">Done</span></td>
+						} else if (rock.Status == RockState.OnTrack) {
+							<td><span class="rock-status-notdone">Not Done</span></td>
+						} else if (rock.Status == null) {
+							<td><span class="rock-status-notdone">Not Set</span></td>
+						} else {
+							<td><span class="rock-status-notdone">Not Done</span></td>
+						}
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}
+
+@foreach (var rockOwnerGroupBy3 in Model.IndvidualRockGroups.Batch(3)) {
+	<div class="print-no-page-break qts-wrapper" style="margin: 20px auto 0">
+
+		@foreach (var rockOwnerGroup in rockOwnerGroupBy3) {
+
+			<div class="qts-col-3 print-no-page-break" style="margin-bottom: 0; margin-top: 5px; border-width: 0">
+				<table class="printout header-always-present rocks-partial-container" style="border-top-width: 0px">
+					<thead>
+						<tr class="rocks-partial print-color-adjust">
+							<th>@rockOwnerGroup.Owner</th>
+							<th>@rockOwnerGroup.CompletionDisplay</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var rock in rockOwnerGroup.Rocks) {
+							var rockIndex = (rockOwnerGroup.Rocks.IndexOf(rock) + 1) + ". ";
+
+							<tr class="rocks-partial print-color-adjust">
+								<td class="number-pad">@(rockIndex + rock.Description)</td>
+								@if (rock.Status == RockState.Complete) {
+									<td><span style="color: #6CCC7C">Done</span></td>
+								} else if (rock.Status == RockState.OnTrack) {
+									<td><span style="color: #EA6B6F">Not Done</span></td>
+								} else if (rock.Status == null) {
+									<td><span class="rock-status-notdone">Not Set</span></td>
+								} else {
+									<td><span class="rock-status-notdone">Not Done</span></td>
+								}
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		}
+	</div>
+}
+
+@if (!Model.CompanyRockGroup.Rocks.Any() && !Model.IndvidualRockGroups.Any()) {
+	<div class="empty-listing">No Rocks.</div>
+}
+
+<!-- END QUARTERLY ROCK SHEET -->

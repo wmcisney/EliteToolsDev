@@ -1,0 +1,55 @@
+﻿@model RadialReview.Accessors.PDF.Partial.TodosPartialViewModel
+@{
+	Layout = "~/Views/Quarterly/_TemplatePartial.cshtml";
+}
+
+<style>
+	.todos-container tr th, .headlines-container tr td {
+		font-size: 11px !important;
+	}
+</style>
+@section head {
+	<div class="swan-flex">
+		<h1>To-Dos</h1>
+		<!-- RIGHT SWAN SERVICES -->
+		<div>
+			<span>@Html.Encode(Model.Company)</span>
+			<span>
+				<img src="@Model.Image" alt="Swan Services Logo" width="50" height="50">
+			</span>
+		</div>
+	</div>
+	@*<hr />*@
+	<div class="header-separator"></div>
+}
+@* Todos *@
+
+@if (Model.Todos.Any()) {
+
+	<div style="margin-top: 0;">
+		<div style="width: 100%;">
+			<table class="todos-container printout header-always-present">
+				<thead>
+					<tr class="print-color-adjust">
+						<th style="width: 70%">To-Dos</th>
+						<th style="width: 15%">OWNER</th>
+						<th>DUE DATE</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- TODOS -->
+					@foreach (var todo in Model.Todos) {
+						var todoIndex = todo.Number + ". ";
+						<tr class="print-color-adjust">
+							<td class="number-pad">@(todoIndex + todo.Todo)</td>
+							<td>@todo.Owner</td>
+							<td>@todo.DueDate</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+} else {
+	<div class="empty-listing">No To-dos.</div>
+}

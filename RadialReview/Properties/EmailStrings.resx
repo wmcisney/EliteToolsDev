@@ -1,0 +1,409 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BodyWrapper" xml:space="preserve">
+    <value>&lt;table style="background-color:#f3f4f4" bgcolor="#F3F4F4" width="100%" align="center" cellspacing="0" cellpadding="0"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;
+            &lt;br&gt;
+            &lt;table cellpadding="1" cellspacing="0" style="background-color:#d9dadb" align="center" bgcolor="#D9DADB"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;
+            &lt;table style="font-family:arial,helvetica,sans-serif;font-size:14px;line-height:20px;background-color:#ffffff" align="center" bgcolor="#ffffff" cellspacing="0" cellpadding="0" width="{2}"&gt;
+
+            &lt;tbody&gt;&lt;tr&gt;&lt;td width="30"&gt;&lt;img style="display:block" border="0" alt="" width="1" height="1"&gt;&lt;/td&gt;
+
+            &lt;td style="font-family:arial,helvetica,sans-serif;font-size:14px;line-height:20px"&gt;
+            &lt;br&gt;&lt;br&gt;
+            {0}
+            &lt;br&gt;&lt;br&gt;
+            &lt;tr&gt;&lt;td width="30"&gt;&lt;img style="display:block" border="0" alt="" width="1" height="1"&gt;&lt;/td&gt;
+
+            &lt;td align="left"&gt;&lt;p style="font-size:9px;color:#999;line-height:12px;margin-top:0px;text-align:center;font-family:Arial,Helvetica,sans-serif" align="center"&gt;
+                {1}
+                &lt;/p&gt;&lt;br&gt;&lt;/td&gt;
+
+            &lt;td width="30"&gt;&lt;img style="display:block" border="0" alt="" width="1" height="1"&gt;&lt;/td&gt;&lt;/tr&gt;
+
+
+            &lt;/tbody&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;br&gt;&lt;/td&gt;&lt;/tr&gt;
+            &lt;/tbody&gt;&lt;/table&gt;</value>
+    <comment>[htmlBody,footer,tableWidth_600]</comment>
+  </data>
+  <data name="Footer" xml:space="preserve">
+    <value>This message was generated automatically by EliteTools.&lt;br/&gt; 95 Highland Ave., Bethlehem, PA 18017&lt;br/&gt;If you feel you have received this message in error you can respond to this email.</value>
+    <comment>[productName]</comment>
+  </data>
+  <data name="JoinOrganizationUnderManager_Subject" xml:space="preserve">
+    <value>{0}, join {1} on {2}</value>
+    <comment>[username,organizationName,productName]</comment>
+  </data>
+  <data name="NewReview_Subject" xml:space="preserve">
+    <value>You have a new eval from {0}</value>
+    <comment>[organizationName]</comment>
+  </data>
+  <data name="PasswordReset_Body" xml:space="preserve">
+    <value>&lt;p&gt;{0},&lt;/p&gt;
+&lt;p&gt;To reset your password please click the following link:&lt;/p&gt;
+&lt;br&gt; 
+    &lt;a href="{1}"&gt;{2}&lt;/a&gt;
+&lt;br /&gt;&lt;br /&gt;If it was not at your request, then please contact us immediately. If you have any questions, feedback, or concerns, you can reply to this e-mail address.
+&lt;br /&gt;
+&lt;br /&gt;
+Sincerely,&lt;br/&gt;
+The {3} Team</value>
+    <comment>[username,linkUrl,linkDisplay,productName]</comment>
+  </data>
+  <data name="PasswordReset_Subject" xml:space="preserve">
+    <value>{0} Password Reset</value>
+    <comment>[productName]</comment>
+  </data>
+  <data name="Prereview_Body" xml:space="preserve">
+    <value>&lt;p&gt;{0},&lt;/p&gt;
+&lt;p&gt;The {1} pre-review has started. You'll need to customize reviews for your direct reports by  {2}. You can begin your pre-review customizations by clicking the following link:&lt;/p&gt;
+&lt;br&gt; 
+    &lt;a href="{3}"&gt;{4}&lt;/a&gt;
+&lt;br /&gt;&lt;br /&gt;If you have any questions, feedback, or concerns, you can reply to this e-mail address.
+&lt;br /&gt;
+&lt;br /&gt;
+Sincerely,&lt;br/&gt;
+The {5} Team</value>
+    <comment>[receiversName,reviewName,dueDate,linkUrl,LinkDisplay,ProductName]</comment>
+  </data>
+  <data name="Prereview_Subject" xml:space="preserve">
+    <value>You have a new pre-review task from {0}</value>
+    <comment>[organizationName]</comment>
+  </data>
+  <data name="ReminderReview_Subject" xml:space="preserve">
+    <value>Reminder, you still have a review to complete.</value>
+    <comment>[organizationName]</comment>
+  </data>
+  <data name="RemindReview_Body" xml:space="preserve">
+    <value>&lt;p&gt;{0},&lt;/p&gt;
+&lt;p&gt;You have a review due on {1}. You can take your review by clicking the following link:&lt;/p&gt;
+    &lt;a href="{2}"&gt;{3}&lt;/a&gt;
+&lt;br /&gt;&lt;br /&gt;If you have any questions, feedback, or concerns, you can reply to this e-mail address.
+&lt;br /&gt;
+&lt;br /&gt;
+Sincerely,&lt;br/&gt;
+The {4} Team</value>
+    <comment>[receiversName,dueDate,linkUrl,LinkDisplay,ProductName]</comment>
+  </data>
+  <data name="NewReview_Body" xml:space="preserve">
+    <value>&lt;p&gt;{0},&lt;/p&gt;
+&lt;p&gt;{6} is open until {2}. You can take your eval by clicking the following link:&lt;/p&gt;
+&lt;br&gt; 
+    &lt;a href="{3}"&gt;{4}&lt;/a&gt;
+&lt;br /&gt;&lt;br /&gt;If you have any questions, feedback, or concerns, you can reply to this e-mail address.
+&lt;br /&gt;
+&lt;br /&gt;
+Sincerely,&lt;br/&gt;
+The {5} Team</value>
+    <comment>[receiversName,manager,dueDate,linkUrl,LinkDisplay,ProductName,reviewName]</comment>
+  </data>
+  <data name="MeetingSummary_Body" xml:space="preserve">
+    <value>&lt;p&gt;{0},&lt;/p&gt;
+&lt;p&gt;Here is your meeting summary for this week:&lt;/p&gt;
+{1}
+&lt;br /&gt;
+&lt;br /&gt;
+Sincerely,&lt;br/&gt;
+The {2} Team</value>
+    <comment>[Name,emailBody,ProductName]</comment>
+  </data>
+  <data name="MeetingSummary_Subject" xml:space="preserve">
+    <value>Meeting Summary - {0}</value>
+    <comment>[meetingName]</comment>
+  </data>
+  <data name="TodoReminder_Body" xml:space="preserve">
+    <value>&lt;p&gt;{0},&lt;/p&gt;
+&lt;p&gt;Here are your to-dos. To view your to-dos, click &lt;a href='{3}'&gt;here&lt;/a&gt;.&lt;/p&gt;
+{1}
+&lt;br /&gt;If you have any questions, feedback, or concerns, you can reply to this e-mail address.
+&lt;br /&gt;
+&lt;br /&gt;
+Sincerely,&lt;br/&gt;
+The {2} Team</value>
+    <comment>[Name,todosTable,ProductName,url]</comment>
+  </data>
+  <data name="TodoReminder_Subject" xml:space="preserve">
+    <value>{0}</value>
+    <comment>[subject]</comment>
+  </data>
+  <data name="DefaultSurvey_Body" xml:space="preserve">
+    <value>You have a new survey to complete. Please complete the survey here:</value>
+  </data>
+  <data name="DefaultSurvey_Subject" xml:space="preserve">
+    <value>You have a new survey to complete</value>
+  </data>
+  <data name="PaymentException_Body" xml:space="preserve">
+    <value>&lt;p&gt;Payment Failed: {0}&lt;/p&gt;&lt;p&gt;{1}&lt;/p&gt;&lt;p&gt;{2}&lt;/p&gt;&lt;p&gt;{3}&lt;/p&gt;</value>
+    <comment>[Message,Details,Trace,id_taskID]</comment>
+  </data>
+  <data name="PaymentException_Subject" xml:space="preserve">
+    <value>Payment Failed for {0}</value>
+    <comment>[OrganizationName]</comment>
+  </data>
+  <data name="PaymentReceipt_Body" xml:space="preserve">
+    <value>&lt;p&gt;We received payment for your {0} subscription. Thanks for your business!&lt;/p&gt;
+
+&lt;p&gt;Questions? Contact us anytime at {1}.&lt;/p&gt;
+
+&lt;p&gt;------------------------------------
+&lt;br/&gt;{0} Receipt - Subscription - {2}
+&lt;br/&gt;
+&lt;br/&gt;Amount: USD {3}
+&lt;br/&gt;
+&lt;br/&gt;Charged to: ({4})
+&lt;br/&gt;Transaction ID: {5}
+&lt;br/&gt;Date: {6}
+&lt;br/&gt;For service through: {7}
+&lt;br/&gt;
+&lt;br/&gt;{8}
+&lt;br/&gt;-----------------------------------&lt;/p&gt;</value>
+    <comment>[ProductName,SupportEmail,OrgName,Charged,CardLast4,TransactionId,ChargeTime,ServiceThroughDate,Address]</comment>
+  </data>
+  <data name="PaymentInvoice_Body" xml:space="preserve">
+    <value>&lt;p&gt;This is an invoice for your {0} account. To avoid interruptions in service, please ensure your credit card is up-to-date.  Your credit card will be charged automatically. We appreciate your business!&lt;/p&gt;
+
+&lt;p&gt;Questions? Contact us anytime at {1}.&lt;/p&gt;
+
+&lt;p&gt;------------------------------------
+&lt;br/&gt;{0} Invoice - Subscription - {2}
+&lt;br/&gt;
+&lt;br/&gt;Amount: USD {3}*
+&lt;br/&gt;
+&lt;br/&gt;Charged to: ({4})
+&lt;br/&gt;Date: {6}
+&lt;br/&gt;For service through: {7}
+&lt;br/&gt;
+&lt;br/&gt;{8}
+&lt;br/&gt;-----------------------------------&lt;/p&gt;
+&lt;p style="font-size:11px"&gt;*This amount is approximate and may change if you add individuals before being charged.&lt;/p&gt;</value>
+    <comment>[ProductName,SupportEmail,OrgName,Charged,CardLast4,TransactionId,ChargeTime,ServiceThroughDate,Address]</comment>
+  </data>
+  <data name="QuarterlyConversation_Body" xml:space="preserve">
+    <value>&lt;p&gt;{0},&lt;/p&gt;
+&lt;p&gt;You have a new Quarterly Conversation due on {1}. You can complete it by clicking the following link:&lt;/p&gt;
+&lt;br&gt; 
+    &lt;a href="{2}"&gt;{3}&lt;/a&gt;
+&lt;br /&gt;&lt;br /&gt;If you have any questions, feedback, or concerns, you can reply to this e-mail address.
+&lt;br /&gt;
+&lt;br /&gt;
+Sincerely,&lt;br/&gt;
+The {4} Team</value>
+    <comment>[receiversName,dueDate,linkUrl,LinkDisplay,ProductName]</comment>
+  </data>
+  <data name="QuarterlyConversationReminder_Body" xml:space="preserve">
+    <value>&lt;p&gt;{0},&lt;/p&gt;
+&lt;p&gt;You have a new Quarterly Conversation due on {1}. You can complete it by clicking the following link:&lt;/p&gt;
+&lt;br&gt; 
+    &lt;a href="{2}"&gt;{3}&lt;/a&gt;
+&lt;br /&gt;&lt;br /&gt;If you have any questions, feedback, or concerns, you can reply to this e-mail address.
+&lt;br /&gt;
+&lt;br /&gt;
+Sincerely,&lt;br/&gt;
+The {4} Team</value>
+    <comment>[receiversName,dueDate,linkUrl,LinkDisplay,ProductName]</comment>
+  </data>
+  <data name="UpdateCard_Body" xml:space="preserve">
+    <value>Hello,
+
+I hope that this email finds you well.
+
+We noticed that your credit card on file is about to expire. Please update your card information within {0}.
+
+If you do need to update your card information in your {0} account please follow the steps below:
+
+1. Log in to your {0} account.
+2. Navigate to "Manage Organization" from the drop down menu by your picture (Upper right corner) then click the "Payment" tab (click this link {1}Manage/Payment)
+3. Click "Add Bank Account" or “Add Credit Card” button in the upper right hand corner.
+4. Enter your bank or debit/credit card information.
+5. Click “Submit.”
+
+Your prompt attention to this matter will be greatly appreciated.
+
+All the best,
+
+{0} Support Team</value>
+    <comment>[ProductName, baseUrl]</comment>
+  </data>
+  <data name="FirstCharge_Body" xml:space="preserve">
+    <value>&lt;p&gt;
+Welcome to the &lt;b&gt;Traction&lt;span style=""line-height: 200%;font-size: 50%;vertical-align: top;""&gt;®&lt;/span&gt; Tools&lt;/b&gt; family!
+&lt;/p&gt;&lt;p&gt;
+Please save this email which has some important next-steps and links.
+&lt;/p&gt;&lt;p&gt;
+&lt;b&gt;What's next?&lt;/b&gt;
+&lt;/p&gt;&lt;p&gt;
+Schedule a quick &lt;a href="https://www.mytractiontools.com/schedule/optimize/"&gt;&lt;b&gt;15-20 minute Optimizer Call&lt;/b&gt;&lt;/a&gt; to ensure that you are taking advantage of all of the features that Elite Tools has to offer. 
+&lt;/p&gt;&lt;p&gt;
+&lt;b&gt;Get Assistance When you Need it&lt;/b&gt;
+ &lt;/p&gt;&lt;p&gt;
+Helping you is a core value that our Client Success team takes very seriously! 
+&lt;ul&gt;
+&lt;li&gt;Check our new, searchable &lt;a href="http://www.mytractiontools.com/success/"&gt;&lt;b&gt;knowledgebase&lt;/b&gt;&lt;/a&gt; for quick answers to common questions&lt;/li&gt;
+&lt;li&gt;Schedule a video chat with the first available member of our Client Success team &lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.mytractiontools.com/success/new/"&gt;&lt;b&gt;Submit a request&lt;/b&gt;&lt;/a&gt; via our new client success portal&lt;/li&gt;
+&lt;li&gt;Forward / email your request to &lt;a href="mailto:client-success@mytractiontools.com"&gt;&lt;b&gt;client-success@mytractiontools.com&lt;/b&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Call us at &lt;a href=""tel:1-402-437-0098""&gt;&lt;b&gt;1-402-437-0098&lt;/b&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/p&gt;&lt;p&gt;
+&lt;b&gt;Looking for Receipts?&lt;/b&gt;
+&lt;/p&gt;&lt;p&gt;
+For any purchases or subscription payments, you will receive an emailed receipt after each payment has processed. Our billing cycle is every 30 days.
+&lt;/p&gt;&lt;p&gt;
+&lt;b&gt;Connect With Us&lt;/b&gt;
+&lt;/p&gt;&lt;p&gt;
+Like and Share us on &lt;a href="https://www.facebook.com/TractionTools/"&gt;&lt;b&gt;Facebook&lt;/b&gt;&lt;/a&gt;.
+&lt;/p&gt;&lt;p&gt;
+Follow us on &lt;a href="https://www.youtube.com/channel/UCfM_bMyqs66VZo3Hx8uiepQ"&gt;&lt;b&gt;YouTube&lt;/b&gt;&lt;/a&gt;, where we have how-to's and ways to get the most out of Elite Tools.
+&lt;/p&gt;&lt;p&gt;
+&lt;b&gt;Send Us Your Testimonial or Review&lt;/b&gt;
+&lt;/p&gt;&lt;p&gt;
+Elite Tools is made better by hearing from you. Please send your thoughts to &lt;a href="support@dlptools.com"&gt;&lt;b&gt;client-support@dlptools.com&lt;/b&gt;&lt;/a&gt; and we may reach out to feature you on our website!
+&lt;/p&gt;&lt;p&gt;
+From all of us at Elite Tools, &lt;b&gt;thank you&lt;/b&gt;.
+&lt;/p&gt;</value>
+  </data>
+  <data name="QuarterlyPrintout_Body" xml:space="preserve">
+    <value>&lt;p&gt;Attached please find the quarterly printout for {0}.&lt;/p&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+Thank you,&lt;br /&gt;
+The {1} Team</value>
+    <comment>[organizationName,productName]</comment>
+  </data>
+  <data name="JoinOrganizationUnderManager_Body" xml:space="preserve">
+    <value>&lt;center&gt;&lt;a href="#" title="{4}" target="_blank"&gt;&lt;img src="https://s3.amazonaws.com/Radial/base/Logos/TRACTION-TOOLS_large_stacked_2c.png" width="300" height="auto" alt="{4}" /&gt;&lt;/a&gt;&lt;/center&gt;
+&lt;br/&gt;
+&lt;p&gt;{0},&lt;br/&gt; Join {1} on {4} by clicking the following link and creating a password:&lt;/p&gt;
+    &lt;a href="{2}"&gt;{3}&lt;/a&gt;
+&lt;br /&gt;
+&lt;br /&gt;If you have any questions about {4}, you can reply to this e-mail address.
+&lt;br /&gt;
+&lt;br /&gt;
+Sincerely,&lt;br/&gt;
+The {4} Team</value>
+    <comment>[UserName,OrganizationName,LinkUrl,LinkDisplay,ProductName,AccessCode]</comment>
+  </data>
+  <data name="MeetingSummary_Body_New" xml:space="preserve">
+    <value>&lt;p&gt;{0},&lt;/p&gt;
+&lt;p&gt;Here is your meeting summary for this week:&lt;/p&gt;
+{1}
+&lt;br /&gt;</value>
+    <comment>[Name,emailBody,ProductName]</comment>
+  </data>
+</root>

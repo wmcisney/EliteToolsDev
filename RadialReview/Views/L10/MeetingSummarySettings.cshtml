@@ -1,0 +1,50 @@
+﻿@model RadialReview.Models.ViewModels.MeetingSummarySettings
+@{
+	ViewBag.Title = "Meeting Summary Settings";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Additional Meeting Summary Subscribers</h1>
+<div id="table"></div>
+
+
+@using (Html.BeginScripts()) {
+	<script>
+		var data = @Html.ArrayToString(Model.SendTo);
+		var editModalFields =[{
+				name: "who",
+				text: "Email",
+				placeholder: "Send the meeting summary to this email",
+				type: "text",
+			}, {
+				name: "type",
+				value: "Email",
+				type: "hidden",
+				}];
+		
+
+		DataTable({
+			container: "#table",
+			data: data,
+			addButton: true,
+			cells: [
+				{ hideColumn:true, name: "Type", type:"hidden", contents: function (x) { return x.Type; }, classes: "fullWidth" },
+				{ name: "Who", contents: function (x) { return x.Who; }, classes: "fullWidth" },
+				{ edit: true },
+				{ remove: true }
+			],
+			clickAdd: {
+				title: "Add to meeting summary",
+				fields: editModalFields,
+				pushUrl: "/L10/AddMeetingSummarySettings/@(Model.RecurrenceId)"
+			},
+			clickRemove: "/L10/RemoveMeetingSummarySettings/{0}",
+			clickEdit: true,
+			postEdit: "/L10/EditMeetingSummarySettings/{0}",
+			
+		});
+
+
+	</script>
+}
+

@@ -1,0 +1,49 @@
+﻿@model RadialReview.Controllers.OrganizationController.UploadVM
+@{
+    ViewBag.Title = "Upload";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="pull-right"><a href="/upload" class="btn btn-default">Back to Upload</a></h2>
+
+<h3><a class="clickable" href="/Upload/Org/Users">CLICK HERE TO USE OTHER UPLOADER...</a></h3>
+
+<h2>Upload Users to Organization</h2>
+
+<h3>File Format (.csv):</h3>
+<table class="table table-bordered">
+    <tr>
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>Email</td>
+        <td>Position</td>
+        <td>@RadialReview.Utilities.Config.ManagerName() First Name</td>
+        <td>@RadialReview.Utilities.Config.ManagerName() Last Name</td>
+    </tr>
+</table>
+
+<div style="height:30px"></div>
+
+<form action="/Organization/Upload" method="post" enctype="multipart/form-data">
+	
+	<div class="row">
+		<div class="col-md-3">
+			<label for="file">Filename:</label>
+		</div>
+		<div class="col-md-9">
+			<input type="file" name="File" id="file" />
+		</div>
+	</div>
+	<br/>
+	<div class="row">
+		<div class="col-md-3">
+			<input class="btn btn-primary" type="submit" />
+		</div>
+	</div>
+</form>
+
+<style>
+    .table-bordered *{
+        border-color: gray !important;
+    }
+</style>

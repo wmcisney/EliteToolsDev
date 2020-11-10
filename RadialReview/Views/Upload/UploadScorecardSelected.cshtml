@@ -1,0 +1,159 @@
+﻿@model RadialReview.Controllers.UploadController.UploadScorecardSelectedDataVM
+@{
+	var anyInCol1 = Model.Measurables.Any(x => x.ExistingMeasurableId != null || x.MatchFailed);
+}
+<div class="instructions">
+	<h3><b>Instructions:</b> Confirm the upload.</h3>
+	@if (anyInCol1) {
+		<p><i>Some measurables appear to already exist. Please choose whether to update existing measurables or create new ones.</i></p>
+	} else {
+		<p>This form will create new measurables for each row.</p>
+	}
+	<p>Make sure the measurables have the correct owner, name, and goal.</p>
+</div>
+<br />
+
+@using (Html.BeginForm("SubmitScorecard", "upload", FormMethod.Post)) {
+	<input type="hidden" name="Path" value="@Model.Path" />
+	<input type="hidden" name="ScoreRange" value="@Model.ScoreRange" />
+	<input type="hidden" name="DateRange" value="@Model.DateRange" />
+	<input type="hidden" name="MeasurableRectType" value="@Model.MeasurableRectType" />
+
+
+	<div class="clearfix"></div>
+	<div class="table-responsive">
+		<table class="table table-bordered resultTable">
+			<thead>
+				<tr>
+					<th @(anyInCol1 ? new HtmlString("style=\"min-width: 240px;\"") : new HtmlString(""))></th>
+					<th style="min-width: 120px;">Specified&nbsp;Owner</th>
+					<th style="min-width: 120px;">Mapped to</th>
+					<th style="min-width: 180px;">Measurable</th>
+					<th style="min-width: 80px;">Direction</th>
+					<th style="min-width: 120px;">Goal</th>
+					<th style="min-width: 120px;">Units</th>
+					@foreach (var d in Model.Dates) {
+						<th>@d.ToShortDateString()</th>
+					}
+
+				</tr>
+			</thead>
+			<tbody>
+				@{var i = 0;}
+				@foreach (var row in Model.Scores) {
+					try {
+						//var users = Model.UserLookup[Model.Users[i]].GetProbabilities().OrderByDescending(x => x.Value).Select(x => x.Key).ToSelectList(x => x.FirstName + " " + x.LastName, x => x.UserOrgId);
+						//if (!users.Any()) {
+						//	users = Model.AllUsers.OrderBy(c => c.Text).ToList();
+						//}
+
+
+						var bestGuess = new SelectListGroup() { Name = "Best Guess" };
+						var everyone = new SelectListGroup() { Name = "Everyone" };
+						List<SelectListItem> users;
+						users = Model.UserLookup[Model.Users[i]].GetProbabilities()
+							.OrderByDescending(x => x.Value)
+							.Select(x => x.Key)
+							.Select(x => new SelectListItem {
+								Text = x.FirstName + " " + x.LastName,
+								Value = "" + x.UserOrgId,
+								Group = bestGuess
+							}).ToList();
+
+						users.AddRange(Model.AllUsers.Select(x => new SelectListItem {
+							Text = x.Text,
+							Value = x.Value,
+							Group = everyone
+						}));
+
+
+
+
+
+						var measurable = Model.Measurables[i];
+						var goal = Model.Goals[i];
+						var dir = Model.Direction[i];
+						var unit = Model.Units[i];
+
+						<tr class="r_@i useExisting">
+							<td>
+								@if (measurable.ExistingMeasurableId != null) {
+									<select class="form-control useSelector" name="m_use_@i" onchange="changeUse(@i)">
+										<option selected value="existing">Update existing measurable</option>
+										<option value="create">Create a new measurable</option>
+									</select>
+									@Html.Hidden("m_existing_meas_id_" + i, measurable.ExistingMeasurableId.Value)
+								} else {
+									<input type="hidden" name="m_use_@i" value="create" />
+								}
+
+								@if (measurable.MatchFailed) {
+									<i title="@measurable.MatchFailReason" style="color:red">Could not replace [?]</i>
+								}
+							</td>
+							<td style="font-style:italic">@Model.Users[i]</td>
+							<td>@Html.DropDownList("m_user_" + i, users, new { @class = "form-control" })</td>
+							<td>@Html.TextBox("m_measurable_" + i, measurable.Name, new { style = "width:100%;", @class = "form-control" })</td>
+							<td>@Html.EnumDropDownList("m_goaldir_" + i, dir, new { @class = "form-control" })</td>
+							<td>@Html.TextBox("m_goal_" + i, goal, new { type = "numeric", step = "any", @class = "form-control" })</td>
+							<td>@Html.EnumDropDownList("m_goalunits_" + i, unit, new { @class = "form-control" })</td>
+							@{ var j = 0;}
+							@foreach (var c in row) {
+								<td>
+									@if (measurable.ExistingMeasurableId.HasValue && c.Value == c.OldValue) {
+										<span class="alternate-existing pill" style="background-color: #777777;" title="This cell value has not changed">@(c.Value)</span>
+										<span class="alternate-create">@(c.Value ?? c.OldValue) </span>
+										@Html.Hidden("m_score_existing_" + i + "_" + j, c.Value)
+										@Html.Hidden("m_score_create_" + i + "_" + j, c.Value ?? c.OldValue)
+
+									} else if (measurable.ExistingMeasurableId.HasValue && c.Value.HasValue) {
+										<span class="alternate-existing pill" style="background-color: #5bc0de;" title="This cell will be replaced with this value">@(c.Value)</span>
+										<span class="alternate-create">@(c.Value ?? c.OldValue) </span>
+										@Html.Hidden("m_score_existing_" + i + "_" + j, c.Value)
+										@Html.Hidden("m_score_create_" + i + "_" + j, c.Value ?? c.OldValue)
+
+									} else if (measurable.ExistingMeasurableId.HasValue && !c.Value.HasValue) {
+										<span class="alternate-existing" title="This cell will retain its existing value">@(c.OldValue)</span>
+										<span class="alternate-create">@(c.Value ?? c.OldValue) </span>
+										@Html.Hidden("m_score_existing_" + i + "_" + j, c.OldValue)
+										@Html.Hidden("m_score_create_" + i + "_" + j, c.Value ?? c.OldValue)
+
+									} else {
+										<span>@(c.Value ?? c.OldValue) </span>
+									}
+								</td>
+								j++;
+							}
+						</tr>
+					} catch (Exception e) {
+						<tr><td style="color:red">Error? @Model.Measurables[i]</td></tr>
+					}
+					i++;
+				}
+			</tbody>
+		</table>
+	</div>
+}
+
+<script>
+	function changeUse(id) {
+		var use = $(".r_" + id + " .useSelector").val() == "existing";
+		$(".r_" + id).toggleClass("useExisting", use);
+		$(".r_" + id).toggleClass("useCreate", !use);
+	}
+</script>
+<style>
+	.useExisting .alternate-create {
+		display: none;
+	}
+
+	.useCreate .alternate-existing {
+		display: none;
+	}
+
+	.pill {
+		color: white;
+		border-radius: 10px;
+		padding: 2px 8px;
+	}
+</style>

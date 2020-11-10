@@ -1,0 +1,366 @@
+﻿@model RadialReview.Models.Angular.Scorecard.AngularMeasurable
+@{
+	var measguid = Html.NewGuid();
+}
+@Html.HiddenFor(x => x.Id)
+<div class="form-horizontal @measguid">
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Name:</label>
+		<div class="col-sm-6">
+			@Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Who's Accountable:</label>
+		<div class="col-sm-6">
+			@Html.DropDownListFor(x => x.Owner.Id, (List<SelectListItem>)ViewBag.PossibleOwners, new { @class = "form-control owner" })
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Units:</label>
+		<div class="col-sm-6 ">
+			@Html.EnumDropDownList("Modifiers", Model.Modifiers ?? RadialReview.Models.Enums.UnitType.None, new { @class = "form-control" })
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Goal:</label>
+		<div class="col-sm-6">
+			<div class="row">
+				<div class="col-xs-4 alt-target lower-switch-container">
+					@Html.TextBox("lower", (double?)Model.Target, new { @class = "form-control lower-ctrl switch-ctrl show-historical-updater-on-edit" })
+					<span class="boundry">Lower Bound</span>
+				</div>
+				<div class="col-xs-4  smallBreak2">
+					@Html.EnumDropDownList("Direction"@*Html.NameFor(x => x.Direction).ToHtmlString()*@, Model.Direction ?? RadialReview.Models.Enums.LessGreater.GreaterThan, new { @class = "form-control direction show-historical-updater-on-edit" })
+				</div>
+				<div class="col-xs-4 switch-container">
+					@Html.TextBox("upper", (double?)(Model.AltTarget ?? Model.Target), new { @class = "form-control upper-ctrl switch-ctrl show-historical-updater-on-edit" })
+					@Html.TextBox("Target", (double?)Model.Target, new { @class = "form-control target-ctrl switch-ctrl show-historical-updater-on-edit" })
+					<span class="boundry">Upper Bound</span>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	@if (ViewBag.IsCreate != true) {
+		<div class="form-group historical-updater hidden">
+			<label class="col-sm-3 control-label">Update Cell Colors For:</label>
+			<div class="col-sm-6 historical-container">
+				<select id="historical" name="historical" class="form-control">
+					<option value="false" selected>Only Future Weeks</option>
+					<option value="true">Past and Future Weeks</option>
+				</select>
+
+				@*@Html.CheckBox("historical", false, new { @class = "checkbox", style = "" })*@
+				<span class="description"> The goals for historical cells will <span class="not">NOT </span> be updated. </span>
+			</div>
+		</div>
+	}
+	<hr />
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Show Average:</label>
+		<div class="col-sm-9 date-click">
+			@Html.CheckBox("enableAverage", Model.ShowAverage ?? false, new { @class = "checkbox", style = "" })
+			<div class="hideable date-fill">
+				<span>Between:</span>
+				@Html.ClientDate("averageStart", Model.AverageRange ?? DateTime.UtcNow, TimeOfDay.Beginning)
+				<span>&nbsp; and today</span>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Show Cumulative:</label>
+		<div class="col-sm-9 date-click">
+			@Html.CheckBox("enableCumulative", Model.ShowCumulative ?? false, new { @class = "checkbox", style = "" })
+			<div class="hideable date-fill">
+				<span>Between:</span>
+				@Html.ClientDate("cumulativeStart", Model.CumulativeRange ?? DateTime.UtcNow, TimeOfDay.Beginning)
+				<span>&nbsp; and today</span>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Formula:</label>
+		<div class="col-sm-8 formula-click">
+			@Html.CheckBox("enableFormula", Model.IsFormula ?? false, new { @class = "checkbox", style = "" })
+			<div class="formula-fill hideable">
+				<div class="formula-detachable">
+					@{
+						try {
+							Html.RenderAction("FormulaPartial", "Scorecard", new { id = (Model.Id == 0 ? (long?)null : Model.Id) });
+						} catch (Exception e) {
+							<span class="gray">--formula error--</span>
+							<span class="hidden">
+								@e.Message
+							</span>
+						}
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class=" @(ViewBag.HideMeetings==true?"hidden":"")">
+		<hr />
+		<div class="form-group">
+			<label class="col-sm-3 control-label">Attached to Meetings:</label>
+			<div class="col-sm-8">
+				@Html.ListBox("recurrenceIds", (List<SelectListItem>)ViewBag.PossibleRecurrences, new { @class = "select-recur form-control", multiple = true })
+				@Html.Hidden("updateRecurrences", "true")
+			</div>
+		</div>
+	</div>
+</div>
+
+
+@if (ViewBag.IsCreate != true) {
+	<div class="pull-right" style="position:absolute; bottom:-48px;">
+		@if (ViewBag.CanArchive == true) {
+			<span class="btn btn-default btn-archive" onclick="@(measguid)Archive()"><span class="icon fontastic-icon-archive"></span> Archive</span>
+		} else {
+			<span class="btn btn-default disabled" title="You do not have permission to archive this measurable."><span class="icon fontastic-icon-archive"></span> Archive</span>
+		}
+	</div>
+}
+
+
+<script>
+	function @(measguid)UpdateClickers() {
+		$(".@measguid .date-click input[type=checkbox]").each(function () {
+			var checked = $(this).is(":checked");
+			$(this).closest(".date-click").find(".hideable").toggleClass("hidden", !checked);
+		});
+	}
+
+	$(".@measguid .date-click input[type=checkbox]").change(function () {
+		@(measguid)UpdateClickers()
+	});
+
+	function @(measguid)ShowAlt() {
+		$(".@(measguid) .direction").each(function () {
+
+			var between = "Between";
+			var dir = $(this).val();
+			$(this).closest(".form-group").find(".alt-target").toggleClass("hidden", dir != between);
+			$(this).closest(".form-group").find(".boundry").toggleClass("hidden", dir != between);
+			$(".@(measguid) .switch-container").toggleClass("col-xs-4", dir == between);
+			$(".@(measguid) .switch-container").toggleClass("col-xs-8", dir != between);
+
+
+			if (dir == between) {
+				$(".@(measguid) .switch-ctrl").detach();
+				$(".@(measguid) .switch-container").prepend(upperCtrl@(measguid));
+				$(".@(measguid) .lower-switch-container").prepend(lowerCtrl@(measguid));
+			} else {
+				$(".@(measguid) .switch-ctrl").detach();
+				$(".@(measguid) .switch-container").prepend(targetCtrl@(measguid));
+			}
+
+		})
+	}
+
+	function @(measguid)Archive() {
+		$.ajax({
+			url: "/Scorecard/Archive/@Model.Id",
+			success: function () {
+				$("#modal").modal('hide');
+			}
+		});
+	}
+
+
+	function @(measguid)UpdateFormulaClickers() {
+		$(".@measguid .formula-click input[type=checkbox]").each(function () {
+			var checked = $(this).is(":checked");
+			$(this).closest(".formula-click").find(".hideable").toggleClass("hidden", !checked);
+		});
+	}
+
+	var targetCtrl@(measguid) = $(".@(measguid) .target-ctrl").detach();
+	var upperCtrl@(measguid) = $(".@(measguid) .upper-ctrl").detach();
+	var lowerCtrl@(measguid) = $(".@(measguid) .lower-ctrl").detach();
+
+	$(".@measguid").on("change input",".show-historical-updater-on-edit",function () {
+		$(".@measguid .historical-updater").removeClass("hidden");
+	});
+
+
+
+	$(".@measguid .historical-container select").change(function () {
+		var checked = $(this).val() == "true";
+		$(this).closest(".historical-container").find(".description .not").toggleClass("hidden", checked);
+	});
+
+	$(".@measguid .direction").change(function () {
+		@(measguid)ShowAlt();
+	});
+
+	var formulaCtrl@(measguid) = false;
+	$(".@measguid .formula-click input[type=checkbox]").change(function () {
+		@(measguid)UpdateFormulaClickers();
+
+		var checked = $(this).is(":checked");
+		if (checked) {
+			if (formulaCtrl@(measguid) != false) {
+				$(".@(measguid) .formula-fill").append(formulaCtrl@(measguid));
+			}
+			$(".@(measguid) .no-formula-detachable").remove();
+		} else {
+			$(".@(measguid) .formula-fill").append("<input type='hidden' name='formula' value='' class='no-formula-detachable'/>");
+			formulaCtrl@(measguid) = $(".@(measguid) .formula-detachable").detach();
+		}
+	});
+
+	@(measguid)ShowAlt();
+	@(measguid)UpdateClickers();
+	@(measguid)UpdateFormulaClickers();
+
+
+	function createOwnerDropdown@(measguid)() {
+		setTimeout(function () {
+			$(".@measguid .owner").select2();
+		}, 1);
+	}
+	createOwnerDropdown@(measguid)();
+</script>
+
+<script>
+	function a@(measguid)() {
+		var select2 = $(".@(measguid) .select-recur").select2({
+			closeOnSelect: true,
+			allowClear: true,
+			placeholder: "Not attached to any meetings..." ,
+			escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+			//minimumInputLength: 1,
+			templateResult: function (d) {
+				return "<div><div class='searchresult clearfix' data-value='" + d.id + "'>" + d.text + "</div></div>";
+			},
+			templateSelection: function (d) {
+				return "<div class='searchresult searchresult-selected'>" + d.text + "</div>";
+			}
+		}).on("change", function (e) {
+			//console.info($(this).select2('data')[0].Name);
+			//$("[@@(nameAttr + "Text")]").val($(this).select2('data')[0].Name);
+		});
+	}
+	setTimeout(function () {
+		a@(measguid)();
+	}, 10);
+
+</script>
+
+
+<style>
+
+
+	.btn-archive {
+		border: 1px solid #d9534f;
+		color: #d9534f;
+	}
+	.btn-archive .icon{
+		color: #d9534f;
+		-webkit-transition: all .25s ease;
+		-moz-transition: all .25s ease;
+		-ms-transition: all .25s ease;
+		-o-transition: all .25s ease;
+		transition: all .25s ease;
+	}
+
+	.btn-archive:hover{
+		color: #fff !important;
+		background-color: #d9534f !important;
+		border-color: #d43f3a !important;
+	}
+	.btn-archive:hover .icon{
+		color: white;
+	}
+
+	.date-fill {
+		display: inline-block;
+		width: calc(100% - 24px);
+		padding-left: 50px;
+		top: -5px;
+		position: relative;
+	}
+	.formula-fill {
+		display: inline-block;
+		width: calc(100% - 24px);
+		padding-left: 50px;
+		position: relative;
+	}
+
+		.date-fill .client-datepicker {
+			display: inline-block;
+			padding-left: 10px;
+		}
+
+	.date-click {
+		height: 34px;
+	}
+
+	.@(measguid) input[type="checkbox"] {
+		top: 4px;
+		display: inline-block;
+		margin-top: 0px !important;
+		display: inline;
+		display: inline-block;
+	}
+	.@(measguid) input[type="checkbox"]:focus:before {
+		content: "";
+		width: 17px;
+		height: 17px;
+		/* border: 1px solid #66afe9; */
+		display: block;
+		border-radius: 3px;
+		box-shadow: 0 0 4px #66afe9;
+	    margin-top: 4px;
+	}
+
+	.boundry {
+		font-size: 10px;
+		color: gray;
+		display: block;
+	}
+
+	.@(measguid) .direction{
+	    min-width: 62px;
+	}
+
+	.@(measguid) .owner ~ .select2 {
+		width:100% !important;
+	}
+
+	.@(measguid) .historical-container input{
+		top: 4px;
+		display: inline-block;
+		margin-top: 0px !important;
+		display: inline;
+		display: inline-block;
+	}
+
+	.@(measguid) .historical-container .description{
+	    color: gray;
+		font-size: 11px;
+		position: relative;
+		/*top: -5px;
+		left: 10px;*/
+	}
+	.@(measguid) .historical-container .description .not{
+		font-style: italic;
+	}
+
+	.@(measguid) .formula-click input,
+	.@(measguid) .formula-click .formula-fill{
+		float:left;
+	}
+
+	.@measguid .select2 {
+		display: block;
+		width: 100% !important;
+	}
+
+@@media (max-width: 768px) {
+	.date-fill{
+		float: right;
+	}
+}
+</style>

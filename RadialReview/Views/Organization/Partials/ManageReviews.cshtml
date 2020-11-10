@@ -1,0 +1,27 @@
+﻿@*model RadialReview.Models.ViewModels.ManageViewModel
+
+@section header{
+    @Html.Partial("Partial/manageheader")
+}
+
+<table class="table startHiddenGroup">
+    <tr class="startHidden">
+        <th style="min-width: 120px">@RadialReview.Properties.DisplayNameStrings.name</th>
+        <th style="width:200px">@RadialReview.Properties.DisplayNameStrings.dateCreated</th>
+        <th style="width:120px">@RadialReview.Properties.DisplayNameStrings.completion</th>
+        <th style="width:50px">
+            <button onclick="@Html.ShowModal("Issue review", "/Review/Create", "/Review/Create", "completeIssue","check")" role="button" class="btn btn-default addButton" data-toggle="modal">+</button>
+        </th>
+    </tr>
+    @foreach (var review in Model.ManagingReviews)
+    {
+        <tr class="startHidden">
+            <td>@review.Review.ReviewName</td>
+            <td>@review.Review.DateCreated</td>
+            <td>
+                @Html.Partial("_Completion",review.Review)
+            </td>
+            <td><a href="@Url.Action("Details", "Reviews", new {id=review.Review.Id})" class="btn btn-info">@RadialReview.Properties.DisplayNameStrings.details</a></td>
+        </tr>
+    }
+</table>*@

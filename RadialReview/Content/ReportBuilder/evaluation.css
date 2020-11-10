@@ -1,0 +1,745 @@
+﻿
+.table-io {
+	border-collapse: collapse;
+	padding: 0px;
+	margin-bottom: 2px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+}
+
+	.table-io td, .table-io th {
+		padding: 0px;
+	}
+
+	.table-io.rocks .cell {
+		padding: 2px;
+	}
+
+	.table-io .fill {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.table-io.companyValues .fill {
+		width: 50px;
+		height: 50px;
+		-moz-border-radius: 50px;
+		-webkit-border-radius: 50px;
+		-ms-border-radius: 50px;
+		border-radius: 50px;
+		margin-top: 1px;
+		position: relative;
+	}
+	.table-io.companyValues .fill:not(.score) {
+		cursor: pointer;
+	}
+
+		.table-io.companyValues .fill:before {
+			top: 6px;
+			right: 8px;
+			font-size: 9px;
+			color: white;
+			-ms-opacity: .45;
+			opacity: .45;
+		}
+
+
+		.table-io.companyValues .fill.companyValues-score {
+			padding-top: 15px;
+			color: white;
+			margin-right: 2px;
+			font-size: 12px;
+			padding-right: 1px;
+			cursor: default;
+		}
+
+			.table-io.companyValues .fill.companyValues-score.Indeterminate:after {
+				margin-top: -8px;
+			}
+
+
+		.table-io.companyValues .fill:after {
+			position: relative;
+			padding-top: 15px;
+			color: #FFFFFF;
+			width: 100%;
+			height: 100%;
+			display: block;
+			font-weight: bold;
+		}
+
+		.table-io.companyValues .fill.hasReason {
+			/*border: 4px dotted rgba(0, 0, 0, 0.17) !important;*/
+		}
+
+			.table-io.companyValues .fill.hasReason.score {
+				/*border: 2px dotted rgba(0,0,0, 0.17) !important;*/
+			}
+
+			.table-io.companyValues .fill.hasReason:after {
+				/*padding-top:7px;*/
+			}
+
+		.table-io.companyValues .fill.score.hasReason:after {
+			/*margin-top: -2px;*/
+		}
+
+		.table-io.companyValues .fill:not(.hasReason):not(.score):not(.Indeterminate):after, .valueTable .fill {
+			/*background-color: rgba(51, 51, 51, 0.2);*/
+			-ms-border-radius: 20px;
+			-moz-border-radius: 20px;
+			-webkit-border-radius: 20px;
+			border-radius: 20px;
+		}
+
+		.table-io.companyValues .fill:not(.hasReason):after {
+			color: rgba(255, 255, 255, 0.35);
+		}
+
+	.table-io.companyValues tbody tr:last-child > * {
+		/*padding-top:10px;
+		font-weight: bold;*/
+	}
+
+	.table-io.companyValues .fill.score {
+		height: 20px;
+		width: 48px;
+		-ms-border-radius: 0;
+		-moz-border-radius: 0;
+		-webkit-border-radius: 0;
+		border-radius: 0;
+		border-left: 1px solid white;
+	}
+
+		.table-io.companyValues .fill.score:after {
+			padding-top: 0px;
+		}
+	/*
+	.table-io.companyValues .fill.hasReason:after {
+		color: #FFFFFF;
+		text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.55);
+	}*/
+
+	/*.table-io.companyValues .fill.hasReason:before {
+		content: "";
+		font-size: 16px;
+		position: relative;
+		color: rgba(232, 232, 232, 0.56);
+		width: 100%;
+		display: inline-block;
+		height: 0px;
+		float: left;
+		text-align: right;
+		padding-right: 0px;
+		margin-top: -4px;
+	}*/
+
+	.table-io.companyValues .fill.Indeterminate, .valueTable .fill.Indeterminate {
+		background-color: transparent;
+	}
+
+	.table-io.companyValues .fill.Positive, .valueTable .fill.Positive {
+		background-color: #449D44;
+		border: 1px solid #449D44;
+	}
+
+	.table-io.companyValues .fill.Neutral, .valueTable .fill.Neutral {
+		background-color: #EC971F;
+		border: 1px solid #EC971F;
+	}
+
+
+	.table-io.companyValues .fill.Negative, .valueTable .fill.Negative {
+		background-color: #D9534F;
+		border: 1px solid #D9534F;
+	}
+
+	.table-io.companyValues .fill.Indeterminate:after, .valueTable .fill.Indeterminate:after {
+		content: "n/a";
+		color: #c3c3c3;
+	}
+
+	/*padding-top: 14px;*/
+
+	.table-io.companyValues .fill.Positive:not(.companyValues-score):after, .valueTable .fill.Positive:after {
+		content: "+";
+	}
+
+	.table-io.companyValues .fill.Neutral:not(.companyValues-score):after, .valueTable .fill.Neutral:after {
+		content: "+/-";
+	}
+
+	.table-io.companyValues .fill.Negative:not(.companyValues-score):after, .valueTable .fill.Negative:after {
+		content: "–";
+	}
+
+
+.fill.True, .fill.Always {
+	background-color: #449D44;
+	border: 1px solid #449D44;
+}
+
+
+.fill.False, .fill.Mostly {
+	background-color: #71BE71;
+	border: 1px solid #71BE71;
+}
+
+.fill.False, .fill.Rarely {
+	background-color: #FC827F;
+	border: 1px solid #FC827F;
+}
+
+.fill.False, .fill.Never {
+	background-color: #D9534F;
+	border: 1px solid #D9534F;
+}
+
+.fill.Complete {
+	background-color: #449D44;
+	border: 1px solid #449D44;
+}
+
+.fill.OnTrack {
+	background-color: #1F68EC;
+	border: 1px solid #1F68EC;
+}
+
+.fill.AtRisk {
+	background-color: #D9534F;
+	border: 1px solid #D9534F;
+}
+
+.gwc-details-square .Indeterminate:after, .roleTable .Indeterminate:after {
+	content: "n/a";
+	color: #CCCCCC;
+}
+
+.table-io.rocks .fill.AtRisk:after, .gwc-details-square .AtRisk:after, .roleTable .AtRisk:after {
+	content: "OFF TRACK";
+}
+
+.table-io.rocks .fill.OnTrack:after, .gwc-details-square .OnTrack:after, .roleTable .OnTrack:after {
+	content: "ON TRACK";
+}
+
+.table-io.rocks .fill.Complete:after, .gwc-details-square .Complete:after, .roleTable .Complete:after {
+	content: "DONE";
+}
+
+/*
+.table-io.rocks .fill.True:after, 
+.gwc-details-square .True:after, 
+.roleTable .True:after {
+	content: "YES";
+}
+
+.table-io.rocks .fill.False:after, 
+.gwc-details-square .False:after, 
+.roleTable .False:after {
+	content: "NO";
+}*/
+
+
+
+
+.table-io.rocks .fill.Always:after,
+.gwc-details-square .Always:after,
+.roleTable .Always:after,
+.table-io.rocks .fill.True:after,
+.gwc-details-square .True:after,
+.roleTable .True:after {
+	content: "Always";
+}
+
+.table-io.rocks .fill.Mostly:after,
+.gwc-details-square .Mostly:after,
+.roleTable .Mostly:after {
+	content: "Mostly";
+}
+
+.table-io.rocks .fill.Rarely:after,
+.gwc-details-square .Rarely:after,
+.roleTable .Rarely:after {
+	content: "Rarely";
+}
+
+.table-io.rocks .fill.Never:after,
+.gwc-details-square .Never:after,
+.roleTable .Never:after,
+.table-io.rocks .fill.False:after,
+.gwc-details-square .False:after,
+.roleTable .False:after {
+	content: "Never";
+}
+
+
+.fivestate-limit-true .table-io.rocks .fill.Always:after,
+.fivestate-limit-true .gwc-details-square .Always:after,
+.fivestate-limit-true .roleTable .Always:after,
+.fivestate-limit-true .table-io.rocks .fill.True:after,
+.fivestate-limit-true .gwc-details-square .True:after,
+.fivestate-limit-true .roleTable .True:after,
+.fivestate-limit-true .table-io.rocks .fill.Mostly:after,
+.fivestate-limit-true .gwc-details-square .Mostly:after,
+.fivestate-limit-true .roleTable .Mostly:after {
+	content: "Yes";
+}
+
+.fivestate-limit-true .table-io.rocks .fill.Rarely:after,
+.fivestate-limit-true .gwc-details-square .Rarely:after,
+.fivestate-limit-true .roleTable .Rarely:after ,
+.fivestate-limit-true .table-io.rocks .fill.Never:after,
+.fivestate-limit-true .gwc-details-square .Never:after,
+.fivestate-limit-true .roleTable .Never:after,
+.fivestate-limit-true .table-io.rocks .fill.False:after,
+.fivestate-limit-true .gwc-details-square .False:after,
+.fivestate-limit-true .roleTable .False:after {
+	content: "No";
+}
+
+
+
+.gwc-details-square, .roleTable .fill {
+	font-size: 9px;
+	text-align: center;
+	line-height: 18px;
+	color: white;
+}
+
+
+.gwc .header1 {
+	border-left: 1px solid gray;
+}
+
+.table-io.gwc th {
+	width: 80px;
+	text-align: center;
+	vertical-align: bottom;
+}
+
+.table-io > tbody > tr > td:first-child {
+	text-align: right;
+	/*width: 200px;*/
+	padding-right: 6px;
+}
+
+.fixedWidth:after {
+	width: 200px;
+	content: "";
+	display: block;
+}
+
+.remainingWidth:after {
+	width: 100%;
+	content: "";
+	display: block;
+}
+
+.remainingWidth {
+	width: 100% !important;
+}
+
+
+.table-io.gwc > tbody > tr > td {
+	height: 80px;
+	width: 80px;
+	position: relative;
+	vertical-align: middle;
+	padding-bottom: 1px;
+	padding-right: 1px;
+}
+
+	.table-io.gwc > tbody > tr > td:first-child {
+		padding-bottom: 6px;
+		padding-top: 6px;
+	}
+
+	.table-io.gwc > tbody > tr > td > .fill {
+		height: 80px;
+		width: 80px;
+		text-align: center;
+		padding-top: 28px;
+		font-weight: bold;
+		color: white;
+		font-size: 16px;
+		cursor: pointer;
+		position: relative;
+	}
+
+		.table-io.gwc > tbody > tr > td > .fill.Indeterminate {
+			color: #C3C3C3;
+		}
+
+.table-io.gwc .perc {
+	position: absolute;
+	bottom: 16px;
+	left: 0px;
+	right: 0px;
+	text-align: center;
+	font-size: 10px;
+	color: #E8E8E8;
+}
+
+.table-io .details {
+	margin-left: 10px;
+}
+
+	.table-io .details .header {
+		background-color: #005ed7;
+		color: #FFF;
+		padding: 2px 6px;
+		font-weight: bold;
+		text-align: left;
+
+		margin-left: -25px;
+		margin-right: -15px;
+		margin-top: -20px;
+		margin-bottom: 10px;
+	}
+
+		.table-io .details .header .extra {
+			color: #fff;
+			font-weight: normal;
+			white-space: nowrap;
+			display: inline-block;
+		}
+
+.table-io.companyValues .details .reason {
+	padding-left: 3px;
+}
+
+
+.table-io.companyValues .details .fill {
+	height: 19px !important;
+	width: 19px !important;
+	/*margin-left: 4px;*/
+}
+
+	.table-io.companyValues .details .fill:after {
+		padding-top: 0px;
+		margin-left: 0px;
+		font-size: 12px;
+		color: rgba(255, 255, 255, 0.8);
+		text-align: center;
+	}
+
+.table-io.gwc #roleDetails td:first-child {
+	padding-left: 10px;
+}
+
+.values-details .reason {
+	padding-left: 7px;
+}
+
+.gwc-details .fill,
+.roleTable .fill {
+	/*height: 23px !important;
+	width: 23px !important;
+	padding-top: 2px !important;
+	margin-top: 1px;*/
+	height: 20px !important;
+	width: 32px !important;
+	padding-top: 0px !important;
+	margin-top: 2px;
+	margin-left: 2px;
+}
+
+.gwc-details table {
+	width: 100%;
+}
+
+.gwc-details .reason {
+	padding-left: 3px;
+}
+
+.gwc-details td:first-child {
+	text-align: right;
+}
+
+.gwc-details .gwc-min {
+	width: 1px;
+	white-space: nowrap;
+}
+
+.gwc-details-square div {
+	margin-left: 10px !important;
+}
+
+.gwc-details td {
+	width: 100%;
+	vertical-align: top;
+}
+
+.table-io .table-padding:after {
+	-moz-min-width: 52px;
+	-ms-min-width: 52px;
+	-o-min-width: 52px;
+	-webkit-min-width: 52px;
+	min-width: 52px;
+	content: " ";
+	display: block;
+}
+
+
+
+.table-io.rocks .fill {
+	height: 40px;
+	text-align: center;
+	padding-top: 9px;
+	font-weight: bold;
+	color: white;
+	font-size: 16px;
+	position: relative;
+}
+
+	.table-io.rocks .fill.Indeterminate {
+		color: #C3C3C3;
+	}
+
+		.table-io.rocks .fill.Indeterminate:after {
+			content: "n/a";
+		}
+
+.table-io.gwc .selected {
+	color: gold;
+}
+
+.evaluation-heading {
+	-webkit-transform-origin: 0% 100%;
+	-moz-transform-origin: 0% 100%;
+	-ms-transform-origin: 0% 100%;
+	-o-transform-origin: 0% 100%;
+	transform-origin: 0% 100%;
+	-webkit-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+	margin-left: 2px;
+	margin-top: -20px;
+	color: #AAAAAA;
+	width: 102px;
+}
+
+.subsection {
+	/*border: 1px solid #e5e5e5;*/
+	border-left: 17px solid #DDDDDD;
+	margin-bottom: 30px;
+	padding: 6px 0px;
+}
+
+.subsection-values .evaluation-heading {
+	color: #597622;
+}
+
+.subsection-roles .evaluation-heading {
+	color: #226666;
+}
+
+.subsection-rocks .evaluation-heading {
+	color: #AA3939;
+}
+
+.subsection-values {
+	border-left-color: #D4EE9F;
+}
+
+.subsection-roles {
+	border-left-color: #a3d5d5;
+}
+
+.subsection-rocks {
+	border-left-color: #FFAAAA;
+}
+
+
+.fill.hasReason:before {
+	font-size: 12px;
+	position: absolute;
+	top: 2px;
+	right: 3px;
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: 400;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	content: "\e111";
+	-ms-opacity: .45;
+	opacity: .45;
+}
+
+.clientDetailsContainer .fill.hasReason:before {
+	color: transparent;
+}
+
+
+.table-io.rocks .fill.hasReason:before {
+	font-size: 9px;
+	top: 1px;
+	right: 2px;
+}
+
+.rocks-details .header .fill {
+	font-size: 9px;
+	height: 19px !important;
+	width: 19px !important;
+	padding-top: 4px;
+}
+
+
+.table-io .header span {
+	display: inline-block;
+	/*white-space: nowrap;*/
+}
+
+#roleTable .roleTable, #valueTable .valueTable {
+	vertical-align: top;
+	clear: both;
+	min-height: 200px !important;
+	height: 200px;
+	width: calc(100% -8px);
+	margin-left: 8px;
+	margin-top: 8px;
+	padding: 2px 12px;
+	overflow-y: auto !important;
+	position: relative;
+	display: block;
+	-moz-resize: vertical;
+	-ms-resize: vertical;
+	-o-resize: vertical;
+	resize: vertical;
+	border-top: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDDDDD;
+}
+
+.roleTable tr, .valueTable tr {
+	vertical-align: top;
+	/*border-bottom: 1px solid #ddd;*/
+}
+
+#roleTable .header, #valueTable .header {
+	max-width: 50%;
+	width: 300px;
+	margin-bottom: 10px;
+	margin-top: 8px;
+}
+
+.roleTable td, .valueTable td {
+	/*white-space: nowrap;*/
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+	padding-right: 10px;
+}
+
+	.roleTable td.block, .valueTable td.block {
+		padding-right: 0px;
+	}
+
+.roleTable thead, .valueTable thead {
+	border-bottom: 1px solid #BBBBBB;
+}
+/*
+.roleTable::-webkit-scrollbar {
+	width: 8px;*
+	background-color: white;
+}
+*/
+/*.roleTable::-webkit-scrollbar-thumb {
+	*border-radius: 6px;
+	background-color: #bbbbbb;*
+}*/
+
+.roleTableBtn, .valueTableBtn {
+	/*position: absolute;
+	right: 10px;
+	top: 65px;*/
+	padding: 0px 10px;
+	margin: 15px;
+}
+
+	.roleTableBtn.on, .valueTableBtn.on {
+		/*position: absolute;
+	right: 10px;
+	top: 65px;*/
+		padding: 0px 10px;
+		float: left;
+	}
+
+	.roleTableBtn:before, .valueTableBtn:before {
+		content: "Show ";
+	}
+
+	.roleTableBtn.on:before, .valueTableBtn.on:before {
+		content: "Hide ";
+	}
+
+.italic {
+	font-style: italic;
+}
+
+td.alt {
+	background-color: #ffc;
+	background-color: rgba(255, 255, 0, 0.2);
+}
+
+.feedback-heading {
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+
+.valueTable .fill {
+	text-align: center;
+	color: #FFF;
+	width: 22px;
+}
+
+
+.markedAs {
+	font-size: 12px;
+	margin-top: 14px;
+}
+
+.completion {
+	line-height: 1;
+	font-size: 12px;
+}
+
+.valueTableQuestion {
+	padding-top: 4px !important;
+	padding-left: 4px !important;
+}
+
+
+.valueTableReason {
+	padding-bottom: 4px !important;
+}
+
+.roleTableReason {
+	padding-bottom: 4px !important;
+}
+
+.roleTableQuestion {
+	padding-top: 3px !important;
+	padding-left: 4px !important;
+	font-weight: bold;
+}
+
+
+.landscape-shift {
+	display: none;
+}
+
+.landscape-placeholder {
+	display: none;
+}
+
+
+.onlyPrint {
+	display: none;
+}

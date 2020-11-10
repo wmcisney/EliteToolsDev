@@ -1,0 +1,140 @@
+﻿.scatter .point {
+  stroke: #222;
+  fill:white;
+}
+
+.scatter line{
+  stroke: black;
+}
+
+.scatter .axis{
+  stroke: grey;
+}
+
+.scatter .title{
+	fill:#6D6D6D;
+	font-size: 21px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: 500;
+	line-height: 1.1;
+}
+
+.scatter .axisTitle{
+	fill:white;
+	font-size: 14px;
+}
+
+.scatter .axisRect-x {
+	fill: #D4EE9F;
+}
+.scatter .axisTitle-x {
+	fill:#597622;
+}
+.scatter .axisRect-y {
+	fill: #A3D5D5;
+}
+.scatter .axisTitle-y {
+	fill:#266;
+}
+
+.scatter .border {
+	stroke: #ccc;
+	fill: none;
+}
+
+svg.scatter{
+	overflow:visible !important;
+	position: relative;
+	z-index: 100;
+}
+
+svg.scatter *:not(.pointerEvents) {
+	pointer-events: none;
+}
+
+svg.scatter .pointerEvents{
+	pointer-events: all !important;
+}
+
+.scatter .card {
+	font-weight: bold;
+	font-family: sans-serif;
+	overflow: visible !important;
+}
+
+.scatter .card .background{
+	fill : white;
+}
+.scatter .card .border{
+	fill: white;
+	stroke: rgba(0, 0, 0, 0.5);
+}
+.scatter .card .title{
+	clip-path: url(#cardClip);
+}
+
+	.scatter .card .title div {
+		font-size: 20px;
+		color: #415EB3;
+		-ms-text-overflow: ellipsis;
+		-o-text-overflow: ellipsis;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+		text-align: left;
+	}
+
+	.scatter .card .subtitle div {
+		font-size: 14px;
+		fill: #646464;
+		-ms-text-overflow: ellipsis;
+		-o-text-overflow: ellipsis;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+		text-align: left;
+	}
+
+.scatter .card .axisTitle{
+	font-weight: normal;
+	font-size: 13px;
+	fill:#999999;
+	
+}
+.scatter .card .axisValue{
+	font-weight: bold;
+	font-size: 16px;
+	fill:#44A035;
+}
+
+.scatter .select {
+	stroke: #597622 !important;
+	fill: #D4EE9F !important;
+	stroke-width: 1px;
+}
+.scatter .hidden {
+	-ms-opacity: 0;
+	opacity: 0;
+	-webkit-transition: opacity .2s;
+	-moz-transition: opacity .2s;
+	-ms-transition: opacity .2s;
+	-o-transition: opacity .2s;
+	transition: opacity .2s;
+}
+
+.scatter .hidden.overrideShow {
+	display: inherit !important;
+	visibility: inherit !important;
+	-ms-opacity: .5;
+	opacity: .5;
+}
+
+.scatter .hoverable {
+	cursor: pointer;
+}
+
+.scatter .quadrantTitle{
+	fill: rgba(128, 128, 128, 0.5);
+    font-weight: bold;
+    font-size: 13px;
+}

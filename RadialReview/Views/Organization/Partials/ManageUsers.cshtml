@@ -1,0 +1,81 @@
+﻿@*model RadialReview.Models.ViewModels.ManageViewModel
+
+
+
+<ul class="nav nav-tabs noOpacity" id="userTab">
+    <li class="active"><a href="#managing" name="managing">@RadialReview.Properties.DisplayNameStrings.directlyManaging</a></li>
+    <li><a href="#members" name="members">@RadialReview.Properties.DisplayNameStrings.members</a></li>
+    <li><a href="#pending" name="pending">@RadialReview.Properties.DisplayNameStrings.unverified @Html.Badge(x => x.PendingUsers.Count())</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content ">
+    <div class="tab-pane active startHiddenGroup" id="managing">
+        <table class="table startHidden">
+            <tr class="">
+                <th>User</th>
+                <th></th>
+                <th style="width:120px">Joined</th>
+                <th style="width: 50px">
+                    <button role="button" class="btn addButton" onclick="showModal('@RadialReview.Properties.DisplayNameStrings.addUser','/User/AddModal?organizationId=@Model.Organization.Id','/nexus/AddManagedUserToOrganization')">+</button>
+                </th>
+            </tr>
+            @foreach (var user in Model.ManagedUsers.OrderByDescending(x => x.AttachTime))
+            {
+                <tr class="startHidden">
+                    <td style="width: 80px; height: 60px; margin-left: auto; text-align: center; margin-right: auto;">
+                        <img style="width:60px;height:40px;" src="@user.ImageUrl(60,40)" alt="@user.GetName()" class="img-thumbnail">
+                    </td>
+                    <td>@user.GetName()</td>
+                    <td><span data-livestamp="@(user.AttachTime.ToString("o"))-00:00"></span></td>
+                    <td><a href="@Url.Action("Manage", "User", new {id=user.Id})" class="btn btn-info">@RadialReview.Properties.DisplayNameStrings.edit</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="tab-pane startHiddenGroup" id="members">
+        <table class="table startHidden">
+            <tr class="">
+                <th>@RadialReview.Properties.DisplayNameStrings.user</th>
+                <th></th>
+                <th style="width:120px">@RadialReview.Properties.DisplayNameStrings.joined</th>
+                <th style="width: 50px">
+                    <button role="button" class="btn addButton" onclick="showModal('@RadialReview.Properties.DisplayNameStrings.addUser','/User/AddModal?organizationId=@Model.Organization.Id','/nexus/AddManagedUserToOrganization')">+</button>
+                </th>
+            </tr>
+            @foreach (var user in Model.AllSubordinates.OrderByDescending(x => x.AttachTime))
+            {
+                <tr class="startHidden">
+                    <td style="width: 80px; height: 60px;margin-left: auto; text-align: center; margin-right: auto;">
+                        <img style="width:60px;height:40px;" src="@user.ImageUrl(60,40)" alt="@user.GetName()" class="img-thumbnail">
+                    </td>
+                    <td>@user.GetName()</td>
+                    <td><span data-livestamp="@(user.AttachTime.ToString("o"))-00:00"></span></td>
+                    <td><a href="@Url.Action("Manage", "User", new {id=user.Id})" class="btn btn-info">@RadialReview.Properties.DisplayNameStrings.edit</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="tab-pane startHiddenGroup" id="pending">
+        <table class="table startHidden">
+            <tr class="">
+                <th>Email</th>
+                <th style="width:120px">Sent</th>
+                <th style="width: 50px">
+                    <button onclick="showModal('@RadialReview.Properties.DisplayNameStrings.addUser','/User/AddModal?organizationId=@Model.Organization.Id','/nexus/AddManagedUserToOrganization')" role="button" class="btn addButton" data-toggle="modal">+</button>
+                </th>
+            </tr>
+            @foreach (var pending in Model.PendingUsers.OrderByDescending(x => x.AttachTime))
+            {
+                <tr class="startHidden">
+                    <td>@pending.EmailAtOrganization</td>
+                    <td><span data-livestamp="@(pending.AttachTime.ToString("o"))-00:00"></span></td>
+                    <td><a href="@Url.Action("Manage", "User", new {id=pending.Id})" class="btn btn-info">@RadialReview.Properties.DisplayNameStrings.edit</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+*@

@@ -1,0 +1,272 @@
+﻿@model RadialReview.Models.Angular.Meeting.AngularRecurrence
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Readonly/_ReadonlyLayout.cshtml";
+}
+<style>
+	.meas-name {
+		text-align: right;
+		max-width: 410px;
+		width: 350px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+
+	h2 {
+		margin-top: 60px;
+		margin-bottom: 6px;
+	}
+
+	.pill {
+		border-radius: 7px;
+		margin-bottom: 2px;
+		display: inline-block;
+		width: 76px;
+		text-align: center;
+		color: white;
+		font-weight: bold;
+		padding-left: 7px;
+		background-color: #ddd;
+		cursor: not-allowed;
+	}
+
+	.circle {
+		background-color: gray;
+		cursor: pointer;
+		border-radius: 20px;
+		width: 15px;
+		height: 15px;
+		border: 3px solid white;
+		margin: 2px;
+	}
+
+	.filled .circle {
+		background-color: orange;
+	}
+
+	.removeRow {
+		cursor: pointer;
+		padding: 0px;
+		width: 16px;
+		text-align: center;
+		color: #cdcdcd;
+		font-weight: bold;
+		font-family: monospace;
+		font-size: 20px;
+		margin-top: -4px;
+	}
+
+	table.hover tr:hover .removeRow {
+		color: white;
+	}
+
+	.crossed td {
+		color: #bbb;
+		text-decoration: line-through;
+	}
+
+	.crossed .circle, .crossed a {
+		display: none;
+	}
+
+	.crossed .removeRow {
+		color: #bbb;
+	}
+</style>
+
+<h1>@Model.Basics.Name</h1>
+<h2>Scorecard</h2>
+@try {
+	<section class="x-scroll">
+
+		@if (Model.Scorecard != null && Model.Scorecard.Measurables != null && Model.Scorecard.Measurables.Any()) {
+			<table class="border hover">
+				<tr>
+					<th>Measurable</th>
+					<th>Goal</th>
+					@foreach (var w in Model.Scorecard.Weeks.OrderByDescending(x => x.ForWeek)) {
+						<th>@w.ForWeek.ToString("MMM dd")</th>
+					}
+				</tr>
+				@foreach (var m in Model.Scorecard.Measurables.Where(x => !x.IsDivider).OrderBy(x => x.Ordering)) {
+					<tr>
+						<td class="meas-name" title="@Html.Encode(m.Name)">@m.Name</td>
+						<td>@(m.Direction.HasValue ? m.Direction.Value.ToSymbol() : "") @(m.Target.HasValue ? ("" + string.Format("{0:0.###}", m.Target.Value)) : "") </td>
+						@foreach (var w in Model.Scorecard.Weeks.OrderByDescending(x => x.ForWeek)) {
+							var value = (decimal?)null;
+							var foundScore = Model.Scorecard.Scores.FirstOrDefault(x => x.ForWeek == w.ForWeekNumber && x.MeasurableId == m.Id);
+							var color = "";
+							if (foundScore != null) {
+								value = foundScore.Measured;
+								if (foundScore.Direction.HasValue && foundScore.Target.HasValue && foundScore.Direction.Value.MeetGoal(foundScore.Target.Value, foundScore.AltTarget, value)) {
+									color = "color:green";
+								} else {
+									color = "color:red";
+								}
+							}
+							<td style="@(color)">@string.Format("{0:0.###}", value)</td>
+						}
+					</tr>
+				}
+			</table>
+		} else {
+			<span class="gray">No Measurables.</span>
+		}
+	</section>
+} catch (Exception e) {
+	<div>An error occurred loading the scorecard.</div>
+}
+
+<h2>Rocks</h2>
+
+@try {
+	<section class="x-scroll">
+		@if (Model.Rocks.Any()) {
+			<table class="hover">
+				<tr>
+					<th style="text-align:center">Status</th>
+					<th></th>
+					<th style="text-align:center">Owner</th>
+					<th>Rock</th>
+				</tr>
+				@foreach (var m in Model.Rocks.OrderBy(x => x.ForceOrder).ThenBy(x => x.Owner != null ? x.Owner.Name : "")) {
+					var color = "";
+					if (m.Completion.HasValue && m.Completion.Value == RadialReview.Models.Enums.RockState.AtRisk) {
+						color = "background-color:red";
+					}
+					if (m.Completion.HasValue && m.Completion.Value == RadialReview.Models.Enums.RockState.Complete) {
+						color = "background-color:green";
+					}
+					if (m.Completion.HasValue && m.Completion.Value == RadialReview.Models.Enums.RockState.OnTrack) {
+						color = "background-color:blue";
+					}
+					<tr>
+						<td class="pill" title="Cannot edit in read-only mode." style="@color">@(m.Completion.HasValue ? m.Completion.Value.GetDisplayName() : "")</td>
+						<td> </td>
+						<td style="text-align:right">@(m.Owner != null ? m.Owner.Name : "")</td>
+						<td>@m.Name</td>
+					</tr>
+				}
+			</table>
+		} else {
+			<span class="gray">No Rocks.</span>
+		}
+	</section>
+} catch (Exception e) {
+	<div>An error occurred loading the rocks.</div>
+}
+
+
+<h2>People Headlines</h2>
+@try {
+	<section class="x-scroll">
+		@if (Model.Headlines.Any()) {
+			<table class="hover">
+				<tr>
+					<th>Owner</th>
+					<th>Headline</th>
+				</tr>
+				@foreach (var m in Model.Headlines.OrderBy(x => x.Owner != null ? x.Owner.Name : "")) {
+					<tr>
+						<td>@(m.Owner != null ? m.Owner.Name : "")</td>
+						<td>@(m.Name)</td>
+					</tr>
+				}
+			</table>
+		} else {
+			<span class="gray">No People Headlines.</span>
+		}
+	</section>
+} catch (Exception e) {
+	<div>An error occurred loading the people headlines.</div>
+}
+
+
+<h2>To-dos</h2>
+@try {
+	<section class="x-scroll">
+		@if (Model.Todos.Any()) {
+			<table class="hover">
+				<tr>
+					<th></th>
+					<th>Owner</th>
+					<th></th>
+				</tr>
+				@foreach (var m in Model.Todos.OrderBy(x => x.Owner != null ? x.Owner.Name : "")) {
+					<tr>
+						<td title="Cannot edit in read-only mode" style="cursor: not-allowed;">@(m.Complete == true ? "✔" : "☐")</td>
+						<td>@(m.Owner != null ? m.Owner.Name : "")</td>
+						<td>@(m.Name)</td>
+					</tr>
+				}
+			</table>
+		} else {
+			<span class="gray">No To-Dos.</span>
+		}
+	</section>
+} catch (Exception e) {
+	<div>An error occurred loading the to-dos.</div>
+}
+
+
+<h2>Issues</h2>
+<small style="display: block;color: #aaa;margin-top: 3px;position: absolute;margin-left: 4px;">Notice: Issues are not removed in read-only mode.</small>
+@try {
+	<section class="x-scroll">
+		@if (Model.IssuesList != null && Model.IssuesList.Issues.Any()) {
+			<table style="width:100%;">
+				<tr>
+					<td style="width:100%;vertical-align: top;">
+						<table class="hover">
+							<tr>
+								<th style="width:50px;text-align:right;"></th>
+								<th style="width:50px;text-align:right;"></th>
+								<th>Owner</th>
+								<th>Issue</th>
+								<th></th>
+							</tr>
+							@foreach (var m in Model.IssuesList.Issues.OrderBy(x => x.Owner != null ? x.Owner.Name : "")) {
+								try {
+									<tr>
+										<td><div class="removeRow noselect" onclick="removeRow(this)" title="Strike issue. Does not remove in read-only.">x</div></td>
+										<td style="text-align:center;" onclick="toggleCircle(this);" class="noselect"><div class="circle noselect"  title="Select Issue"></div></td>
+										<td style="height:30px">@m.Owner.Name</td>
+										<td>@(m.Name) <a href="@m.DetailsUrl" target="notes_frame" class="gray">(notes)</a></td>
+									</tr>
+								} catch (Exception) {
+
+								}
+							}
+						</table>
+					</td>
+					<td style="width:200px;vertical-align: top;">
+						<div class="gray"><b>Notes:</b></div>
+						<iframe name="notes_frame" style="width: 400px;position: relative;top: 0px;bottom: 0px;left: 0;right: 0;min-height: 500px;background-color: #eee;border: 1px solid #ccc;border-radius: 6px;"></iframe>
+					</td>
+				</tr>
+			</table>
+		} else {
+			<span class="gray">No Issues.</span>
+		}
+	</section>
+} catch (Exception e) {
+	<div>An error occurred loading the issues.</div>
+}
+
+<script>
+	function toggleCircle(self) {
+		if (self.className == "filled") {
+			self.className = "";
+		} else {
+			self.className = "filled";
+		}
+	}
+
+	function removeRow(self) {
+		if (self.parentElement.parentElement.className == "crossed") {
+			self.parentElement.parentElement.className = "";
+		} else {
+			self.parentElement.parentElement.className = "crossed";
+		}
+	}
+</script>

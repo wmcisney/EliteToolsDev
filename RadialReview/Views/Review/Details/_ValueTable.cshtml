@@ -1,0 +1,99 @@
+﻿@using RadialReview.Models
+@using RadialReview.Models.Enums
+@model RadialReview.Controllers.ReviewController.ReviewDetailsViewModel
+<!--_ValueTable.cshtml-->
+<div class="pull-right header">
+	<input id="valueTableFilter" type="text" class="form-control" placeholder="Filter" />
+</div>
+
+<table class="tablesorter valueTable">
+	<thead>
+		<tr>
+			<th style="min-width:140px">Name:</th>
+			<th style="min-width:200px">Value:</th>
+			<th></th>
+			<th>Reason:</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			var sorter = new Dictionary<PositiveNegativeNeutral, string> { { PositiveNegativeNeutral.Positive, "2" }, { PositiveNegativeNeutral.Neutral, "1" }, { PositiveNegativeNeutral.Negative, "-1" }, { PositiveNegativeNeutral.Indeterminate, "" } };
+			var text = new Dictionary<Tristate, string> { { Tristate.True, "yes" }, { Tristate.Indeterminate, "n/a" }, { Tristate.False, "no" } };
+		}
+		
+
+		@foreach (var r in Model.AnswersAbout.Where(x => x is CompanyValueAnswer).Cast<CompanyValueAnswer>()
+			.GroupBy(x=>x.RevieweeUserId+"_"+x.Askable.Id+"_"+x.ReviewerUserId).Select(x=>x.First()))
+		{
+			<tr>
+				<td>@r.ReviewerUser.GetName()</td>
+				<td class="alignLeft bold">@r.Askable.GetQuestion()</td>
+				<td class="block"><div class="fill @r.Exhibits" data-sort="@(sorter[r.Exhibits])"></div><span style="display:none">@((int)r.Exhibits)</span></td>
+				<td class="remainingWidth" style="padding-left: 10px; white-space: normal; ">
+					@if (!String.IsNullOrWhiteSpace(r.Reason)){
+						<span data-sort="0" class="italic">"@r.Reason"</span>
+					}
+					else{
+						<span data-sort="1"></span>
+					}</td>
+				<td>
+					@if (!String.IsNullOrWhiteSpace(r.Reason))
+					{
+						@:<input class="value_@(r.Id)" type="checkbox" onclick="toggleValue2(this, @(r.Id))" @(r.IncludeReason? "checked" : "") />
+						<span class="hidden">@(r.IncludeReason ? "b" : "c")</span>
+					}
+					else
+					{
+						<span class="hidden"></span>
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@using (Html.BeginStyles()){
+	<style>
+		table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr :not(.tablesorter-headerUnSorted) .tablesorter-header-inner {
+			color: black;
+		}
+		  
+	</style>
+}
+
+@using (Html.BeginScripts())
+{
+	<script>
+		$(function() {
+			$(".valueTable").filterTable({ inputSelector: '#valueTableFilter' });
+			$(".valueTable").tablesorter({
+				headers: {
+					2: { sorter: 'attr' },
+					3: { sorter: 'attr' }
+				},
+				/*sortForce: [[0, 1]],*/
+				sortList: [[3,0],[2,0]],
+				sortStable: true,
+			});
+		});
+		function toggleValue2(s, id) {
+			var found = $(s).prop("checked");
+			var clzz = "input.value_" + id;
+			$(clzz).prop("disabled", true);
+			$.ajax({
+				url: "/Review/SetIncludeValueFeedback?answerId=" + id + "&on=" + found,
+				success: function (d) {
+					$(clzz).prop("checked", d.Object.On);
+					var c = "c";
+					if (d.Object.On)
+						c = "b";
+					$(clzz + "~span").html(c);
+				},
+				complete: function () {
+					$(clzz).prop("disabled", false);
+				}
+			});
+		}
+	</script>
+}

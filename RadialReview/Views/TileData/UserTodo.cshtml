@@ -1,0 +1,33 @@
+﻿@model long?
+@{
+	string filter = null;
+	if (Model.HasValue) {
+
+		//filter = "| filter:filters.byRange('CompleteTime',model.dataDateRange.startDate,model.dataDateRange.endDate) | filter:{Owner:{Id:" + Model + "}}";
+		filter = "| filter:filters.byRange('CompleteTime', model.dataDateRange.todoStart,model.dataDateRange.todoEnd) | filter:{Owner:{Id:" + Model + "}}";
+	}
+}
+
+<div class="review smallBreak2 loading tiny" style2="min-height:30px;">
+	<div class="todo-heading heading tile-title">
+		<span class="handle">Current To-Dos</span>
+		<span class="tile-buttons">
+			<a href="/todo/list" target="_blank" class="tile-button tile-button-view-all" title="View All"><span class="glyphicon glyphicon-th-large"></span></a>
+			<a href="javascript:void(0)" class="tile-button tile-button-add-new todoModal" data-method="CreateTodoRecurrence" title="Create New"><span class="glyphicon glyphicon-plus-sign"></span></a>
+		</span>
+	</div>
+	<div class="tile personal-todo-list-container">
+		@{ Html.RenderPartial("~/Views/Todo/Partial/list.cshtml", new ViewDataDictionary(){
+								   {"AddHeaders", false},
+								   {"AddController", false},
+								   {"AddCompletion", false},
+								   {"AddDatePicker", false},
+								   {"DefaultSort","'DueDate'"},
+								   {"Filter",filter},
+								   {"UsePopup",true},
+								   {"RecurrenceId", -1},
+							   }); }
+		<div ng-show="model.Todos===undefined" class="gray alignCenter" style="padding-bottom: 16px;" elem-ready="functions.reload(model.Todos===undefined)">Please wait</div>
+	</div>
+</div>
+

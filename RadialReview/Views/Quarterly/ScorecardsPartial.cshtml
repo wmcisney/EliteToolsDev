@@ -1,0 +1,91 @@
+﻿@model RadialReview.Accessors.PDF.Partial.ScorecardsPartialViewModel
+@using RadialReview.Utilities;
+@{
+	Layout = "~/Views/Quarterly/_TemplatePartial.cshtml";
+}
+
+
+@* Scorecards *@
+@section head {
+	<div class="swan-flex">
+		<h1>Scorecard</h1>
+		<!-- RIGHT SWAN SERVICES -->
+		<div>
+			<span>@Html.Encode(Model.Company)</span>
+			<span>
+				<img src="@Model.Image" alt="Swan Services Logo" width="50" height="50">
+			</span>
+		</div>
+	</div>
+	@*<hr />*@
+	<div class="header-separator"></div>
+}
+
+<div class="scorecard-table" style="margin-top: 0;">
+	<table style="width: 100%;border-collapse: collapse;">
+		<thead>
+			<tr>
+				<th class="print-color-adjust sm-title" style="width: 100px;">OWNER</th>
+				<th class="print-color-adjust sm-title">MEASURABLE</th>
+				<th class="print-color-adjust sm-title" style="width: 50px;">GOAL</th>
+				@{
+					var reverse = 1;
+					if (Model.Scorecards.Scorecard.ReverseScorecard == true) {
+						reverse = -1;
+					};
+					var weeks = @Model.Scorecards.Scorecard.Weeks.OrderByDescending(x => x.ForWeekNumber).Skip(1).Take(13).OrderBy(x => reverse * x.ForWeekNumber);
+				}
+				@foreach (var week in weeks) {
+					<th class="print-color-adjust sm-date">@week.DisplayDate.ToString("MM/dd/yy")<br>@week.DisplayDate.Date.AddDays(6).ToString("MM/dd/yy")</th>
+				}
+			</tr>
+		</thead>
+		<tbody class="scorecard-data">
+			@foreach (var measurable in Model.Scorecards.Scorecard.Measurables.OrderBy(x => x.Ordering).Where(x => (true || !(x.Disabled ?? false)) && !x.IsDivider)) {
+				var modifier = measurable.Modifiers ?? (RadialReview.Models.Enums.UnitType.None);
+				var goal = (measurable.Direction ?? (RadialReview.Models.Enums.LessGreater.LessThan)).ToPdfSymbol() + " " + modifier.Format((measurable.Target ?? 0).KiloFormat());
+
+				if (measurable.Direction.HasValue && measurable.Direction.Value == RadialReview.Models.Enums.LessGreater.Between) {
+					goal = modifier.Format((measurable.Target ?? 0).KiloFormat()) + " " + (measurable.Direction ?? (RadialReview.Models.Enums.LessGreater.LessThan)).ToPdfSymbol() + " " + modifier.Format((measurable.AltTarget ?? 0).KiloFormat());
+				}
+
+				var measurableOwner = measurable.Owner.NotNull(x => x.Name) == "n/a"
+					? "N/A"
+					: measurable.Owner.NotNull(x => x.Name);
+
+				<tr>
+					<td class="print-color-adjust">@(measurableOwner + "")</td>
+					<td class="print-color-adjust">@(measurable.Name + "")</td>
+					<td class="print-color-adjust">@goal</td>
+
+					@foreach (var week in weeks) {
+						var founds = Model.Scorecards.Scorecard.Scores.Where(x => x.ForWeek == week.ForWeekNumber && x.Measurable.Id == measurable.Id);
+						var found = founds.LastOrDefault();
+						if (found != null && found.Measured.HasValue) {
+							var val = found.Measured ?? 0;
+							var value = modifier.Format(val.KiloFormat());
+
+							var dir = found.Direction ?? measurable.Direction;
+							var target = found.Target;
+							if (dir == null) {
+								dir = measurable.Direction;
+								target = measurable.Target;
+							}
+							if (dir != null) {
+								if (dir.Value.MeetGoal(target ?? 0, found.AltTarget ?? measurable.AltTarget, val)) {
+									<td class="print-color-adjust sm-date sm-date-green">@value</td>
+								} else {
+									<td class="print-color-adjust sm-date sm-date-red">@value</td>
+								}
+							}
+
+						} else {
+							<td class="print-color-adjust"></td>
+						}
+
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

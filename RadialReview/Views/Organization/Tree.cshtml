@@ -1,0 +1,195 @@
+﻿@model long
+@{
+    ViewBag.Title = "Tree";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<ul id="Selectors" class="noBullet "></ul>
+<div class="row">
+	<div class="col-md-9">
+		<div id="Chart"></div>
+	</div>
+	<div class="col-md-3 noselect">
+	</div>
+</div>
+@Model
+
+@using (Html.BeginStyles())
+{
+    <style>
+        .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+        }
+
+        .node {
+            font: 10px sans-serif;
+        }
+
+            .node.organizations circle {
+                stroke: black;
+                fill: #E4E4E4;
+            }
+            .node.admin circle {
+                stroke: #ff7878;
+                fill:#ffbcbc;
+            }
+
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 1.5px;
+        }
+
+        .highlighted text, .highlighted {
+            fill: red !important;
+            color: red !important;
+        }
+
+        .selector {
+            text-transform: capitalize;
+            cursor:pointer;
+        }
+
+		#Selectors {
+			position: fixed;
+			overflow-y: auto;
+			max-height: 90vh;
+			top: 55px;
+			float: left;
+			z-index: 100;
+		}
+
+    </style>
+}
+
+
+@using (Html.BeginScripts())
+{
+    @*<script src="~/Scripts/d3/d3.min.js"></script>*@
+    @Scripts.Render("~/bundles/d3")
+    <script>
+        allClasses = [];
+
+        var width = 1224,
+            height = 1224;
+
+      
+
+        var svgRoot = d3.select("#Chart").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        var svg = svgRoot.append("g")
+            .attr("transform", "translate(100,0)");
+
+        d3.json("/Data/OrganizationHierarchy/@Model", function (error, json) {
+            var tempTree = d3.layout.tree().size([height, width - 250]);
+            var nodes = tempTree.nodes(json),
+                links = tempTree.links(nodes);
+
+            var layers = {};
+            var max = 0;
+            for (var i = 0; i < nodes.length; i++) {
+                var d = nodes[i].depth;
+                if (!(d in layers))
+                    layers[d] = 0;
+                layers[d] += 1;
+                max = Math.max(max, layers[d]);
+            }
+            var newH = 100 + max * 22;
+            //tree.size([newH, width - 250]);
+            svgRoot.attr("height", newH);
+            var tree = d3.layout.tree()
+                      .size([newH, width - 250]);
+
+            var nodes = tree.nodes(json),
+                links = tree.links(nodes);
+
+            var diagonal = d3.svg.diagonal()
+                .projection(function (d) { return [d.y, d.x]; });
+
+            var link = svg.selectAll("path.link")
+                .data(links)
+              .enter().append("path")
+                .attr("class", "link")
+                .attr("d", diagonal);
+
+            var node = svg.selectAll("g.node")
+                .data(nodes)
+              .enter().append("g")
+                .attr("class", function (d) { return "node "+d.class })
+                .attr("transform", function (d) { return "translate(" + d.y + "," + d.x + ")"; })
+            
+            node.append("a")
+                .attr("xlink:href", function (d) {
+                    if (d.id != "-1") {
+                        return "/User/Details/" + d.id;
+                    }
+                })
+                .append("circle")
+                .attr("r", 4.5)
+                .attr("class", function (d) {
+                    var classes = d.class.split(" ");
+                    for(var i=0;i<classes.length;i++)
+                    {
+                        var item = classes[i].trim();
+                        if (allClasses.indexOf(item)==-1 && item!="") {
+                            allClasses.push(item);
+                        }
+                    }
+                    return d.class;
+                })
+                .append("title")
+                .text(function (d) {
+                    if (d.class == "admin") {
+                        return "Administrator";
+                    }else if (d.class == "organizations")
+                    {
+                        return "Organization";
+                    }
+                });
+
+            for (var i = 0; i < allClasses.length; i++)
+            {
+                $("#Selectors").append("<li data-highlight='" + allClasses[i] + "' class='selector " + allClasses[i] + " noSelect'>" + allClasses[i].replace(/_/g, ' ') + "</li>");
+                var c = allClasses[i];
+
+
+                $("." + c).hover(
+                    function () {
+                        var clss=$(this).data("highlight");
+                        $("." + clss).attr("class", function (i, classNames) { return classNames + " highlighted"; });
+                    },
+                    function () {
+                        var clss = $(this).data("highlight");
+                        $("." + clss).attr("class", function (i, classNames) { return classNames.replace("highlighted", "");});
+                    });
+            }
+
+            var box = node.append("a")
+                .attr("xlink:href", function (d) { return "/User/Details/" + d.id })
+                .append("g")
+                .attr("transform", function (d) { return "translate(0,-4)"; });
+
+            box.append("text")
+                .attr("dx", function (d) { return d.children ? -7 : 7; })
+                .attr("dy", 3)
+                .attr("text-anchor", function (d) { return d.children ? "end" : "start"; })
+                .text(function (d) { return d.name; })
+                .style("font-size", "10px")
+
+            box.append("text")
+                .attr("dx", function (d) { return d.children ? -7 : 7; })
+                .attr("dy", 10)
+                .attr("text-anchor", function (d) { return d.children ? "end" : "start"; })
+                .text(function (d) { return d.subtext; })
+                .style("font-size", "8px")
+                .style("fill", "gray")
+        });
+
+        d3.select(self.frameElement).style("height", height + "px");
+
+    </script>
+}

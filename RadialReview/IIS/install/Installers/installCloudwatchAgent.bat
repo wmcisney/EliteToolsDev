@@ -1,0 +1,1 @@
+powershell "C:\Progra~1\Amazon\AmazonCloudWatchAgent\amazon-cloudwatch-agent-ctl.ps1" -a fetch-config -m ec2 -c file:'c:\install\Files\cloudwatchAgent\config.json' -s

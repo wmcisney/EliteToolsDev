@@ -1,0 +1,80 @@
+﻿@model RadialReview.Controllers.MeasurableController.MeasurableVM
+
+<div class="form">
+	@Html.HiddenFor(x => x.UserId)
+	<div class="">
+        <div class="btn btn-default clickable " onclick="addRow();">Add Measurable</div>
+		<div class="row">
+			<div class="col-sm-12" id="allRows">
+				<div style="width:calc( 100% - 25px );display:inline-block">
+					@*<div class="row">
+							<div class="col-sm-6"><u>Measurable</u></div>
+							<div class="col-sm-6 alignCenter"><u>Weekly Goal</u></div>
+						</div>*@
+				</div>
+				@foreach (var item in Model.Measurables)
+				{
+					Html.RenderPartial("_MeasurableRow", item);
+				}
+			</div>
+		</div>
+		<br />
+		@*<h4>Admininstering measurables:</h4>
+		<div class="row">
+			<div class="col-sm-12" id="allRows">
+				<div style="width:calc( 100% - 25px );display:inline-block"></div>
+				@foreach (var item in Model.AdminMeasurables) {
+					Html.RenderPartial("_MeasurableRow", item);
+				}
+			</div>
+		</div>*@		
+        @*<label>Update All Level 10s: </label> @Html.CheckBoxFor(x => x.UpdateAllL10s)*@
+	</div>
+</div>
+<script>
+	function addRow() {
+		$.ajax({
+			url: "/Measurable/BlankEditorRow?admin=@(Model.UserId)",
+			cache: false,
+			success: function (html) {
+				$("#allRows").append(html);
+			}
+		});
+		return false;
+	}
+
+	$(function () {
+		$(document).on("click", "span.deleteRow", function () {
+			$(this).parents("div.roleRow:first").hide();
+			$(this).parents("div.roleRow:first").find("[name*='DeleteTime']").val("@Model.CurrentTime.ToString()");
+			return false;
+		});
+	});
+
+
+</script>
+
+<style>
+		#allRows .heading {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		@@media (min-width: 768px) {
+
+			#allRows .measurable-row:not(:nth-of-type(2)) .heading {
+				display: none;
+			}
+
+			#allRows .measurable-row:not(:nth-of-type(2)) .deleteRow {
+				top: 11px !important;
+			}
+		}
+
+		.deleteRow.disable {
+			text-decoration: line-through;
+			top: 22px !important;
+		}
+
+</style>

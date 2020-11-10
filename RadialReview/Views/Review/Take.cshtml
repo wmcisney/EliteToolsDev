@@ -1,0 +1,452 @@
+﻿@model RadialReview.Controllers.ReviewController.TakeViewModel
+@{
+	ViewBag.Title = "Review";
+	Layout = "~/Views/Shared/_ReviewLayout.cshtml";
+}
+
+@using RadialReview.Models
+@using RadialReview.Models.Askables
+
+@section header{
+	<!--Don't delete me-->
+}
+
+@section top{
+	@if (!Model.Editable) {
+		<div class="alertBar progress past-due">
+			<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;font-size:14px;">
+				This @Html.ReviewName().ToLower() is past due. This screen is read-only<span class="hidden-xs">, you won't be able to make changes to it</span>.
+			</div>
+		</div>
+		<div class="past-due-placeholder">&nbsp;</div>
+	}
+	<div class="jumbotron">
+		<h1 class="nameFade">@Model.ForUser.GetName()</h1>
+	</div>
+	<div class="hover anon-info" style="">
+		@if (Model.Anonymous) {
+			@:<span class="glyphicon glyphicon-lock anon-info-icon"></span> Your feedback will be anonymous to @(Model.ForUser.GetNameShort()). &nbsp;Only their @RadialReview.Utilities.Config.ManagerName() will see your name.
+		} else {
+			@:<span class="glyphicon glyphicon-eye-open anon-info-icon"></span>Your name will be included on your feedback to @Model.ForUser.GetNameShort().
+		}
+	</div>
+}
+
+@section sidebar{
+	<div class="hidden-xs hidden-sm">
+		<div class="flipButton" onclick="$('.flipCard,.nameFade').toggleClass('flipped');"><span class="glyphicon glyphicon-share-alt"></span></div>
+		<div class="userContainer noselect">
+			<div class="flipCard">
+				<figure class="front ">
+					<div class="sidebar noselect">
+						<div class="sidebar-contents">
+							@Html.Partial("_ResponsibilityGroup", Model.ForUser)
+						</div>
+					</div>
+				</figure>
+				<figure class="back">
+					<div class="sidebar">
+						<div class="sidebar-contents">
+							<ol id="nameList">
+								@for (int i = 0; i < Model.OrderedPeople.Count; i++) {
+									<li class="@(Model.OrderedPeople[i].Item2?"complete1":"incomplete1")">
+										<span class="indicator">
+											<span class="progress progressIndicator">
+												<span class="progress-bar @(Model.OrderedPeople[i].Item2 ? "progress-bar-success" : "progress-bar-primary progress-bar-striped")" style="width:@(Model.OrderedPeople[i].Item3)%"></span>
+											</span>
+										</span>
+										<a class="@(i == Model.Page ? "currentPage" : "") test-ignore" href="@Url.Action("take", new{id = Model.Id, page = i} )">@Model.OrderedPeople[i].Item1</a>
+
+									</li>
+								}
+							</ol>
+							<hr />
+							<div class="alignCenter" style="padding:5px;padding-top: 14px;"><a class="btn btn-default reviewOthersButton" href="@Url.Action("AdditionalReview", new { id = Model.Id ,page = Model.Page })">Evaluate Others <span class="glyphicon glyphicon-plus gray"></span></a></div>
+						</div>
+					</div>
+				</figure>
+			</div>
+		</div>
+	</div>
+	<div class="visible-xs visible-sm row">
+		<div class="col-xs-10 col-xs-offset-1">
+			@Html.Partial("_ResponsibilityGroup", Model.ForUser)
+
+			<ol id="nameList">
+				@for (int i = 0; i < Model.OrderedPeople.Count; i++) {
+					<li class="@(Model.OrderedPeople[i].Item2?"complete1":"incomplete1")">
+						<span class="indicator">
+							<span class="progress progressIndicator">
+								<span class="progress-bar @(Model.OrderedPeople[i].Item2 ? "progress-bar-success" : "progress-bar-primary progress-bar-striped")" style="width:@(Model.OrderedPeople[i].Item3)%"></span>
+							</span>
+						</span>
+						<a class="@(i == Model.Page ? "currentPage" : "")" href="@Url.Action("take", new{id = Model.Id, page = i} )">@Model.OrderedPeople[i].Item1</a>
+					</li>
+				}
+			</ol>
+			<hr />
+			<div class="alignCenter" style="padding:5px;padding-top: 14px;"><a class="btn btn-default reviewOthersButton" href="@Url.Action("AdditionalReview", new { id = Model.Id ,page = Model.Page })">Evaluate Others <span class="glyphicon glyphicon-plus gray"></span></a></div>
+			<br />
+		</div>
+	</div>
+}
+
+@Html.HiddenFor(x => x.StartTime.Ticks)
+@if (Model.Page == 0 && Model.Editable && Model.FirstPageHint) {
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Instructions:</h3>
+				</div>
+				<div class="panel-body">
+					<p class="alignCenter"><h4>Please answer all questions as accurately and honestly as possible.</h4></p>
+					<p>For each coworker, you're asked to evaluate whether the individual <i>Gets</i>, <i>Wants</i>, and <i>Has the Capacity</i> to perform each of their roles. You may add a comment to your response by clicking '<span class="glyphicon glyphicon-pencil" style="opacity:.7"></span>' icon in the square.</p>
+					<p>You're also asked to evaluate whether the individual <i>Almost Always</i>, <i>Sometimes</i>, or <i>Hardly Ever</i> exhibits company values. You may add a comment to your response by clicking "Add Comment" to the right.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<span class="glyphicon glyphicon-question-sign"
+	  style="float: right;margin-top: -15px;opacity: .4; cursor:pointer;position:absolute;top: 38px;right: 20px;z-index: 10000;"
+	  onclick="cancelTips($('.cancelTipsButton'));resetHints();runTips();"></span>
+<div class="row review-page @(Model.Editable?"":"no-edits")">
+	<div class="col-md-12">
+		<div>
+			<div class="smallBreak"></div>
+			@foreach (var section in Model.Answers.GroupBy(x => x.BaseAnswer.Askable.SectionId).OrderBy(x=> x.Key==null? -1:Model.Sections[x.Key.Value]._Ordering)) {
+				<div class="section" style="position:relative;">
+					<div class="section-color" style="width:4px;top:30px;bottom:0px;position:absolute;background-color:@(section.Key.NotNull(x=> Model.Sections[x.Value].Color))"></div>
+					<h4 class="section-title" data-order="@(section.Key==null?"null":""+Model.Sections[section.Key.Value]._Ordering)">@(section.Key.NotNull(x=> Model.Sections[x.Value].Name))</h4>
+					@foreach (var group in section.GroupBy(x => x.BaseAnswer.Askable.Category.Id).OrderByDescending(x => x.Key)) {
+						var dict = new ViewDataDictionary(ViewData);
+
+						var sliders = group.ToList().Where(x => x.BaseAnswer is SliderAnswer).Select(x => x.BaseAnswer).Cast<SliderAnswer>().ToList();
+						var thumbs = group.ToList().Where(x => x.BaseAnswer is ThumbsAnswer).Select(x => x.BaseAnswer).Cast<ThumbsAnswer>().ToList();
+						var feedbacks = group.ToList().Where(x => x.BaseAnswer is FeedbackAnswer).Select(x => x.BaseAnswer).Cast<FeedbackAnswer>().ToList();
+						var gwcs = group.ToList().Where(x => x.BaseAnswer is GetWantCapacityAnswer).Select(x => x.BaseAnswer).Cast<GetWantCapacityAnswer>().ToList();
+						var values = group.ToList().Where(x => x.BaseAnswer is CompanyValueAnswer).Select(x => x.BaseAnswer).Cast<CompanyValueAnswer>().ToList();
+						var rocks = group.ToList().Where(x => x.BaseAnswer is RockAnswer).Select(x => x.BaseAnswer).Cast<RockAnswer>().ToList();
+						var radios = group.ToList().Where(x => x.BaseAnswer is RadioAnswer).Select(x => x.BaseAnswer).Cast<RadioAnswer>().ToList();
+						//var gwc = group.ToList().Where(x => x is GetWantCapacityAnswer).Cast<GetWantCapacityAnswer>().ToList();
+
+						dict["Max"] = group.Count();
+
+						<div class="panel panel-default">
+							@*<div class="panel-heading">
+								<h3 class="panel-title">@*group.FirstOrDefault().NotNull(x => x.BaseAnswer.Askable.Category.Category.Translate())*</h3>
+							</div>*@
+							<div class="panel-body">
+								@Html.Partial("Take/GWC", Tuple.Create(gwcs, Model.Editable), dict)
+								@Html.Partial("Take/Values", Tuple.Create(values, Model.Editable), dict)
+								@Html.Partial("Take/Rocks", Tuple.Create(rocks, Model.Editable), dict)
+								@{dict["I"] = 0;}
+								@Html.Partial("Slider", Tuple.Create(sliders, Model.Editable), dict)
+								@{dict["I"] = sliders.Count();}
+								@Html.Partial("Thumbs", Tuple.Create(thumbs, Model.Editable), dict)
+								@{dict["I"] = sliders.Count() + thumbs.Count();}
+								@Html.Partial("Take/Radio", Tuple.Create(radios, Model.Editable), dict)
+								@{dict["I"] = sliders.Count() + thumbs.Count() + radios.Count();}
+								@Html.Partial("Feedback", Tuple.Create(feedbacks, Model.Editable), dict)
+								@*@{dict["I"] = sliders.Count() + thumbs.Count();}
+									@Html.Partial("GetWantCap", Tuple.Create(gwc, Model.Editable), dict)*@
+							</div>
+						</div>
+					}
+				</div>
+			}
+		</div>
+	</div>
+</div>
+@using (Html.BeginScripts()) {
+	@Scripts.Render("~/bundles/TakeReview")
+	<script>
+		var canUpdate = true;
+		$(function () {
+			$(".sidebar1 img").one("load", fixMinheight);
+			fixMinheight();
+		});
+		function fixMinheight() {
+			var h = Math.max($(".front .sidebar").height(), $(".back .sidebar").height()) + 15;
+			$(".sidebar1").css("min-height", h);
+		}
+		function sliderUpdateInternal(self) {
+			var d = { value: parseInt($(self).val()) };
+			var disp = d.value;
+			if (d.value == 0) {
+				disp = "NA";
+			}
+			$("#" + $(self).attr("name") + " .rangevalue").html(disp).addClass("show");
+			slideUpdate.call(self, d);
+		}
+
+		var tips = [];
+		function cancelTips(self) {
+			try {
+				$(self).parents(".qtip").qtip("hide");
+				$(self).parents(".qtip").qtip("disable");
+				var item = $(tips[0].selector);
+				$(item).removeClass("tip");
+				setTimeout(function () { $(item).removeClass("slowFade"); }, 500);
+			} catch (e) {
+				console.log(e);
+			}
+		}
+		function nextTips(self) {
+			var item = $(tips[0].selector);
+			$(item).qtip("hide");
+			$(item).qtip("disable");
+			$(item).removeClass("tip");
+			setTimeout(function () { $(item).removeClass("slowFade"); }, 500);
+			tips.splice(0, 1);
+			runTips();
+		}
+
+		function addTip(selector, title, tip) {
+			var t = {
+				tip: tip,
+				heading: title,
+				selector: selector
+			};
+			tips.push(t);
+			return t;
+		}
+
+		function runTips() {
+			if (tips.length > 0) {
+				setTimeout(function () {
+					var windowWidth = $(window).width();
+					if (tips[0].selector.is("#nameList") && windowWidth < 767) {
+						tips[0].selector = $(".visible-xs #nameList");
+					}
+					var tip = tips[0].tip;
+					var heading = tips[0].heading;
+					var item = $(tips[0].selector);
+					
+					if (item.length == 0) {
+						tips.splice(0, 1);
+						runTips();
+						return;
+					}
+					var position = tips[0].position || { at: 'center right', my: 'center left' };
+					if (windowWidth < 767) {
+						position = { at: 'top center', my: 'bottom center' };
+					}
+					$(item).addClass("currentTip");
+					var next = "Next";
+					var closeBtn = "<span class='btn btn-default cancelTipsButton' style='margin:2px;' onclick='cancelTips(this)'>Close</span>";
+					if (tips.length == 1) {
+						next = "Got it!";
+						closeBtn = "";
+					}
+					$(item).addClass("slowFade tip");
+					$(item).qtip({
+						content: {
+							text: "<div>" +
+								"<div><h4>" + heading + "</h5></div>" +
+								"<div><p style='font-size:13px;'>" + tip + "</p></div>" +
+								"<div style='text-align:right'>" +
+								closeBtn +
+								"<span class='btn btn-default' style='margin:2px;' onclick='nextTips()'>" + next + "</span>" +
+								"</div>" +
+								"<div>"
+						},
+						style: {
+							classes: 'qtip-shadow qtip-bootstrap qtip-gray'
+						}, adjust: {
+							scroll: true
+						},
+						show: { when: false, ready: true },
+						position: position,
+						hide: false,
+					});
+				}, 500);
+			}
+		}
+
+		function slideUpdate(d) {
+			var name = $(this).attr("name");
+			var disp = d.value;
+			if (d.value == 0) {
+				disp = "NA";
+			}
+			var answer = sliderToText(d.value);
+			$("#" + $(this).attr("name") + " .rangevalue").html(disp);
+			$("#" + name + "_title").html(answer);
+			$(this).val();
+			$(this).attr("name");
+		}
+
+		function resetHints() {
+			tips = [];
+			var options = "Always, Mostly, Rarely and Never";
+			if (window.LimitFiveState) {
+				options = "Yes and No";
+			}
+			addTip($(".table-gwc tr").eq(1).find(".fill").first(), "Evaluating Roles", "You'll need to evaluate how well an individual performs their roles.<br/> Click this box to toggle between " + options + ".");
+			addTip($(".table-gwc tr").eq(1).find(".glyphicon-pencil").first(), "Adding Comments", 'You can optionally add a comment by clicking the pencil.');
+			addTip($(".table-values .posneg").first(), "Evaluating Values", "You'll need to evaluate whether an individual exhibits Company Values. Choose between <i>Almost Always</i>, <i>Sometimes</i>, or <i>Hardly Ever</i>.");
+			var t = addTip($(".table-values .reason").first(), "Adding Comments", 'You can optionally add a comment by clicking here.');
+			t.position = { at: 'top center', my: 'bottom center' };
+			t = addTip($("#nameList"), "Who are you evaluating?", "The sidebar lists all the people you'll need to evaluate.");// Red text indicates an incomplete evaluation, while blue indicates that it is complete.");
+			t.position = { at: 'center left', my: 'center right' };
+			t = addTip($(".reviewOthersButton").last(), "Evaluate more people", "You may optionally add more people to evaluate by clicking 'Evaluate Others'.");
+			t.position = { at: 'center left', my: 'center right' };
+		}
+
+		$(function () {
+			$(".sliderBar").bind("slider:changed", function (event, data) {
+				slideUpdate.call(this, data);
+			});
+			$(".sliderBar").each(function (d) {
+				slideUpdate.call(this, this);
+			});
+			$('.btn-group').button();
+			resetHints();
+			setTimeout(function () {
+				$('.flipCard,.nameFade,.flipButton').addClass("flipped");
+			}, 1500);
+		});
+	</script>
+	if (ViewBag.NoSubmit == null) {
+		<script>
+			$(function () {
+
+				var reviewChanges = false;
+
+				$(".changeable").change(function () {
+					reviewChanges = true;
+					console.log("change");
+				});
+
+				$(".changeable").on('input propertychange', function () {
+					reviewChanges = true;
+					console.log("propertychange");
+				});
+				var onleaving = function () {
+					if (reviewChanges) {
+						var o;
+						$.ajax({
+							method: "post",
+							data: $("#form").serialize(),
+							url: "/Review/Save/",
+							async: false,
+							success: function (data) {
+								//nothin.
+							},
+							error: function (a, b, c) {
+								o = 'Are you sure you want to leave this page? Without clicking Back or Next, your changes will be lost.';
+							}
+						});
+						return o;
+					}
+				};
+
+				var isOnIOS = navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPhone/i);
+				var unloadEventName = isOnIOS ? "pagehide" : "beforeunload";
+
+				$(document).ready(function () {
+					$('.submitButton').on('mousedown', stopNavigate);
+					$('.submitButton').on('mouseleave', function () {
+						$(window).on(unloadEventName, onleaving);
+					});
+				});
+
+				$(window).on(unloadEventName, onleaving);
+
+
+				function stopNavigate() {
+					$(window).off(unloadEventName);
+				}
+			});
+
+
+		</script>
+	}
+
+	if (Model.Page == 0 && Model.Editable && Model.FirstPageHint) {
+		<script>
+			$(function () {
+				runTips();
+			});
+		</script>
+	}
+
+}
+
+@using (Html.BeginStyles()) {
+	@Styles.Render("~/Content/TakeReview")
+	<style>
+		html, body {
+			background-color: #eee;
+		}
+
+		.qtip-grays {
+			background-color: #f7f7f7;
+		}
+		
+		.incomplete a {
+			color: #D68585 !important;
+		}
+
+		textarea {
+			border: 1px solid #dfdfdf;
+		}
+
+		.slowFade {
+			-moz-transition: opacity .2s ease;
+			-o-transition: opacity .2s ease;
+			-webkit-transition: opacity .2s ease;
+			transition: opacity .2s ease;
+		}
+
+		.tip.fill {
+			background-color: #005ed7 !important;
+		}
+
+		.tip.posneg, textarea.tip, .reviewOthersButton.tip {
+			box-shadow: 0 0 8px 2px #6c584b;
+		}
+
+		.tip.glyphicon {
+			opacity: 1;
+			color: #005ed7;
+		}
+
+		@@-webkit-keyframes thumb {
+			0% {
+				-webkit-transform: translateX(0px);
+			}
+
+			25% {
+				-webkit-transform: translateX(-5px);
+			}
+
+			50% {
+				-webkit-transform: translateX(0px);
+			}
+
+			75% {
+				-webkit-transform: translateX(5px);
+			}
+
+			100% {
+				-webkit-transform: translateX(0px);
+			}
+		}
+
+		h4.question {
+			padding: 0px 10px 0px 10px !important;
+		}
+
+		#nameList.tip li a {
+			-webkit-animation-name: thumb;
+			-webkit-animation-duration: 500ms;
+			-webkit-transform-origin: 50% 50%;
+			-webkit-animation-iteration-count: 3;
+			-webkit-animation-timing-function: ease;
+		}
+	</style>
+}

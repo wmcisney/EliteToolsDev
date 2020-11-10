@@ -1,0 +1,117 @@
+﻿@model RadialReview.Controllers.TodoController.TodoModalVM
+
+@Html.HiddenFor(x => x.Id)
+@Html.HiddenFor(x => x.AccountableUserId)
+
+@{
+	var showDropDown = (ViewBag.Originating != null && ViewBag.ShowMeeting == true);
+	var guid = Guid.NewGuid().ToString().Replace("-","");
+	var canEdit = ViewBag.CanEdit != false;
+}
+<div class="modal-@guid">
+	<div class="form-group">
+		@*@Html.LabelFor(x => x.Message)*@
+		@Html.TextAreaFor(x => x.Message, new { @class = "form-control autoResize min-32", placeholder = "Enter To-do message", autocomplete = "off", disable = ViewBag.CanEdit == false, rows = "1" })
+	</div>
+	<div class="form-group">
+		<iframe src="/Todo/Pad/@Model.Id" width="99.8%" style="padding-right: 1px;"></iframe>
+	</div>
+
+	<div class="row">
+		@if (showDropDown) {
+			<div class="col-sm-5">
+				<div class="form-group">
+					<label>From:</label>
+					@Html.DropDownListFor(x=>x.ForRecurrenceId, (List<SelectListItem>)ViewBag.PossibleMeetings, new { @class = "form-control select-recur", style = "width:100%" })
+				</div>
+			</div>
+		} else {
+			@Html.HiddenFor(x => x.ForRecurrenceId)
+		}
+		<div class="@(showDropDown?"col-sm-5":"col-sm-11")">
+			<div class="form-group">
+				<label>Due Date:</label>
+				@Html.ClientDateFor(x => x.DueDate, TimeOfDay.End)
+			</div>
+		</div>
+		<div class="col-sm-1">
+			<div class="form-group">
+				<label>Complete:</label>
+				<input type="checkbox" @(Model.Completed ? "checked" : "") name="completed" style="height: 20px;width: 20px;top: 13px; display: block; left: 4px;" @(canEdit?"":"disabled='disabled'")" />
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+<script>
+
+	$(".modal-@guid .select-user").select2({
+		templateResult: imageListFormat,
+		templateSelection: imageListFormat,
+	});
+
+	(function () {
+		var r = $(".modal-@guid .autoResize").autoResize({
+			extraSpace: 24
+		});
+		
+		var i=setInterval(function () {
+			if (!$("#modal").is(".loading")) {
+				r.data('AutoResizer').check();
+				setTimeout(function () {
+					clearInterval(i);
+				},600);
+			}
+		}, 100);
+	})();
+
+	
+	function a@(guid)() {
+		var select2 = $(".modal-@guid .select-recur").select2({
+								closeOnSelect: true,
+			//allowClear: true,
+			@(canEdit?"":"") //Intentionally allowing editing of meetings,
+			placeholder:  "Not attached to any meetings..." ,
+			escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+			templateResult: function (d) {
+									return "<div><div class='searchresult clearfix' data-value='" + d.id + "'>" + d.text + "</div></div>";
+								},
+			templateSelection: function (d, e) {
+									if (d.disabled || d.readonly) {
+					$(e).addClass("selected-disabled");
+									}
+									if (d.readonly) {
+					$(e).addClass("selected-readonly");
+									}
+
+									return "<div class='searchresult searchresult-selected'>" + d.text + "</div>";
+								}
+							}).on("change", function (e) { });
+
+		var select3 = $(".@guid .select-accountable").select2({
+			closeOnSelect: true,
+			allowClear: true,
+			@*@(canEdit?"":"disabled:true,")*@
+			placeholder:  "Select an owner..." ,
+			escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+			templateResult: function (d) {
+				return "<div><div class='searchresult clearfix' data-value='" + d.id + "'>" + d.text + "</div></div>";
+			},
+			templateSelection: function (d) {
+				return "<div class='searchresult searchresult-selected'>" + d.text + "</div>";
+			}
+		}).on("change", function (e) {});
+	}
+	setTimeout(function () {
+		a@(guid)();
+	}, 1);
+
+</script>
+
+<style>
+	.min-32 {
+		min-height: 32px;
+	}
+</style>

@@ -1,0 +1,40 @@
+﻿@model RadialReview.Models.OrganizationModel
+
+@{
+	ViewBag.Title = "title";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm()) {
+	<div class="form-group">
+		@Html.LabelFor(x => x.Settings.EnableL10)
+		@Html.CheckBoxFor(x => x.Settings.EnableL10, new { @class = "checkbox" })
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(x => x.Settings.EnableReview)
+		@Html.CheckBoxFor(x => x.Settings.EnableReview, new { @class = "checkbox" })
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(x => x.Settings.EnableSurvey)
+		@Html.CheckBoxFor(x => x.Settings.EnableSurvey, new { @class = "checkbox" })
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(x => x.Settings.EnablePeople)
+		@Html.CheckBoxFor(x => x.Settings.EnablePeople, new { @class = "checkbox" })
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(x => x.Settings.EnableCoreProcess)
+		@Html.CheckBoxFor(x => x.Settings.EnableCoreProcess, new { @class = "checkbox" })
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(x => x.Settings.Branding)
+		@Html.EnumDropDownListFor(x => x.Settings.Branding, new { @class = "form-control" })
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(x => x.Settings.EnableZapier)
+		@Html.CheckBoxFor(x => x.Settings.EnableZapier, new { @class = "checkbox" })
+	</div>
+
+	<input type="submit" class="btn btn-primary">
+}

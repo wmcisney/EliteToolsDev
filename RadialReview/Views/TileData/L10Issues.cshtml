@@ -1,0 +1,22 @@
+﻿@model long
+
+<div class="review smallBreak2 loading tiny l10-issue-tile" style="min-height:30px">
+	<div class="l10-issue-heading heading tile-title" style="@(ViewBag.HeadingStyle)" data-style="@(ViewBag.HeadingStyle)">
+		@*<span class="clickable pull-right new hidden-width-1 issuesModal" data-method="CreateIssue" data-showusers="false" data-recurrence="@Model">Create New <span class='icon fontastic-icon-pinboard'></span></span>
+			<span class="clickable pull-right new visible-width-1 issuesModal" data-method="CreateIssue" data-showusers="false" data-recurrence="@Model" style="text-decoration: none;"><span class='icon fontastic-icon-pinboard'></span></span>*@
+		<span class="handle">{{(model.L10Issues | filter:{KeyId:@(Model)})[0].Title}}&nbsp;</span>
+		<span class="tile-buttons">
+			<a href="/l10/details/@(Model)#Issues" target="blank" class="tile-button tile-button-view-all" title="View All"><span class="glyphicon glyphicon-th-large"></span></a>
+			<a href="javascript:void(0)" class="tile-button tile-button-add-new issuesModal" data-method="CreateIssue" data-showusers="false" data-recurrence="@Model" title="Create New"><span class="glyphicon glyphicon-plus-sign"></span></a>
+		</span>
+	</div><div class="tile">
+		@{ Html.RenderPartial("~/Views/Issues/Partial/list.cshtml", new ViewDataDictionary(){
+		{"AddHeaders", false},
+		{"AddController", false},
+		{"AllowEditOwner", false},
+		{ "UsePopup",true},
+		{"RecurrenceId", Model},
+		{"Selector", "((model.L10Issues )| filter:{KeyId:"+Model+"})[0].Contents "},
+	}); }<div ng-show="(model.L10Issues  | filter:{KeyId:@(Model)}).length==0" class="gray alignCenter" elem-ready="functions.reload((model.L10Issues | filter:{KeyId:@(Model)}).length==0)">Please wait</div><div ng-if="(model.L10Issues  | filter:{KeyId:@(Model)})[0].HasError" class="gray alignCenter">{{(model.L10Issues  | filter:{KeyId:@(Model)})[0].Message}}</div>
+</div>
+</div>

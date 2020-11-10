@@ -1,0 +1,106 @@
+﻿@model long
+
+@{
+	var includeComplete = new HtmlString((ViewBag.IncludeComplete as bool? != null ? "&completed=" + ((bool)ViewBag.IncludeComplete)  : ""));
+	var name = new HtmlString((ViewBag.SetName as string != null ? "&name=" + ((string)ViewBag.SetName)  : ""));
+	var callback = ViewBag.Callback ?? "meetingCallback";
+
+	var pullUrl = new MvcHtmlString(ViewBag.PullUrl ?? ("/DashboardData/Data2/" + Model + "?recurrenceId={0}" + (includeComplete) + (name)));
+	var recurrenceId = ViewBag.RecurrenceId == null ? -3 : (long)ViewBag.RecurrenceId;
+	var guid = Html.NewGuid();
+}
+
+
+@{
+	Html.RenderPartial("~/Views/CDN/Angular.cshtml");
+}
+
+
+@using (Html.BeginStyles()) {
+	@Styles.Render("~/styles/L10")
+	@Styles.Render("~/styles/meeting")
+	<style>
+		input.due-date {
+			border: none;
+			width: 85px;
+			text-decoration: none;
+			color: #767F99;
+			text-align: right;
+			background-color: rgba(0, 0, 0, 0);
+			cursor: pointer;
+		}
+
+		.todo-selected {
+			background-color: #FFFFE8;
+			border-top: 1px solid #E8E8A8;
+			border-bottom: 1px solid #E8E8A8;
+		}
+	</style>
+}
+
+@using (Html.BeginScripts()) {
+
+	@*<script type="text/javascript">
+		
+		try {
+			var @(guid)url = Time.addTimestamp("@pullUrl");
+			prefetch( (@(guid)url).replace("{0}",@recurrenceId) + "&start=NaN&end=NaN&fullScorecard=true");
+		} catch (e) {
+			console.error(e);
+		}
+		
+	</script>*@
+
+	@Scripts.Render("~/bundles/L10js")
+	@Scripts.Render("~/bundles/meeting")
+
+	<script>
+    angular.module('L10App')
+        .value('recurrenceId', @(recurrenceId))
+        .value('meetingDataUrlBase', "@(pullUrl)")
+        .value('meetingCallback', @callback);
+
+    $('#pages a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
+    function meetingCallback() {
+        location.queryString = {};
+        location.search.substr(1).split("&").forEach(function (pair) {
+            if (pair === "") return;
+            var parts = pair.split("=");
+            location.queryString[parts[0]] = parts[1] &&
+                decodeURIComponent(parts[1].replace(/\+/g, " "));
+        });
+        if (location.queryString.todo) {
+            $('html, body').animate({
+                scrollTop: $("#todo_" + location.queryString.todo).offset().top - $(".navbar").height() - 16
+            }, 500);
+            $("#todo_" + location.queryString.todo).addClass("todo-selected");
+        }
+		setTimeout(function() {
+		    $(".scroll-right").scrollLeft(8000);
+	    }, 400);
+
+    }
+
+    $(function () {
+        setTimeout(function () {
+            var $element = $('#daterange3');
+            if ($element.length){
+				var scope = angular.element($element).scope();
+				scope.dataDateRange = {
+					startDate: moment().subtract('days', 1).toDate(),
+					endDate: moment().add('days', 2).toDate()
+				};
+			}
+        }, 1);
+
+        $("body").on("click", ".measurableModal", function () {
+            var m = $(this).data("recurrence");
+            showModal('Add Measurable', '/L10/AddMeasurable/' + m, '/L10/AddMeasurable/');
+        });
+    });
+	</script>
+}

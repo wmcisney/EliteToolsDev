@@ -1,0 +1,195 @@
+﻿@model RadialReview.Controllers.OrganizationController.PortVM
+@{
+	var signups = (ViewBag.V2SignedUp as List<RadialReview.Models.V2.V2Signup>) ?? new List<RadialReview.Models.V2.V2Signup>();
+	var anySignups = signups.Any(x => x.HaltedBy == null);
+	var signupUser = (signups.FirstOrDefault(z => z.HaltedBy == null).NotNull(y => y.ByUser));
+}
+<h1>@Model.OrgName</h1>
+
+@if (Model.AlreadyMigrated) {
+	<h2 style="color:red">!!! This organization is already migrated !!!</h2>
+
+}
+@if (Model.DeleteTime != null) {
+	<i>This organization was marked deleted on @Model.DeleteTime.Value.AddHours(-5).ToString("yyyy-MM-dd")</i>
+}
+
+<table id="info-table">
+	<tr>
+		<th>
+			V2 Signed up:
+		</th>
+		<td>
+			<b style="color:@(anySignups ? "green" : "red")">
+
+				@(anySignups)
+
+				@if (signupUser > 0) {
+					<a href="/user/details/@signupUser">by userid = (@signupUser)</a>
+				}
+
+			</b>
+		</td>
+	</tr>
+
+	@if (signups.Any()) {
+
+		if (!signups.Any(x => x.MigrationExecuted != null) && signups.Any(x => !x.ImmediateSignup)) {
+			<tr>
+				<th> V2 Waiting on:</th>
+				<td>
+					<b style="color:red"> @(signups.FirstOrDefault().NotNull(x => x.WaitingOn())) </b>
+				</td>
+			</tr>
+		}
+
+		if (!signups.Any(x => x.MigrationExecuted != null) && signups.Any(x => x.ImmediateSignup)) {
+			var allowedToday = signups.FirstOrDefault().NotNull(x => x.AllowedOnDate(DateTime.UtcNow - TimeSpan.FromHours(5)));
+
+			<tr>
+				<th> V2 Day of Week:</th>
+				<td>
+					<b> @(signups.FirstOrDefault().NotNull(x => x.DaysOfWeek())) </b>
+				</td>
+			</tr>
+		}
+	}
+
+
+</table>
+
+<br />
+
+@*<table id="iframe-table">
+
+		<tr id="org-json">
+			<td class="left"><iframe src="/organization/json/@Model.OrgId"></iframe></td>
+			<td class="right"></td>
+		</tr>
+
+		<tr id="user-enc">
+			<td class="left"><iframe src="/organization/userenc/@Model.OrgId"></iframe></td>
+			<td class="right"></td>
+		</tr>
+		<tr id="window-3">
+			<td class="left"></td>
+			<td class="right"></td>
+		</tr>
+		<tr id="window-4">
+			<td class="left"></td>
+			<td class="right"></td>
+		</tr>
+	</table>*@
+<a class="btn btn-info" target="_blank" href="/organization/json/@Model.OrgId">Download Organization</a>
+
+<table id="checklist">
+	<tr>
+		<td><input type="checkbox" /></td>
+		<td>Confirm Organization Name is correct.</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" /></td>
+		<td>Port the Org Data, receive OK</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" /></td>
+		<td>Port the User Data, receive OK</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" /></td>
+		<td>Confirm payments are equal</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" /></td>
+		<td>Login with user and test account</td>
+	</tr>
+</table>
+<br />
+<br />
+@if (!Model.AlreadyMigrated) {
+	<div class="merge-btn">
+		<button onclick="markMigrate()" style="background:#005ed7;color:white;">Mark Migrated</button>
+		<br /><br />
+		<i>This will disable the account, log the team out, and send an email to the primary contact.</i>
+	</div>
+} else {
+	<div class="unmerge-btn">
+		<button onclick="unmigrate()" style="background:red;color:white">Unmigrate</button><br /><br />
+		<i>Notice: An email was already sent to users of this account.</i>
+	</div>
+}
+<style>
+	#checklist tr {
+		cursor: pointer;
+	}
+
+		#checklist tr:hover {
+			background: #005ed73b;
+		}
+
+	#checklist td {
+		padding: 12px 10px;
+		font-size: 15px;
+		padding-right: 10px;
+		color: #333;
+		font-family: monospace;
+	}
+
+	#checklist input {
+		width: 16px;
+		height: 16px;
+	}
+
+	#info-table th {
+		padding-right: 10px;
+	}
+</style>
+
+
+@using (Html.BeginScripts()) {
+	<script>
+
+		$("#checklist tr").on("click", function (a, b) {
+			if (a.target == $(this).find("[type='checkbox']")[0])
+				return;
+			var c = $(this).find("[type='checkbox']").is(":checked");
+			$(this).find("[type='checkbox']").prop('checked', !c);
+		});
+
+		function unmigrate() {
+				$.ajax({
+					url: "/organization/UnmarkMigrate/@Model.OrgId",
+					success: function () {
+						showAlert("Marked Unmigrated");
+						location.reload();
+
+					}
+				});
+
+		}
+
+		function markMigrate() {
+			var all = true;
+			$("#checklist input[type='checkbox']").each(function (x) {
+				all = all && $(this).is(":checked");
+			});
+
+			if (!all) {
+				alert("Cannot merge. Confirm all steps are complete.");
+			} else {
+				$.ajax({
+					url: "/organization/MarkMigrate/@Model.OrgId",
+					success: function () {
+						showAlert("Marked Migrated");
+						location.reload();
+					}
+				});
+			}
+		}
+	</script>
+}
+
+
+
+@Html.Raw(Model.InjectedPortScript)
+

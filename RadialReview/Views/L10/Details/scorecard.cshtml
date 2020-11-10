@@ -1,0 +1,103 @@
+﻿@{
+    var forceMin = ViewBag.ForceMin == null ? "" : "," + ((int)ViewBag.ForceMin);
+    var scorecardKey = ViewBag.ScorecardKey as string ?? "model.Scorecard.Key";
+}
+
+<md-toolbar class="md-table-toolbar md-default" ng-hide="filter.show == true">
+    <div class="md-toolbar-tools">
+        <span>Scorecard</span>
+        <span flex></span>
+      
+        <md-button class="md-icon-button export-scorecard" aria-label="Export Scorecard" data-recurrence="{{::recurrenceId}}">
+            <md-tooltip md-direction="left">
+                Export Scorecard
+            </md-tooltip>
+            <md-icon>file_download</md-icon>
+        </md-button>
+        <md-button class="md-icon-button measurableModal add-btn" aria-label="Add Measurable" data-recurrence="{{::recurrenceId}}">
+            <md-tooltip md-direction="left">
+                Add Measurable
+            </md-tooltip>
+            <md-icon>add</md-icon>
+        </md-button>      
+    </div>
+</md-toolbar>
+
+@{
+    Html.RenderPartial("~/Views/Measurable/partial/list.cshtml", new ViewDataDictionary(){
+        {"AddHeaders", false},
+        {"AddController", false},
+        {"DisableName", false},
+        {"EditOwner", true},
+        {"Reorderable", true},
+        {"ForceMin", ViewBag.ForceMin},
+        {"Selector", "(model.Scorecard) "},
+    }); }
+
+
+@using (Html.BeginScripts()) {
+    @Scripts.Render("~/bundles/ScorecardDetails")
+    <script>
+
+		$("body").on("click",".export-scorecard",function () {
+			var rid = $(this).attr("data-recurrence");
+			exportScorecard(rid);
+		});
+
+		function exportScorecard(recurrenceId) {
+			$.ajax({
+				url: "/L10/ExportScorecard/" + recurrenceId + "?type=csv",
+				success: function (d) {
+					showAlert(d);
+				},
+				error: function () {
+					showAlert("Error downloading scorecard.");
+				}
+			});
+
+		}
+
+        $(function () {
+            fixHelperModified = function (e, tr) {
+                var $originals = tr.children();
+                var $helper = tr.clone();
+                $helper.children().each(function (index) {
+                    $(this).width($originals.eq(index).width());
+                });
+                return $helper;
+            };
+
+            var updateIndex = function (e, ui) {
+                var order = [];
+                var i = 0;
+                $('tr', ui.item.parent()).each(function (i) {
+                    order.push(+$(this).attr("data-measurable"));
+                });
+
+                var data = {
+                    ordering: order,
+                    recurrenceId: angular.element(document.querySelector('#ScorecardContainer')).scope().recurrenceId
+                };
+                $.ajax({
+                    url: "/L10/UpdateRecurrenceMeasurableOrdering",
+                    method: "POST",
+                    data: $.param(data, true),
+                    success: function (d) {
+                        showJsonAlert(d);
+                        angular.element(document.querySelector('#ScorecardContainer')).scope().$apply();
+                    }
+                });
+            };
+        });
+    </script>
+}
+
+@using (Html.BeginStyles()) {
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+    <style>
+        .grid.gray {
+            background-color: #eee;
+            height: 100%;
+        }
+    </style>
+}

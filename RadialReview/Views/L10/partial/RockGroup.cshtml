@@ -1,0 +1,53 @@
+﻿@model List<RadialReview.Models.L10.L10Meeting.L10Meeting_Rock>
+
+@foreach (var person in Model.GroupBy(x => x.ForRock.ForUserId).OrderBy(x => x.First().ForRock.AccountableUser.GetName())) {
+
+	/**/
+<div class="component rock-group rock-group-user-id-@person.First().ForRock.AccountableUser.Id">
+	<div class="top-bar">
+		@Html.Partial("_ProfilePicture", person.First().ForRock.AccountableUser)
+		<span class="owner">
+			@person.First().ForRock.AccountableUser.GetName()
+		</span>
+		<span data-accountable="@person.First().ForRock.AccountableUser.Id" class="pull-right completion-percentage"><span class="ratio"></span><span class="percentage"></span></span>
+	</div>
+	<div class="table-responsive2">
+		<table style="width: 100%">
+			<tr>
+				<th></th>
+				<th style="width: 1px"></th>
+				<th style="width: 46px"></th>
+			</tr>
+			@foreach (var i in person.OrderByDescending(x => x.VtoRock)) {
+				<tr data-owner="@i.ForRock.AccountableUser.Id"
+					class="rock-row user-id-@i.ForRock.AccountableUser.Id rock-id-@i.ForRock.Id rock-type-@(i.VtoRock ? "company" : "personal")"
+					data-rockid="@(i.ForRock.Id)"
+					data-message="@(i.ForRock.Rock)"
+					@if (i.ForRock.DueDate != null) { @: data-duedate="@(i.ForRock.DueDate.NotNull(x=>x.Value.ToJavascriptMilliseconds()))"
+					}
+					data-accountable="@(i.ForRock.AccountableUser.Id)"
+					data-name="@(i.ForRock.AccountableUser.GetName())">
+					<td class="message multiline2" data-rock="@(i.ForRock.Id)"><div class="milestone-marker-container"></div><div class="rock-title">@i.ForRock.Rock</div></td>
+					<td width="240px" class="rock-state-holder on-edit-enabled">@Html.EditorFor(x => i.Completion, "RockStateThin", new { name = "rock_" + i.ForRock.Id })</td>
+					<td width="34px" class="buttonHolder currentBlue">
+						<span class="icon fontastic-icon-pinboard issuesButton @((ViewBag.CanEdit??true)?"issuesModal":"disabled")"
+							  data-meeting="@person.First().L10Meeting.Id"
+							  data-recurrence="@person.First().ForRecurrence.Id"
+							  data-rock="@(i.ForRock.Id)"							  
+							  data-method="CreateRockIssue"
+							  title="@((ViewBag.CanEdit??true)?"Create a Context-Aware Issue™":"Cannot edit")"></span>
+						<span class="glyphicon glyphicon-unchecked todoButton @((ViewBag.CanEdit??true)?"todoModal":"disabled")"
+							  data-meeting="@person.First().L10Meeting.Id"
+							  data-recurrence="@person.First().ForRecurrence.Id"
+							  data-rock="@(i.ForRock.Id)"
+							  data-accountable="@(i.ForRock.ForUserId)"
+							  data-method="CreateRockTodo"
+							  title="@((ViewBag.CanEdit??true)?"Create a Context-Aware To-Do™":"Cannot edit")">
+						</span>
+					</td>
+				</tr>
+			}
+		</table>
+	</div>
+</div>
+}

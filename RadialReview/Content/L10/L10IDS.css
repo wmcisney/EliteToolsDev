@@ -1,0 +1,358 @@
+﻿.ids-list > .issue-row {
+	margin: 4px;
+}
+.ids-list > .issue-row >.fill{
+	/*display: flex;
+	align-items: center;
+	justify-content: flex-start;*/
+	border-radius: 10px;
+	background-color: #FFF;
+	border: 1px solid #E8E8E8;
+	border-left: 1px solid #E8E8E8;
+	color: #666;
+	/*margin: 4px;*/
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	z-index: -1;
+}
+
+.issue-row .move-icon .icon:before {
+	display: inline-block;
+	transform: translate(0, 3px) rotate(90deg);
+}
+
+.ids-list .move-icon,
+.dd-dragel .move-icon {
+	display: inline-block;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.ids-list .outer, .ids-list .inner,
+.dd-dragel .outer,.dd-dragel .inner {
+	display: none;
+}
+
+.ids-list > .issue-row > .move-icon > .outer {
+	display: inline-block;
+	margin: 5px 6px 4px 8px;
+	color: #999;
+	cursor: move;
+}
+
+.ids-list > .issue-row .dd-list .move-icon .inner,
+.dd-dragel > .issue-row .dd-list .move-icon .inner  {
+	display: inline-block;
+	margin: 5px 6px 4px 8px;
+	color: #999;
+	cursor: move;
+}
+
+.ids-list.dd-list .dd-list .dd-list .message,
+.dd-dragel .dd-list .dd-list .message {
+	font-size: 95%;
+}
+
+.ids-list.dd-list .dd-list .dd-list .dd-list .message,
+.dd-dragel .dd-list .dd-list .dd-list .message {
+	font-size: 90%;
+}
+
+.ids-list {
+	padding-left: 0px;
+}
+
+.ids-list .dd-list {
+	padding-left: 0px;
+	margin-left: 30px;
+	padding-bottom: 2px;
+
+	margin: 0 0 9px 0;
+	min-height: 10px;
+}
+
+.issue-row .move-icon:hover {
+	color: #565656;
+}
+
+.issue-row {
+	position: relative;
+}
+
+
+	.ids-list .issue-row .contents {
+		/*position: absolute;
+	top: 0px;*/
+		display: inline-block;
+		margin: 5px 0;
+	}
+	
+.ids-list > .issue-row > .message,
+.dd-dragel > .issue-row > .message {
+	/*margin: 5px 0 0;*/
+	font-weight: bold;
+	color: #545454;
+}
+.ids-list > .issue-row .message,
+.dd-dragel > .issue-row .message {
+	padding-left: 28px;
+	padding-top: 7px;
+	padding-bottom: 4px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/*.ids-list > .issue-row >.message,
+.dd-dragel > .issue-row >.message {
+	padding-left: 48px;
+	padding-top: 7px;
+	padding-bottom: 4px;
+}*/
+
+.ids-list .issue-row .merge-list {
+	margin-bottom: 0px;
+	list-style: none;
+	padding-left: 0;
+}
+
+.ids-list .dd-placeholder/*, .ids-list .placeholder*/ {
+	border: 1px dotted #E8E8E8;
+	margin: 7px 7px;
+	min-height: 18px;
+}
+
+.dd > .dd-list div:first-child .dd-placeholder-icon:before {
+	content: "\e040";
+}
+
+/*.dd > .dd-list div:first-child .dd-placeholder-icon:after {
+	content: "\e041";
+}*/
+
+.dd > .dd-list > div:first-child .dd-placeholder-icon {
+	display: none;
+}
+
+
+.ids-list .dd-placeholder > .dd-placeholder-icon {
+	font-family: "fontastic" !important;
+	font-style: normal !important;
+	font-weight: normal !important;
+	font-variant: normal !important;
+	text-transform: none !important;
+	speak: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	display: inline-block;
+	margin: 7px;
+	color: #bbb;
+}
+
+	.ids-list .dd-placeholder > .dd-placeholder-icon:before {
+		content: "\e041";
+	}
+
+
+.dd-item > button {
+	display: none;
+}
+
+.ids-list > .issue-row:hover >.message{
+	cursor:pointer;
+	color: #2A6496;
+}
+
+.ids-list > .issue-row:hover {
+	cursor:pointer !important;
+}
+
+.dd-dragel {
+	position: absolute;
+	pointer-events: none;
+	margin-left: -8px;
+	margin-top: -4px;
+	padding: 0px;
+}
+
+.ids-list .issueDetails .heading {
+	width: calc(100% - 32px);
+}
+
+.ids-list .issueDetails h4 {
+	margin-top: 0px;
+	margin-bottom: 10px;
+}
+
+.ids-list .issueDetails:empty { 
+	color: #ddd;
+}
+
+.ids-list .issueDetails:empty:after {
+	content: "Click an issue to see its details.";
+}
+
+.ids-list .issueDetails .move-icon {
+	display: none;
+}
+
+.ids-list .issueDetails > ol {
+	overflow: visible;
+	color: #999;
+}
+.ids-list .issueDetails ol {
+	padding-left: 22px;
+	font-size: 12px;
+}
+
+.ids-list .issueDetails > ol .issue-row {
+	list-style-type: square;
+	overflow: visible;
+	white-space: normal;
+}
+.ids-list .issueDetails > ol .issue-row .message {
+	color: #666;
+}
+
+.ids-list .issueDetails .details {
+	/*white-space: pre-line;*/
+	border: 1px solid #E8E8E8;
+	padding: 2px 6px;
+	color: #666;
+	font-size: 12px;
+	background-color: #FcFcFc;
+	width: 100%;
+	resize: vertical;
+	height: 100px;
+}
+
+.page-header.details {
+	color: #666;
+}
+
+.ids-list > .issue-row.selected >.fill {
+	background-color: #fefefe;
+	border: 1px solid #B2B8C8;
+	border-radius: 8px;
+}
+
+.ids-list .issue-details-container, .dd-dragel .issue-details-container {
+	display: none;
+}
+
+.issueDetails .issue-details-container {
+	padding-left: 5px;
+}
+
+
+.issueDetails li {
+	cursor: pointer;
+}
+
+.issueDetails .issue-details-container {
+	border-left: 2px solid #EFEFEF;
+	padding-left: 13px;
+	margin-left: -14px;
+}
+
+.issueDetails .button-bar {
+	padding-top: 6px;
+}
+
+.issueDetails .button-bar .btn{
+	margin: 2px;
+}
+
+/*.issueDetails .button-bar .icon{
+	font-size: 140%;
+}*/
+
+.issue-row .issue-checkbox {
+	display: none;
+}
+
+.ids-list>.issue-row>.issue-checkbox {
+	display: inline-block;
+	position: absolute;
+	top: 5px;
+	left: -17px;
+}
+
+.ids-list .issue-checkbox:checked ~ * {
+	opacity: .5;
+}
+
+.dd-active .dd-list {
+	min-height: 20px;
+	border: 1px solid red;
+}
+
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+
+.placeholder{  
+	position: relative;
+	margin: 0;
+	padding: 0;
+	border: none;
+	display: block;
+	list-style-type: none;
+}
+
+
+.placeholder:before {
+	position: absolute;
+	content:"";
+	width: 0;
+	height: 0;
+	margin-top: -5px;
+	left: -5px;
+	top: -4px;
+	border: 5px solid transparent;
+	border-left-color: red;
+	border-right: none;
+}
+
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+
+
+.issues-list-container .vertical {
+margin: 0 0 9px 0;
+min-height: 10px;
+}
+.issues-list-container ol {
+list-style-type: none;
+}
+.issues-list-container ol {
+list-style: decimal;
+}
+.issues-list-container ul, .issues-list-container ol {
+padding: 0;
+margin: 0 0 9px 25px;
+}
+
+.issues-list-container ol.vertical li {
+display: block;
+margin: 5px;
+padding: 5px;
+border: 1px solid #CCC;
+color: #08C;
+background: #EEE;
+}
+.issues-list-container li {
+line-height: 18px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+	margin-bottom: 0;
+}

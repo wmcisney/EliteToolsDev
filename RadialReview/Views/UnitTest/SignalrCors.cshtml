@@ -1,0 +1,19 @@
+﻿<div>
+	SignalR Cors Test
+
+	<button onclick="go()" value="go">Go</button>
+
+	<script>
+		function go() {
+
+			$.ajax({
+				url: "https://s0.traction.tools/signalr/negotiate?clientProtocol=2.1&connectionData=%5B%7B%22name%22%3A%22realtimehub%22%7D%5D&_=1559637488465",
+				complete: function (a, b, c) {
+					debugger;
+				}
+			});
+		}
+
+
+	</script>
+</div>

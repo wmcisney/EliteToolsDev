@@ -1,0 +1,59 @@
+﻿@model RadialReview.Accessors.PDF.Partial.FooterData
+@{
+	var logo = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAcCAMAAACj+uTiAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAUdQTFRFAAAA////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Oml7WgAAAG10Uk5TABSmC7f/BYL+gAGP/Gj3cSHS71InJkfp2ikPHSLQ4TI3B9cQu84fU7NLBKehDQKK/ZacsQmVdQrTSrW2rt4saVUV9RijngyfY699zwPx+20WucNRuhfBTCTRwAjb1dbsLzjmLh4+5zo5a79wstvxoPcAAAFNSURBVHicbdLnV8IwEADwQziMgKgoToZCcSAVQRAcoIBUUcS9EfdC///PJr2A8sJ9yLvrL+3lXQrwF5YeC3QNqw1t1m5g72XI+uwqOJwuRHQ5HYr0u1GEe0CRwSFT0DPc+XzEC6NjROMTvJ6ckuDzB4Iw7SHy+2DGH6KjhDXEyCzMUSvUwvOICwKii4zXMX0pvmwKC/ElISRJW1dS9jS2I8JhVea2jBhDK7IAa4zSdTE0y0ZLNiEToCyXNw+Tz0nZgm2ZaQVTChqVxRLstF4vGxyMXVntAWTbPSspSFVkvs93HbSFOatW+a1YlUuMJ4dU147g+EQkpxnR8gzx/OJStr2C6xvEW7r0u/q9Dt4G0cMjPD03vHLOL698eXsnqgfh47Pzgr6KRE3l93HEa3SKb+W2owkxP5aOKgJGmUvSUAFAb2JT7wYApZ/Sv+oX4WUmaeKxEyYAAAAASUVORK5CYII=";
+}
+
+
+<div>
+	<table class="footer-container" style='color:#ddd;' border="0">
+		<tr>
+			<td style="width:52px;text-align:right;">
+				<div class="logo-container">
+					<img style="height:100%;" src="@logo" />
+				</div>
+			</td>
+			<td style="">
+				Built with Elite Tools | ©  2020-@Model.YearEnd  & Elite Tools.
+				All Rights Reserved. | @Model.CompanyName
+			</td>
+			<td style="width:200px;text-align:right;padding-right:10px;">
+				as of @(Model.Generated) | 
+			</td>
+		</tr>
+	</table>
+</div>
+
+<style>
+
+	.footer-container {
+		/*background-color: blue;
+		-webkit-print-color-adjust: exact !important;*/
+		border: none;
+		border-collapse: collapse;
+		width: 100%;
+		float:right;
+		font-size:9px;
+		position:relative;
+		top:1px;
+	}
+
+		.footer-container sup {
+			font-size: 60%;
+			/*position:relative;
+			top:.75px;*/
+		}
+
+		.footer-container .logo-container {
+			-webkit-print-color-adjust: exact !important;
+			/*width: 10px;*/
+			height: 12px;
+			padding: 2px;
+			position: relative;
+			/*top: 1px;*/
+			/*margin: -2px;*/
+			/*margin-left: 10px;*/
+			display: inline-block;
+			background-color: #005ed7;
+			margin-right:2px;
+		}
+</style>

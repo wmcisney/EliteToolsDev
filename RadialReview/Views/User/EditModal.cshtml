@@ -1,0 +1,28 @@
+﻿@model RadialReview.Models.ViewModels.EditUserOrganizationViewModel
+
+@Html.HiddenFor(x => x.UserId)
+
+
+
+<div class="smallBreak"></div>
+<div class="row">
+    <div class="col-xs-3"><label>Manager:</label></div>
+    <div class="col-xs-9">@Html.CheckBoxFor(x => x.IsManager, new { style = "padding-bottom: 7px;", @class = "checkbox" })</div>
+</div>
+@if (Model.CanSetManagingOrganization && Model.ManagingOrganization.HasValue)
+{
+    <div class="row">
+        <div class="col-xs-3"><label>Admin:</label></div>
+        <div class="col-xs-9">@Html.CheckBox(Html.NameFor(x=>x.ManagingOrganization).ToString(),Model.ManagingOrganization??false,new { @class = "checkbox" })</div>
+    </div>
+}
+
+
+<script>
+    $(function () {
+        $("#positionSelector").change(function () {
+            $("#customPosition").val($("#positionSelector option:selected").text());
+            setTimeout(function () { $("#customPosition")[0].select(); }, 10);
+        })
+    });
+</script>

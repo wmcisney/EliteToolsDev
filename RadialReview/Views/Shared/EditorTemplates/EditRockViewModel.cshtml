@@ -1,0 +1,424 @@
+﻿@model RadialReview.Models.ViewModels.EditRockViewModel
+
+@Html.HiddenFor(x => x.Id)
+@{
+	var guid = Html.NewGuid();
+	var canEdit = !(bool)(Model.CanEdit == false);
+	//var modalLeftClass = "col-xs-12";
+	//var modalRightClass = "";
+
+	//var modalLeftClassOpen = "col-md-7";
+	//var modalRightClassOpen = "col-md-5";
+
+	var classes = "";
+
+	if (canEdit) {
+		classes += " modal-allows-edit";
+	}
+
+	if (Model.Milestones.Any()) {
+		classes += " modal-has-milestones";
+	}
+
+	if (Model.AnyL10sWithMilestones != false || true) {
+		//modalLeftClass = modalLeftClassOpen;
+		classes += " modal-allows-milestones";
+	}
+}
+
+<div class="@guid @classes">
+	@*Html.HiddenFor(x => x.SelectedRecurrenceId)*@
+	@Html.HiddenFor(x => x.Id)
+
+	<div class="row row-background">
+		<div class="modal-rock-panel-left">
+			<div class="row">
+				<div class="form-group">
+					<div class="col-sm-8">
+						<div class="form-group">
+							@Html.LabelFor(x => x.Title)
+							@Html.TextBoxFor(x => x.Title, new { @class = "form-control", placeholder = "Enter the rock", autocomplete = "off" }).Disable(!canEdit)
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label>Status</label>
+							<select name="@Html.NameFor(x => x.Completion)" class="form-control">
+								@foreach (var u in Model.RockStates) {
+									<option value="@u.id" @(u.id == Model.Completion.ToString() ? "selected" : "")>@u.name</option>
+								}
+							</select>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="form-group">
+				<label>Details</label>
+				@if (Model.IsCreate == true) {
+					@Html.TextAreaFor(x => x.Notes, new { @class = "form-control verticalOnly", style = "min-height:144px;" })
+				} else {
+					<iframe src="/Rocks/Pad/@Model.Id" width="99.6%" style="min-height:200px;"></iframe>
+				}
+			</div>
+			<div class="row">
+				<div class="form-group">
+					<div class="col-sm-4">
+						<label>Due Date</label>
+						@if (canEdit) {
+							@Html.ClientDateFor(x => x.DueDate, TimeOfDay.End)
+							@*@Html.EditorFor(x => x.DueDate, new { name = "DueDate", id = "Rock_DueDate", localize = true })*@
+						} else {
+							@Html.HiddenFor(x => x.DueDate)
+							if (Model.DueDate != null) {
+								<div>@Html.DisplayFor(x => x.DueDate)</div>
+							} else {
+								<div style="padding: 7px 0px;">Not set</div>
+							}
+						}
+					</div>
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label>Accountable Owner</label>
+							@Html.DropDownListFor(x => x.AccountableUser, (IEnumerable<SelectListItem>)Model.PotentialUsers, new { @class = "fullWidth form-control owner" }).Disable(!canEdit)
+
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<label>Rock Type</label>
+						<select name="@Html.NameFor(x => x.AddToVTO)" class="form-control">
+							@foreach (var u in Model.RockTypes) {
+								<option value="@u.id" @(u.id == Model.AddToVTO.ToString() ? "selected" : "")>@u.name</option>
+							}
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class=" @(Model.HideMeetings==true?"hidden":"")">
+
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<label>Attach to meeting(s):</label>
+							@Html.ListBoxFor(x => x.RecurrenceIds, Model.PossibleRecurrences, new { @class = "select-recur form-control", multiple = true }).DisableToReadonly()
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+		@try {
+			if (Model.AnyL10sWithMilestones != false || true) {
+				<div class="modal-rock-panel-right no-milestones @(Model.Milestones.Any()?"hidden":"")">
+					<div class="btn btn-warning btn-xs add-btn" onclick="addMilestone@(guid)()">Add milestones <i class="glyphicon glyphicon-chevron-right"></i></div>
+				</div>
+				<div class="modal-rock-panel-right has-milestones @(Model.Milestones.Any()?"":"hidden")">
+					<div class="milestone-section @(canEdit?"":"disabled")">
+						<div class="btn btn-warning btn-sm add-btn pull-right" style="margin-top: 15px;margin-bottom: 5px;clear: both;" onclick="addMilestone@(guid)()">Add another milestone <i class="glyphicon glyphicon-plus"></i></div>
+						<div class="row" style="clear:both;">
+							<div class="col-xs-7 col-xs-offset-1"><label>Milestones</label></div>
+							<div class="col-xs-3 has-milestones @(Model.Milestones.Any()?"":"hidden") noPad"><label>Due Date</label></div>
+
+						</div>
+						<div class="milestone-table">
+							@for (var i = 0; i < Model.Milestones.Count(); i++) {
+
+								<div class="row ms-row ms-row-@i">
+									<div class="col-xs-1">@Html.CheckBoxFor(x => Model.Milestones[i].Complete, new { @class = "checkbox" }) </div>
+									<div class="col-xs-7">@Html.TextBoxFor(x => Model.Milestones[i].Name, new { @class = "form-control" }) </div>
+									<div class="col-xs-3 noPad">
+										@if (canEdit) {
+											@Html.ClientDateFor(x => Model.Milestones[i].DueDate, TimeOfDay.End)
+											@*@Html.EditorFor(x => Model.Milestones[i].DueDate, new { localize= true })*@
+										} else {
+											@Html.HiddenFor(x => Model.Milestones[i].DueDate)
+											<div>@Html.DisplayFor(x => x.DueDate)</div>
+										}
+									</div>
+									<div class="col-xs-1"><span class="delete" onclick='removeMilestone@(guid)(@i)'>x</span></div>
+									@Html.HiddenFor(x => Model.Milestones[i].Id)
+								</div>
+
+							}
+						</div>
+						<div class="row">
+							<div class="col-xs-5 col-xs-offset-1"><label class="gray no-milestones @(Model.Milestones.Any()?"hidden":"")">No milestones.</label></div>
+						</div>
+
+
+					</div>
+					<div class="modal-rock-panel-right-background"></div>
+				</div>
+
+			}
+		} catch (Exception e) {
+			<span>Error: @e.Message </span>
+		}
+	</div>
+</div>	
+@if (Model.IsCreate != true) {
+	<div class="pull-left" style="clear:both; position: absolute; bottom: -48px;">
+		@if (Model.CanArchive == true) {
+			<span class="btn btn-default btn-archive" onclick="@(guid)Archive()"><span class="icon fontastic-icon-archive"></span> Archive</span>
+		} else {
+			<span class="btn btn-default disabled" title="You do not have permission to archive this rock."><span class="icon fontastic-icon-archive"></span> Archive</span>
+		}
+	</div>
+	<div style="clear:both"></div>
+}
+
+<style>
+	
+	.btn-archive {
+		border: 1px solid #d9534f;
+		color: #d9534f;
+	}
+	.btn-archive .icon{
+		color: #d9534f;
+		-webkit-transition: all .25s ease;
+		-moz-transition: all .25s ease;
+		-ms-transition: all .25s ease;
+		-o-transition: all .25s ease;
+		transition: all .25s ease;	
+	}
+
+	.btn-archive:hover{
+		color: #fff !important;
+		background-color: #d9534f !important;
+		border-color: #d43f3a !important;
+	}
+	.btn-archive:hover .icon{
+		color: white;
+	}
+
+
+
+	.@guid .select2 {
+		display: block;
+		width: 100% !important;
+	}
+	.@guid .select2-search__field{
+		min-width:150px;
+        width: 300px !important;
+	}
+
+	.@(guid) .milestone-table {
+		width:100%;
+		margin-bottom: 30px;
+
+	}
+
+	.@(guid) .modal-rock-panel-right.no-milestones {
+		float: right;
+		position: absolute;
+		right: 0px;
+		top: 5px;
+	}
+
+	.@(guid) .row-background{
+	    background: #eaeaea;
+		margin-top: -19px;
+		margin-bottom: -15px;
+	}
+
+
+	.@(guid) .modal-rock-panel-left{
+		padding-top: 10px;
+	}
+
+	.@(guid) .modal-rock-panel-left,.@(guid) .modal-rock-panel-right {
+	    position: relative;
+		min-height: 1px;
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+
+	.@(guid) .modal-rock-panel-left {
+		background: white;
+	}
+	.@(guid).modal-has-milestones .modal-rock-panel-left{
+		box-shadow: 4px 0px 5px -3px rgba(0,0,0,.125), 1px 0px 2px -1px rgba(0,0,0,.125);
+	}
+	.@(guid) .modal-rock-panel-right.has-milestones	{
+		box-shadow: 0px 2px 5px -4px black inset;
+	}
+
+
+	@@media (min-width: 992px){
+		.@(guid).modal-has-milestones .modal-rock-panel-left,.@(guid).modal-has-milestones .modal-rock-panel-right {
+			float: left;
+		}
+		.@(guid).modal-has-milestones .modal-rock-panel-left {
+			width: 58.33333333%;
+		}
+		.@(guid).modal-has-milestones .modal-rock-panel-right{
+			width: 41.66666666%;
+		}
+	}
+
+
+
+
+
+	.@(guid) .milestone-section.disabled input{
+		pointer-events: none;
+		border: none;
+		box-shadow: none;
+		border-bottom: 1px solid lightgray;
+		border-radius: 0;
+	}
+
+	.@(guid) .milestone-section.disabled .delete,
+	.@(guid) .milestone-section.disabled .add-btn{
+		display:none;
+	}
+
+	.@(guid) .milestone-section.disabled input[type='checkbox']:before{
+		background-color: #9e9e9e69;
+		width: calc(100% - 2px);
+		height: calc(100% - 2px);
+		display: inline-block;
+		content: "";
+		border-radius: 2px;
+	}
+
+	.@(guid) .milestone-table .checkbox{
+		margin: 10px;
+		top: 14px;
+	}
+	.@(guid) .ms-row{
+		padding-bottom:4px;
+	}
+
+	.@(guid) .delete{
+		font-family: monospace;
+		padding: 3px 14px;
+		top: 2px;
+		position: relative;
+		text-align: center;
+		font-size: 18px;
+		color: lightgray;
+		left: -20px;
+		cursor: pointer;
+		font-weight: bold;
+	}
+
+	#modalMessage{
+	    width: 50%;
+		margin-bottom: 15px;
+	}
+</style>
+
+<script>
+	function removeMilestone@(guid)(n) {
+		$(".@guid .ms-row-" + n).remove();
+		@*$(".@guid .delete-indicator-" + n).val("True");*@
+		refreshIds@(guid)();
+		if ($(".@(guid) .ms-row").length == 0) {
+			$(".@guid .no-milestones").removeClass("hidden");
+			$(".@guid .has-milestones").addClass("hidden");
+			$(".@guid").removeClass("modal-has-milestones");
+		}
+
+	}
+
+	function refreshIds@(guid)() {
+		$(".@(guid) .ms-row").each(function (a,b) {
+			$(this).find("[name]").each(function () {
+				var curName = $(this).attr("name")
+				var ending = curName.substr(curName.indexOf("."));
+				$(this).attr("name", "Milestones[" + a + "]" + ending);
+			});
+		});
+	}
+
+	function addMilestone@(guid)() {
+		var g = generateGuid();
+		var dg = "date-" + g;
+		var n = $(".milestone-table .ms-row-placeholder").length;
+		var row = $("<div class='row ms-row ms-row-"+g+"' >");
+		var name = "Milestones[" + n + "]";
+		row.append("<div class='col-xs-1' ><input name='" + name + ".Complete' type='checkbox' class='checkbox'/></div>");
+		row.append("<div class='col-xs-7'><input name='" + name + ".Name' type='text' class='form-control'/></div>");
+		row.append("<div class='col-xs-3 noPad " + dg + "'></div>");
+		row.append("<div class='col-xs-1'><span class='delete' onclick='removeMilestone@(guid)(\""+g+"\")'>x</span></div>");
+		row.append("<input type='hidden' name='" + name + ".Id' value='0' />");
+		row.append("<span class='ms-row-placeholder'/>");
+		$(".@(guid) .milestone-table").append(row);
+		$(".@guid .no-milestones").addClass("hidden");
+		$(".@guid .has-milestones").removeClass("hidden");
+		$(".@guid").addClass("modal-has-milestones");
+
+		@*$(".@guid .modal-rock-panel-left").removeClass("@modalLeftClass");
+		$(".@guid .modal-rock-panel-left").addClass("@modalLeftClassOpen");
+		$(".@guid .modal-rock-panel-right").removeClass("@modalRightClass");
+		$(".@guid .modal-rock-panel-right").addClass("@modalRightClassOpen");*@
+
+
+		Time.createClientDatepicker({
+			selector: "."+dg,
+			name: name + ".DueDate",
+			localTime: new Date(),
+		});
+		refreshIds@(guid)();
+	}
+
+	function a@(guid)() {
+		$(".@guid .owner").select2({
+			escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+		});
+
+		var select2 = $(".@guid .select-recur").select2({
+								closeOnSelect: true,
+			//allowClear: true,
+			@(canEdit?"":"") //Intentionally allowing editing of meetings,
+			placeholder:  "Not attached to any meetings..." ,
+			escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+			templateResult: function (d) {
+									return "<div><div class='searchresult clearfix' data-value='" + d.id + "'>" + d.text + "</div></div>";
+								},
+			templateSelection: function (d, e) {
+									if (d.disabled || d.readonly) {
+					$(e).addClass("selected-disabled");
+									}
+									if (d.readonly) {
+					$(e).addClass("selected-readonly");
+									}
+
+									return "<div class='searchresult searchresult-selected'>" + d.text + "</div>";
+								}
+							}).on("change", function (e) { });
+
+					var select3 = $(".@guid .select-accountable").select2({
+								closeOnSelect: true,
+			allowClear: true,
+			@*@(canEdit?"":"disabled:true,")*@
+			placeholder:  "Select an owner..." ,
+			escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+			templateResult: function (d) {
+				return "<div><div class='searchresult clearfix' data-value='" + d.id + "'>" + d.text + "</div></div>";
+			},
+			templateSelection: function (d) {
+				return "<div class='searchresult searchresult-selected'>" + d.text + "</div>";
+			}
+		}).on("change", function (e) {});
+	}
+	setTimeout(function () {
+		a@(guid)();
+	}, 1);
+
+
+	function @(guid)Archive() {
+		$.ajax({
+			url: "api/v1/Rocks/@Model.Id",
+			method:"delete",
+			success: function () {
+				$("#modal").modal('hide');
+				showAlert("Archived.");
+			}
+		});
+	}
+
+</script>

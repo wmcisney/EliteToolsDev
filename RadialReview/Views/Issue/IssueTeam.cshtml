@@ -1,0 +1,32 @@
+﻿@model List<SelectListItem>
+<div class="row">
+	@*<div class="col-sm-5 col-sm-push-7">
+			<p class="well">
+				As a supervisor of this organization you can issue reviews to teams you manage or to the organization as a whole.
+			</p>
+		</div>*@
+	<div class="col-sm-6">
+		<h2 class="alignCenter">Which team?</h2>
+	</div>
+
+	<div class="col-sm-6 adjTop" @*style="padding-top: 25px;"*@>
+		@Html.DropDownList("SelectedTeam", Model, new { @class = "form-control" })
+	</div>
+</div>
+
+<div id="pageIssueTeam" class=""></div>
+
+
+<script>
+	function startIssueTeam() {
+		qtip();
+		$('.btn').button();
+		$("#SelectedTeam").change(function () {
+			if ($(this).val() != "") {
+				$("#TeamId").val($("#SelectedTeam").val());
+				loadPage("#pageIssueTeam", "/Issue/IssueOrganization?_clientTimestamp=" + (+new Date()));
+			}
+		});
+	}
+</script>
+<img src="~/Content/img/blank.gif" onload="startIssueTeam()" />

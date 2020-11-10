@@ -1,0 +1,186 @@
+﻿@*@model RadialReview.Models.ViewModels.WorkspaceDropdownVM*@
+
+<li class="workspace-dropdown-mobile">
+	<a href="#" onclick="Workspace.showWorkspacesModal()">Workspaces</a>
+</li>
+<li class="btn-group heading workspace-dropdown workspace-dropdown-desktop" id="header-tab-dropdown">
+	<button type="button"
+			style="overflow-x: hidden;border-radius:2px;text-overflow: ellipsis;white-space: nowrap; max-width:256px;"
+			class="btn btn-default heading"
+			onclick="window.location='/'">
+		Workspaces
+		<span id="DashboardNotification" style="display: none;" class="glyphicon glyphicon-exclamation-sign"></span>
+		@*<span class="caret"></span>*@
+	</button>
+	<button class="btn btn-default heading dropdown-toggle" data-toggle="dropdown" aria-expanded="true" onclick="Workspace.showWorkspaceDropdown()">
+		<span class="caret"></span>
+		<span class="sr-only">Toggle Dropdown</span>
+	</button>
+	<ul id="workspace-dropdown-list" class="dropdown-menu" role="menu">
+		<li>
+			<center><img src="/Content/img/ajax-loader.gif" /></center>
+		</li>
+	</ul>
+</li>
+
+<script>
+
+	Workspace = new function () {
+		var self = this;
+		var contents = false;
+
+		var getContents = function (callback) {
+			callback = callback || function () { };
+			if (!contents) {
+				console.log("loading workspace");
+				$.ajax({
+					url: "/dashboard/dropdown",
+					success: function (html) {
+						contents = html;
+						$("#workspace-dropdown-list").html(html);
+						callback(html);
+					},
+					error: function () {
+						$('.workspace-dropdown .dropdown-toggle').dropdown('toggle');
+						//showWorkspaceDropdown.visible = false;
+					}
+				});
+			} else {
+				callback(contents);
+			}
+		};
+
+		this.showWorkspacesModal = function () {
+			getContents(function (html) {
+				//showModal({
+				//	title:"Show Workspace",
+				//	contents: html,
+				//	noFooter: true,
+				//})
+				Workspace.openWorkspacesModal();
+			})
+		};
+
+		this.goToMeetingWorkspace = function (id) {
+			window.location = "/Dashboard/Generate/" + id + "?type=L10&w=" + window.innerWidth;
+		};
+
+		this.showWorkspaceDropdown = function () {
+			getContents();
+		};
+
+		this.addPage=function() {
+			showModal({
+				title: "Add a Workspace",
+				fields: [{
+					name: "title",
+					text: "Title"
+				}],
+				push: "/Dashboard/CreateDashboard",
+				success: function (d) {
+					window.location.href = "/Dashboard/Index/" + d.Object;
+				}
+			});
+		}
+	}
+</script>
+<style>
+
+	.workspace-dropdown li a {
+		border-radius: 13px;
+		padding-left: 22px;
+		padding-right: 30px;
+		margin: 0px 4px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.workspace-dropdown ul li .glyphicon-home {
+		float: right;
+		margin-top: 4px;
+		margin-right: -10px;
+		color: #cccccc;
+		font-size: 11px;
+		width: 0px;
+		height: 0px;
+	}
+
+	.workspace-dropdown .extended-menu .glyphicon-home {
+		margin-right: 5px;
+		top: 5px;
+		right: 20px;
+		margin-top: 0px;
+	}
+
+	.workspace-dropdown .dropdown-heading {
+		font-size: 9px;
+		padding-top: 3px;
+		padding-left: 10px;
+		padding-bottom: 3px;
+		margin-top: -9px;
+		margin-bottom: 6px;
+		text-transform: uppercase;
+		background-color: #fafafa;
+		color: #ccc;
+	}
+
+	.workspace-dropdown .glyphicon-home:not(.selected) {
+		display: none;
+	}
+
+	.workspace-dropdown .glyphicon-star {
+		height: 0px;
+		width: 0px;
+		float: left;
+		right: 15px;
+        	top: 4px;
+/*Mark right: 15px;
+        top: 4px; */
+/* Clay float: right;
+		left: 11px;
+		top: 4px; */
+		font-size: 11px;
+		pointer-events: none;
+	}
+
+	.workspace-dropdown .extended-menu .glyphicon-star {
+		left: 12px;
+		top: 6px;
+		font-size: 9px;
+		float:left;
+	}
+
+	.workspace-dropdown .glyphicon-star:before {
+		color: #ccc;
+		opacity: .7;
+	}
+
+	.workspace-dropdown .glyphicon-star:not(.starred) {
+		display: none;
+	}
+
+
+	.workspace-dropdown .add-workspace {
+		width: 0px;
+		height: 0px;
+		float: right;
+		top: 4px;
+		right: -7px;
+		font-size: 15px;
+		color: #005ed7;
+	}
+
+
+	/* Small devices (tablets, 768px and up) */
+	@@media (max-width: 767.1px) {
+		.workspace-dropdown-desktop {
+			display: none !important;
+		}
+	}
+
+	@@media (min-width: 768px) {
+		.workspace-dropdown-mobile {
+			display: none !important;
+		}
+	}
+</style>

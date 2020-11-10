@@ -1,0 +1,62 @@
+﻿@using Microsoft.Ajax.Utilities
+@model RadialReview.Controllers.VTOController.VTOListingVM
+@{
+    ViewBag.Title = "V/TO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section top{
+	<div class="jumbotron">
+		<h1>V/TO</h1>
+	</div>
+}
+
+@section header{
+	@*Html.Partial("_ReviewsHeader")*@
+}
+
+@using (Html.BeginScripts())
+{
+
+}
+@if (ViewBag.IsManager ?? false)
+{
+	<div style="text-align: right;margin-bottom: 3px;">
+		<a class="btn btn-primary btn-invert" href="/Vto/Edit">Create new V/TO</a>
+	</div>
+}
+
+<div class="panel panel-primary startHiddennGroup">
+	@if (Model.VTOs.Any())
+	{
+		<div class="table-responsive">
+			<table class="table table-condensed tablesorter tablefilter tablesorter-default">
+				<thead>
+					<tr>
+						<th style="min-width: 120px">Vision/Traction Organizer Diagrams</th>
+						<th style="width:140px" class="alignCenter">Organization Wide</th>
+						<th style="width:80px" class="alignCenter"></th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var vto in Model.VTOs)
+					{
+						<tr class="startHiddenn">
+							<td><a href="/vto/edit/@vto.Id">@vto.Name.IfNullOrWhiteSpace("<untitled>")</a></td>
+							<td class="alignCenter">@vto.OrganizationWide</td>
+							<td class="alignCenter"></td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+
+	}
+	else
+	{
+		<div class="panel-body gray">
+			There are no V/TOs.
+		</div>
+	}
+</div>

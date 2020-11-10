@@ -1,0 +1,133 @@
+﻿@model Tuple<List<RadialReview.Models.SliderAnswer>, bool>
+
+@using RadialReview.Models
+@using RadialReview.Models.Enums
+
+@functions {
+
+    public string ConvertBool(ThumbsType b)
+    {
+        if (b == ThumbsType.None)
+            return "glyphicon glyphicon-hand-up     btn btn-lg  btn-default";
+        else if (b == ThumbsType.Up)
+            return "glyphicon glyphicon-thumbs-up   btn btn-lg btn-success";
+        else if (b == ThumbsType.Down)
+            return "glyphicon glyphicon-thumbs-down btn btn-lg btn-danger";
+        throw new Exception("Unknown Thumbs");
+    }
+
+}
+
+@foreach (var slider in Model.Item1.OrderBy(x => x.Askable.GetQuestion()))
+{
+    ViewData["I"] = ((int)ViewData["I"]) + 1;
+    <div class="row question">
+        <div class="col-md-6 alignCenter startHidden">
+            @if (slider.Required)
+            {
+                <div class="pull-left star @((ViewBag.Incomplete != null && !slider.Complete) ? "red" : "")"><span class="glyphicon glyphicon-asterisk"></span></div>
+            }
+            <h4 class="question">@slider.Askable.GetQuestion()</h4>
+        </div>
+
+        <div class="col-md-6 startHidden">
+            @if (Model.Item2)
+            {
+                <div class="row slideHover">
+                    <div class="side col-xs-3"><h5>@RadialReview.Properties.DisplayNameStrings.min</h5></div>
+                    <div class="col-xs-6" style="padding:34px 0 0px 0;">
+                        @*<input name="question_@(RadialReview.Models.Enums.QuestionType.Slider)_@slider.Id"
+                            type="text"
+                            class="sliderInput"
+                            value="@((int?)(slider.Percentage*100))"
+                            data-slider-min="0"
+                            data-slider-max="100"
+                            data-slider-step="1"
+                            data-slider-value="@((int?)(slider.Percentage*100))"
+                            data-slider-orientation="horizontal"
+                            data-slider-selection="after">*@
+
+                        <div class="sliderr noselect" id="question_@(RadialReview.Models.Enums.QuestionType.Slider)_@(slider.Identifier)">
+
+                            @*<input class="sliderBar bar"
+                                type="range"
+                                name="question_@(RadialReview.Models.Enums.QuestionType.Slider)_@slider.Id"
+                                value="@((int?)(slider.Percentage*100)??0)"
+                                min="0"
+                                max="100"
+                                step="5"
+                                onchange="sliderUpdateInternal(this)">*@
+
+							<input class="sliderBar changeable"
+								   type="text"
+								   name="question_@(RadialReview.Models.Enums.QuestionType.Slider)_@(slider.Identifier)"
+								   value="@((int?)(slider.Percentage*100)??0)"
+								   data-slider="true"
+								   data-slider-range="0,100"
+								   data-slider-step="9.09090909"
+								   data-slider-highlight="true"
+								   data-slider-snap="true" />
+
+
+
+                            <!--span class=" highlight"></span-->
+                            @*<div class="rangevalue">
+                                @if (slider.Percentage == null)
+                                {
+                                    @:NA
+                            }
+                                else
+                                {
+                                    @((int?)(slider.Percentage * 100))
+                                }
+                            </div>*@
+                        </div>
+                    </div>
+                    <div class="side col-xs-3"><h5>@RadialReview.Properties.DisplayNameStrings.max</h5></div>
+                </div>
+            }
+            <div id="question_@(RadialReview.Models.Enums.QuestionType.Slider)_@(slider.Identifier)_title" class="bold alignCenter percentage">
+                @((int?)(slider.Percentage * 100))
+            </div>
+        </div>
+    </div>
+    if ((int)ViewData["I"] < (int)ViewData["Max"])
+    {
+        <hr class="smallBreak2" style="margin-top: 8px;" />
+    }
+}
+<br />
+
+@using (var styles = Html.BeginStyles())
+{
+    <style>
+        .dangerRadio.active {
+            color: #B94A48;
+            background-color: #F2DEDE;
+            border-color: #EED3D7;
+        }
+
+        .successRadio.active {
+            color: #468847;
+            background-color: #DFF0D8;
+            border-color: #D6E9C6;
+        }
+    </style>
+}
+
+
+@using (var scripts = Html.BeginScripts())
+{
+    <script>
+        @*
+        function Thumbs(id) {
+            if ($("#" + id).val() == "@ThumbsType.Up") {
+                $("#" + id).val("@ThumbsType.Down");
+                $("." + id).html("<span class='@ConvertBool(ThumbsType.Down)'></span>");
+            } else {
+                $("#" + id).val("@ThumbsType.Up");
+                $("." + id).html("<span class='@ConvertBool(ThumbsType.Up)'></span>");
+            }
+        }*@
+    </script>
+}

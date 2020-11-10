@@ -1,0 +1,69 @@
+﻿.print-page-break {
+	display: block;
+	page-break-before: always;
+}
+/* COVER PAGE */
+.bullet-wrapper {
+	max-width: 60% !important;
+}
+
+.heading-print {
+	width: 81% !important;
+}
+
+.swan-print {
+	width: 18% !important;
+}
+/* QUARTERLY ROCK */
+.qts-col-3 thead > tr > th:last-child {
+	width: 30% !important;
+}
+/* AC EFFECT */
+.border-bottom-sm-vert:after,
+.border-top-sm-hori:before,
+.border-left-lg-vert:before,
+.border-left-sm-hori:before,
+.has-sub-ac:before,
+.has-sub-ac .border-left-sm-hori:after,
+.sub-border-left-sm-hori:after,
+.ac-separator,
+.bullet-orange,
+.print-color-adjust,
+.ac-wrapper > div,
+.ac-bottom-list > .border-global > .border-center:first-child:before {
+	-webkit-print-color-adjust: exact;
+}
+
+.ac-bottom-list > .border-global > div.has-sub-ac:last-child > div:after {
+	top: -69%;
+}
+/* PEOPLE ANALYZER */
+.tt-peopleanalyzer table > thead > tr > th.th-normal:first-child {
+	width: 45% !important;
+}
+/* FOOTER */
+.hide-on-print {
+	display: none;
+}
+
+.display-on-print {
+	display: block !important;
+	position: fixed;
+	bottom: 0;
+}
+/* SCORECARD PRINT */
+.sm-date {
+	max-width: 5%;
+	word-wrap: break-word;
+}
+
+.scorecard-table thead tr > th {
+	max-width: 40px;
+	width: 40px;
+	word-wrap: break-word;
+	font-size: 9px !important;
+}
+
+.scorecard-table tbody.scorecard-data tr > td {
+	line-height: 13px !important;
+}

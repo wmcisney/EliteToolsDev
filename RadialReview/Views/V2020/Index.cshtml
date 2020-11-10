@@ -1,0 +1,885 @@
+﻿@model RadialReview.Controllers.V2020Controller.V2VM
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Elite Toolsv Low-Budget Launch - Elite Tools</title>
+	<link rel="SHORTCUT ICON" href="https://s3.amazonaws.com/Radial/icons/TractionTools/resources/favicon.ico?v=BGArkdlq8m" />
+
+</head>
+<body>
+
+	<marquee class="GeneratedMarquee" direction="left" scrollamount="x4" behavior="scroll">
+
+		<img src="~/Content/V2/airplane.gif" style="transform: scaleX(-1);margin-bottom: -4px;" />	Welcome to Elite Tools  <span class="blink">Low-Budget Launch</span>
+	</marquee>	
+	<a href="/" style="color:#666;text-decoration:underline;padding:15px;float:left;color:transparent;pointer-events:none;">Go Home!</a>
+
+	<a href="/" style="color:#666;text-decoration:underline;padding:15px;float:right;">Go Home!</a>
+	<center style="margin-top: 30px;margin-bottom: 40px;"><img class="logo" width="353" height="90" src="~/Content/img/TractionTools Email Banner.jpg" /></center>
+	<h1>Oops! We spent all our money building Traction Tools 20/20</h1>
+	<p style="float: left;width: 54%;margin-left: 21%;padding: 0px 2%;">
+		<!--<span class="line">All our engineers were too busy working on Traction Tools 20/20 to build us a launch page,&nbsp; </span>
+		<span class="line">Maggie from Support offered to learn HTML instead.</span>
+		<br />
+		<span class="line">And since all our money was spent on engineers, we had to improvise our launch videos.</span>
+		<span style="display: block;margin-top: 80px;font-style: italic;background: green;color: whitesmoke;padding: 6px;">
+			Traction® Tools Proudly Presents its Traction Tools 20/20 Launch
+		</span>-->
+	</p>
+	<div style="float:left;width:20%">
+		<!--<img height="170" width="158" src="~/Content/V2/maggie.png" style="display: block;" />
+		<span style="font-family: cursive; font-size: 14px; color: #666; width: 158px; display: block; font-style: italic;">Hi I'm Maggie, welcome to my Traction Tools V2 launch page!</span>-->
+	</div>
+	<br style="clear:both;" />
+	<hr style="clear:both;margin-top: 65px;margin-bottom: 30px;" />
+	<br />
+	<h1 style="margin: 40px 0 30px;">How do you want to learn about Elite Tools?</h1>
+	<br />
+
+
+	<div class="video-parent">
+		@{ var i = 0;}
+		@foreach (var v in Model.Videos) {
+			<span class="video-container bg@(i)">
+				<span class="video-title"> @(v.VideoName) </span>
+				<a target="_blank" href="@v.VideoUrl">
+					<img width="320" height="180" src="@v.ImageUrl" onclick="increment('@v.VideoName')" />
+				</a>
+			</span>
+			i += 1;
+		}
+	</div>
+	@if (Model.CanSignup) {
+		<h1 style="margin-top: 70px;">Get in line for Elite Tools!</h1>
+		<p>Save your spot in line for your organization's migration!</p>
+		<center>
+			<span class="fire"></span><button class="signup-btn" onclick="showSignup()">Sign Up for Elite Tools!</button><span class="fire"></span>
+		</center>
+	} else {
+		if (Model.AlreadySignedUp) {
+			<center>
+				<h1 style="margin-top: 70px; color: orangered;"><span class="fire"></span>Your company is already in line for a migration!<span class="fire"></span></h1>
+			</center>
+		} else {
+			<center>
+				<h1 style="margin-top: 70px; color: orangered;"><span class="fire"></span><i>Ask your account admin to begin the migration process</i><span class="fire"></span></h1>
+			</center>
+		}
+	}
+	<div style="text-align: center; padding-top: 34px;">Have questions? Reach out to <a href="mailto:support@dlptools.com">support@dlptools.com</a>!</div>
+	<br />
+	<br />
+	<hr style="margin: 40px 5vw;" />
+	<br />
+	<br />
+	<div class="video-parent">
+
+		@{ i = 2;}
+		@foreach (var v in Model.BottomVideos) {
+			<div>
+				<div class="video-header"> @(v.VideoHeader)</div>
+				<span class="video-container bg@(i)">
+					<span class="video-title">@(v.VideoName) </span>
+					<a target="_blank" href="@v.VideoUrl">
+						<img width="320" height="180" src="@v.ImageUrl" onclick="increment('@v.VideoName')" />
+					</a>
+				</span>
+			</div>
+
+			i += 1;
+		}
+
+		@*<div>
+				<div class="video-header">Demo Video</div>
+				<span class="video-container bg2">
+					<span class="video-title"> See a Demo </span>
+					<a target="_blank" href="https://youtu.be/i4njPe2_rho">
+						<img width="320" height="180" src="https://i.ytimg.com/vi/i4njPe2_rho/mqdefault.jpg" />
+					</a>
+				</span>
+			</div>
+			<div>
+				<div class="video-header">Making Version 2</div>
+				<span class="video-container bg3">
+					<span class="video-title"> Making Version 2 </span>
+					<a target="_blank" href="https://youtu.be/i4njPe2_rho">
+						<img width="320" height="180" src="https://i.ytimg.com/vi/i4njPe2_rho/mqdefault.jpg" />
+					</a>
+				</span>
+			</div>*@
+	</div>
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<div class="footer">
+		Built by the people at Elite Tools
+		<br /> Copyright <img src="~/Content/V2/copyright.gif" style="margin-bottom: -4px;width: 20px;
+    height: 20px;" /> 2020 Elite Tools
+		<!--<br />Traction and EOS are registered trademarks of EOS.-->
+		<br />
+	</div>
+	<center>
+		<img style="filter: drop-shadow(0px 0px 9px white);" src="~/Content/V2/tt.gif" />
+	</center>
+	<div class="popup-container hidden">
+		<div class="popup-background"></div>
+		<div class="popup noselect hidden popup-signup">
+			<div class="title-bar">
+				<span class="title">Save me a seat!</span>
+				<span class="x" onclick="closePopup()">x</span>
+			</div>
+			<div class="body">
+				<form id="signupForm" action="/v2/signup" method="post" o1nsubmit="submitForm()">
+					@try {
+						@Html.HiddenFor(x => x.Signup.Id)
+						@Html.HiddenFor(x => x.Signup.OrgId)
+						@Html.HiddenFor(x => x.Signup.CreateTime)
+						@Html.HiddenFor(x => x.Signup.DeleteTime)
+						@Html.HiddenFor(x => x.Signup.HaltedBy)
+						@Html.HiddenFor(x => x.Signup.HaltedReason)
+						@Html.HiddenFor(x => x.Signup.ByUser)
+						@Html.HiddenFor(x => x.Signup.ImmediateSignup)
+					} catch (Exception e) {
+
+					}
+					<h4>
+						We want to make sure your transition to Elite Tools is seamless.
+						<br />
+						Please let us know about your organization.
+					</h4>
+
+					<div class="cb-form none">
+						<label for="@Html.IdFor(x=>x.Signup.NeedMobileApp)">
+							@Html.CheckBoxFor(x => x.Signup.NeedMobileApp)
+							<span class="cb"></span>
+							I need access to the mobile application
+						</label>
+					</div>
+					<div class="cb-form none">
+						<label for="@Html.IdFor(x=>x.Signup.NeedPeopleTools)">
+							@Html.CheckBoxFor(x => x.Signup.NeedPeopleTools)
+							<span class="cb"></span>
+							I need access to the People Tools™
+
+						</label>
+					</div>
+					<div class="cb-form none">
+						<label for="@Html.IdFor(x=>x.Signup.NeedApi)">
+							@Html.CheckBoxFor(x => x.Signup.NeedApi)
+							<span class="cb"></span>
+							I need to use the API
+						</label>
+					</div>
+					<div class="cb-form none">
+						<label for="@Html.IdFor(x=>x.Signup.NeedTextingActions )">
+							@Html.CheckBoxFor(x => x.Signup.NeedTextingActions)
+							<span class="cb"></span>
+							I need to use Texting Actions <i><small>(Text-a-todo™, Text-an-issue™, Text-a-headline™)</small></i>
+						</label>
+					</div>
+					<div class="cb-form none">
+						<label for="@Html.IdFor(x=>x.Signup.NeedScorecardFormulas  )">
+							@Html.CheckBoxFor(x => x.Signup.NeedScorecardFormulas)
+							<span class="cb"></span>
+							I need to use Scorecard Formulas
+						</label>
+					</div>
+					<div class="cb-form none">
+						<label for="@Html.IdFor(x=>x.Signup.NeedCustomMeetings)">
+							@Html.CheckBoxFor(x => x.Signup.NeedCustomMeetings)
+							<span class="cb"></span>
+							I need to use Custom Meeting Agendas within Elite Tools
+						</label>
+					</div>
+					<div class="cb-form none">
+						<label for="@Html.IdFor(x=>x.Signup.NeedQuarterly)">
+							@Html.CheckBoxFor(x => x.Signup.NeedQuarterly)
+							<span class="cb"></span>
+							I need to use Elite Tools for a virtual offsite
+						</label>
+					</div>
+
+					<div class="error error-feature inset"></div>
+
+					<div class="question-set-2 hidden">
+
+						@try {
+							<h4 style="margin-top:20px;">Who's your primary contact?</h4>
+							<div class="cb-form">
+								@Html.DropDownListFor(x => x.Signup.PrimaryContactId, Model.PossiblePrimaryContacts)
+							</div>
+						} catch (Exception e) {
+
+						}
+
+						<h4 style="margin-top:20px;">Which day can we migrate your account?</h4>
+
+						<div class="inline-cb ">
+							<div class="cb-form any">
+								<label for="@Html.IdFor(x=>x.Signup.Monday)">
+									@Html.CheckBoxFor(x => x.Signup.Monday)
+									<span class="cb"></span>
+									Monday
+								</label>
+							</div>
+							<div class="cb-form any">
+								<label for="@Html.IdFor(x=>x.Signup.Tuesday)">
+									@Html.CheckBoxFor(x => x.Signup.Tuesday)
+									<span class="cb"></span>
+									Tuesday
+								</label>
+							</div>
+							<div class="cb-form any">
+								<label for="@Html.IdFor(x=>x.Signup.Wednesday)">
+									@Html.CheckBoxFor(x => x.Signup.Wednesday)
+									<span class="cb"></span>
+									Wednesday
+								</label>
+							</div>
+							<div class="cb-form any">
+								<label for="@Html.IdFor(x=>x.Signup.Thursday)">
+									@Html.CheckBoxFor(x => x.Signup.Thursday)
+									<span class="cb"></span>
+									Thursday
+								</label>
+							</div>
+							<div class="cb-form any">
+								<label for="@Html.IdFor(x=>x.Signup.Friday)">
+									@Html.CheckBoxFor(x => x.Signup.Friday)
+									<span class="cb"></span>
+									Friday
+								</label>
+							</div>
+						</div>
+						<div class="error error-day inset"></div>
+					</div>
+					<div>
+						<div class="ready-to-migrate hidden inset info">
+							<img style='float: left;padding-right: 15px;padding-left: 5px;padding-top: 3px;' src='/Content/V2/info.png' />
+							We'll make sure that we inform you before the migration takes place. If you want to halt your migration, please contact support.
+						</div>
+						<button class="submit" title="" onclick="$('#Signup_ImmediateSignup').val('true')">Add me to the queue!</button>
+					</div>
+					<div class="wait-list hidden">
+						<button style="width: 300px;margin-left: -150px;" onclick="$('#Signup_ImmediateSignup').val('false')">Wait until these features are done</button>
+					</div>
+				</form>
+			</div>
+
+		</div>
+
+		<div class="popup noselect hidden popup-alreadysignedup-immediate">
+			<div class="title-bar">
+				<span class="title">You're already in line!</span>
+				<span class="x" onclick="closePopup()">x</span>
+			</div>
+			<div class="body">
+				<img style='float: left;padding: 20px;padding-top: 0;' src='/Content/V2/success.png' />
+				<h4>Good news, you're already signed up!</h4>
+				<p>
+					We'll make sure that we inform you before the migration takes place. If you want to halt your migration, please contact support.
+				</p>
+				<button title="" onclick="closePopup()">OK</button>
+			</div>
+			<div class="fireworks"></div>
+		</div>
+
+		<div class="popup noselect hidden popup-alreadysignedup-delay">
+			<div class="title-bar">
+				<span class="title">You're already in line!</span>
+				<span class="x" onclick="closePopup()">x</span>
+			</div>
+			<div class="body">
+				<img style='float: left;padding: 20px;padding-top: 0;' src='/Content/V2/success.png' />
+				<h4>Good news, you're already signed up!</h4>
+				<p>
+					We'll make sure that we inform you before we're ready to migrate you. If you have any questions, please contact support.
+				</p>
+				<button title="" onclick="closePopup()">OK</button>
+			</div>
+			<div class="fireworks"></div>
+		</div>
+
+		<div class="popup noselect hidden popup-congrats">
+			<div class="title-bar">
+				<span class="title">CONGRATULATIONS!</span>
+				<span class="x" onclick="closePopup()">x</span>
+			</div>
+			<div class="body">
+				<img style='float: left;padding: 20px;padding-top: 0;' src='/Content/V2/success.png' />
+				<h4>You're in line for a Traction Tools 20/20 migration.</h4>
+				<p style="margin-top: 10px;">We'll let you know before your account is updated.</p>
+				<button onclick="closePopup()" title="" style="">OK</button>
+
+			</div>
+			<div class="fireworks"></div>
+		</div>
+
+		<div class="popup noselect hidden popup-congrats-later">
+			<div class="title-bar">
+				<span class="title">CONGRATULATIONS!</span>
+				<span class="x" onclick="closePopup()">x</span>
+			</div>
+			<div class="body">
+				<img style='float: left;padding: 20px;padding-top: 0;' src='/Content/V2/success.png' />
+				<h4>We're working on these features.</h4>
+				<p style="margin-top: 10px;">We'll let you know when they're done.</p>
+				<button onclick="closePopup()" title="" style="">OK</button>
+
+			</div>
+			<div class="fireworks"></div>
+		</div>
+	</div>
+
+</body>
+</html>
+<style>
+	.fireworks {
+		background: url(/content/V2/fireworksd.gif);
+		background-repeat: repeat no-repeat;
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		height: 50vh;
+		background-size: 50vh;
+		/* background: linear-gradient(0deg, #00000080, transparent), url(/content/V2/fireworksd.gif); */
+		background-position: bottom;
+	}
+
+	.footer {
+		text-align: center;
+		color: #444;
+		font-family: cursive;
+		opacity: .3;
+		padding: 40px;
+	}
+
+	.video-header {
+		text-align: center;
+		font-family: sans-serif;
+		color: #444;
+		font-size: 20px;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+
+	.noselect {
+		-webkit-touch-callout: none; /* iOS Safari */
+		-webkit-user-select: none; /* Safari */
+		-khtml-user-select: none; /* Konqueror HTML */
+		-moz-user-select: none; /* Old versions of Firefox */
+		-ms-user-select: none; /* Internet Explorer/Edge */
+		user-select: none; /* Non-prefixed version, currently
+								  supported by Chrome, Opera and Firefox */
+	}
+
+	.popup-background {
+		background: rgba(0,0,0,0.5);
+		position: fixed;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+	}
+
+	.popup select {
+		border: 3px inset;
+		padding: 2px 4px;
+		outline: none;
+		width: 250px;
+	}
+
+	.popup .disabled {
+		pointer-events: none;
+	}
+
+		.popup .disabled label {
+			color: #777;
+		}
+
+		.popup .disabled .cb {
+			background-color: silver;
+			background-blend-mode: overlay;
+		}
+
+
+	.popup button {
+		padding: 4px;
+		border: 4px outset #005ed7;
+		text-align: center;
+		left: 50%;
+		position: relative;
+		margin-left: -100px;
+		width: 180px;
+		margin-bottom: 20px;
+	}
+
+	.popup .error-indicator {
+		color: #aa0000;
+		font-style: italic;
+	}
+
+	button[disabled] {
+		border-color: #d8d8d8;
+		background: silver;
+		color: lightgray;
+		font-weight: normal;
+		color: grey;
+		text-shadow: 1px 1px #fff;
+		cursor: default;
+	}
+
+	.popup p {
+		font-size: 16px;
+		text-align: left;
+		padding: 0 18px;
+		font-family: sans-serif;
+	}
+
+	.popup .inset {
+		padding: 10px 15px;
+		border: 2px inset;
+		margin: 20px;
+		font-family: sans-serif;
+		font-size: 16px;
+		background: #b7b7b7;
+	}
+
+		.popup .inset.error {
+			color: #aa0000;
+		}
+
+		.popup .inset.success {
+			color: green;
+		}
+
+		.popup .inset:empty {
+			display: none;
+		}
+
+	.popup h4 {
+		padding-left: 10px;
+		font-family: sans-serif;
+		margin-bottom: 0px;
+		margin-top: 20px;
+	}
+
+	.inline-cb {
+		width: 500px;
+	}
+
+		.inline-cb .cb-form {
+			display: inline-block;
+			width: 110px;
+			margin-bottom: 8px;
+		}
+
+	label {
+		cursor: pointer;
+		font-family: "MS Sans Serif",Tahoma,Verdana,Segoe,sans-serif;
+		padding: 10px 0;
+	}
+
+	.cb {
+		height: 14px;
+		width: 13px;
+		top: 3px;
+		position: relative;
+		padding-right: 2px;
+		border: 2px inset #d5d5d5;
+		background: white;
+		box-shadow: -1px -1px 0 0 #828282;
+		display: inline-block;
+		cursor: pointer;
+	}
+
+	.cb-form {
+		margin: 15px;
+	}
+
+		.cb-form input {
+			display: none;
+		}
+
+	input:checked ~ .cb {
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23000' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+		background-position: 2px 2px;
+		background-size: 69%;
+		background-repeat: no-repeat;
+	}
+
+	.hidden {
+		display: none;
+	}
+
+	.popup {
+		border: 3px outset;
+		width: 580px;
+		background: silver;
+		box-shadow: 0px 13px 25px 10px rgba(0,0,0,.65);
+		margin: auto;
+		position: fixed;
+		top: 50px;
+		left: calc(50% - 290px);
+	}
+
+	.title-bar {
+		background: darkblue;
+		height: 25px;
+		font-family: "MS Sans Serif", Tahoma, Verdana, Segoe, sans-serif;
+	}
+
+		.title-bar .title {
+			position: relative;
+			top: 4px;
+			left: 10px;
+			color: white;
+		}
+
+
+		.title-bar .x {
+			color: white;
+			font-family: monospace;
+			font-size: 19px;
+			float: right;
+			padding: 0px 8px 3px 9px;
+			cursor: pointer;
+		}
+
+			.title-bar .x:hover {
+				background-color: #00006d;
+			}
+
+			.title-bar .x:active {
+				margin-top: 1px;
+				padding-bottom: 0px;
+			}
+</style>
+
+<style>
+	.line {
+		display: inline-block;
+	}
+
+	.logo {
+		border: 6px outset white;
+		padding: 0px 10px;
+		background: white;
+	}
+
+	.button,
+	button {
+		border: 6px #005ed7;
+		border-style: outset;
+		background-color: #005ed7;
+		color: white;
+		font-weight: bold;
+		padding: 15px;
+		font-size: 16px;
+		cursor: pointer;
+	}
+
+		button:focus, button:active {
+			outline: none;
+		}
+
+		button:active {
+			border-style: inset;
+		}
+
+	html {
+		background: url('/content/v2/tetris.jpg');
+	}
+
+	body {
+		background-color: lightgray;
+		background-color: lightgray;
+		margin: 100px 10vh 200px;
+		min-width: 800px;
+	}
+
+	p {
+		font-size: 22px;
+	}
+
+	p, h1, h2, h3 {
+		text-align: center;
+	}
+
+	hr {
+		border-style: outset;
+		border-width: 4px;
+		margin: 0 5vw;
+	}
+
+	.fire {
+		background: url(/content/v2/fire.gif);
+		width: 40px;
+		height: 40px;
+		display: inline-block;
+		margin: -10px 20px;
+	}
+
+	h1 .fire {
+		position: relative;
+		top: -10px;
+	}
+
+	.video-parent {
+		display: flex;
+		justify-content: space-around;
+		flex-wrap: wrap;
+		max-width: 1400px;
+		margin: auto;
+	}
+
+	.video-container {
+		margin: 10px 40px;
+		display: inline-block;
+		background-color: black;
+		background: url(/content/v2/play.gif);
+		background-size: 360px 200px;
+		position: relative;
+		height: 220px;
+		width: 370px;
+	}
+
+		.video-container .video-title {
+			color: #ffffffe6;
+			font-family: monospace;
+			font-size: 24px;
+			right: 8px;
+			position: absolute;
+			bottom: 10px;
+			background: #00000087;
+			padding: 2px 10px;
+		}
+
+		.video-container.bg0 {
+			background: url(/content/v2/play0.gif);
+			background-size: 360px 200px;
+		}
+
+		.video-container.bg1 {
+			background: url(/content/v2/play.gif);
+			background-size: 360px 200px;
+		}
+
+		.video-container.bg2 {
+			background: url(/content/v2/play2.gif);
+			background-size: 367px 222px;
+		}
+
+		.video-container.bg3 {
+			background: url(/content/v2/play5.gif);
+			background-size: 367px 222px;
+		}
+
+		.video-container.bg4 {
+			background: url(/content/v2/play3.gif);
+			background-size: 367px 222px;
+		}
+
+		.video-container a {
+			position: absolute;
+			height: 220px;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+		}
+
+	.video-conainer a:active {
+		border-color: blue;
+	}
+
+	.video-container img {
+		display: block;
+		opacity: 1;
+		transition: opacity .2s, border-color .2s;
+		border-left: 25px solid black;
+		border-right: 25px solid black;
+		border-top: 20px solid black;
+		border-bottom: 20px solid black;
+	}
+
+		.video-container img:hover {
+			opacity: .15;
+			/*cursor: url(images/my-cursor.png), auto;*/
+		}
+
+	.blink {
+		animation: blinker 1s ease-in-out infinite;
+		font-size: 30px;
+		font-weight: bold;
+		font-family: sans-serif;
+	}
+
+	@@keyframes blinker {
+		50% {
+			opacity: 0.25;
+		}
+	}
+</style>
+
+<style type="text/css" scoped>
+	.GeneratedMarquee {
+		font-family: 'Comic Sans MS';
+		font-size: 2em;
+		font-weight: bold;
+		line-height: 1.3em;
+		color: blue; /*#330099;*/
+		padding: 0em;
+	}
+</style>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+<script>
+
+	var data = @(Html.ToJson(Model));
+
+	var publicSignupUrl = "https://mytractiontools.com";
+
+	function showSignup() {
+		if (data.IsPublic) {
+			window.location = publicSignupUrl;
+		} else {
+			$(".popup-container").removeClass("hidden");
+			if (data.AlreadySignedUp) {
+				debugger;
+				if (!data.Signup || data.Signup.ImmediateSignup) {
+					$(".popup-alreadysignedup-immediate").removeClass("hidden");
+				} else {
+					$(".popup-alreadysignedup-delay").removeClass("hidden");
+				}
+			} else {
+				checkForm();
+				$(".popup-signup").removeClass("hidden");
+			}
+		}
+	}
+	function closePopup() {
+		$(".popup-container,.popup").addClass("hidden");
+	}
+
+	function increment(name) {
+		$.ajax({
+			method:"post",
+			url: "/v2020/increment/?id=" + name,
+			success: function () {
+				console.log("incremented: " + name)
+			}
+		});
+	}
+
+	function checkForm() {
+		$(".error").html("");
+		$(".error-indicator").removeClass("error-indicator");
+		$(".popup .submit").attr("disabled", false);
+		//$(".popup .any").removeClass("disabled");
+		$(".popup .submit").attr("title", "");
+		$(".wait-list").addClass("hidden");
+		$(".question-set-2").removeClass("hidden");
+		$(".ready-to-migrate").removeClass("hidden");
+		var errorIcon = "<img style='float: left;padding-right: 15px;padding-left: 5px;padding-top: 3px;' src='/Content/V2/error.png'/>";
+
+		if ($(".none input:checked").length != 0) {
+			//Features
+			$(".error-feature").html(errorIcon+"The features you've indicated that you require are not ready yet.  We'll wait to migrate your account until they're ready.");
+			$(".popup .submit").attr("disabled", "disabled");
+			$(".none input:checked").closest("label").addClass("error-indicator");
+			$(".wait-list").removeClass("hidden");
+			$(".popup .submit").attr("title", "We can't migrate your account right now. See the error above.");
+			//$(".popup .any").addClass("disabled");
+			$(".question-set-2").addClass("hidden");
+			$(".ready-to-migrate").addClass("hidden");
+		} else if ($(".any input:checked").length == 0) {
+			//Days
+			$(".error-day").html(errorIcon+"Please select at least one day that we can perform the migration.");
+			$(".popup .submit").attr("disabled", "disabled");
+			$(".any input").closest("label").addClass("error-indicator");
+			$(".popup .submit").attr("title", "Please select the days we can migrate your account.");
+			$(".ready-to-migrate").addClass("hidden");
+		}
+	}
+	$("input[type='checkbox']").on("change", checkForm);
+
+	function getFormData($form){
+		var unindexed_array = $form.serializeArray();
+		var indexed_array = {};
+
+		$.map(unindexed_array, function(n, i){
+			indexed_array[n['name']] = n['value'];
+		});
+
+		return indexed_array;
+	}
+
+	$('#signupForm').on("submit", function (d) {
+
+		event.preventDefault();
+		setTimeout(function () {
+			debugger;
+			var data = $('#signupForm').serialize().replace(/Signup\./g, '');
+			var immediate = $('#Signup_ImmediateSignup').val() == "true";
+
+			$.ajax({
+				url: "/v2020/signup",
+				data: data,
+				method: "post",
+				contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+				dataType: "json",
+				success: function (d) {
+					window.data.AlreadySignedUp = true;
+					window.data.Signup = window.data.Signup  || {};
+					window.data.Signup.ImmediateSignup = immediate;
+					closePopup();
+					$(".signup-btn").html("CONGRATULATIONS! You're in line!")
+					if (immediate) {
+						$(".popup-congrats,.popup-container").removeClass("hidden");
+					} else {
+						$(".popup-congrats-later,.popup-container").removeClass("hidden");
+					}
+				},
+				error: function (d) {
+					var error = "Error";
+					console.error(d.responseJSON);
+					try {
+						error += ": " + d.responseJSON.Message;
+					} catch (e) {
+					}
+					alert(error);
+				}
+			});
+		},1);
+	});
+
+	try {
+		if (data) {
+			if (data.ErrorMessage)
+				console.warn(data.ErrorMessage);
+			if (data.ErrorTrace)
+				console.warn(data.ErrorTrace);
+		}
+	} catch (e) {
+		console.error(e);
+	}
+
+
+</script>
+@try {
+	@(new HtmlString(Model.Inject ?? ""))
+} catch (Exception e) {
+	<!--inject error-->
+}

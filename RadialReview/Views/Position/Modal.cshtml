@@ -1,0 +1,35 @@
+﻿@model RadialReview.Models.ViewModels.PositionViewModel
+
+@Html.HiddenFor(x=>x.Id)
+@*<div class="row">
+    <div class="col-xs-3">
+        <label>Job Class:</label>
+    </div>
+    <div class="col-xs-9">
+        @Html.DropDownListFor(x => x.Position, Model.Positions.Select(x => new SelectListItem() {
+           Selected = (x.Id == Model.Position),
+           Text = x.Name.Translate(),
+           Value = "" + x.Id 
+       }),
+        new { id="positionSelector",@class="form-control"})
+    </div>
+</div>
+<div class="smallBreak"></div>
+<div class="smallBreak"></div>*@
+<div class="row">
+    <div class="col-xs-3">
+        <label>Job Title:</label>
+    </div>
+    <div class="col-xs-9">
+        @Html.TextBoxFor(x => x.PositionName, new { id = "customPosition", @class = "form-control" })
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#positionSelector").change(function () {
+            $("#customPosition").val($("#positionSelector option:selected").text());
+            setTimeout(function () { $("#customPosition")[0].select(); }, 10);
+        })
+    });
+</script>

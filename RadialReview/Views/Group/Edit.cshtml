@@ -1,0 +1,53 @@
+﻿@model RadialReview.Models.ViewModels.GroupViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using(var styles=Html.BeginStyles())
+{
+    <style>
+        .directlyManaged {
+            background-color: rgba(176, 176, 255, 0.47);
+        }
+        .subordinate {
+            background-color: rgba(176, 176, 255, 0.15);
+        }
+        .self {
+            background-color: rgba(192, 176, 255, 0.9);
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-md-12 ">
+        @Html.AlertBoxDismissable((string)ViewBag.Message)
+
+        <h2>Edit Group</h2>
+        @using (Html.BeginForm("Edit","Group",FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(x => x.OrganizationId)
+            <fieldset class="form-horizontal">
+                <div class="control-group">
+                    <div class="no-color pull-right">
+                        <input type="submit" value="Save" class="btn saveButton" onclick="clearUnsaved()" />
+                    </div>
+                    @Html.LabelFor(model => model.Group.GroupName, new { @class = "control-label" })
+
+                    <div class="controls">
+                        @Html.HiddenFor(model=>model.Group.Id)
+                        @Html.TextBoxFor(model => model.Group.GroupName, new { @class = "modifiable" })
+                        @Html.ValidationMessageFor(model => model.Group.GroupName, null, new { @class = "help-inline" })
+                    </div>
+                </div>
+                @Html.EditorFor(x=>x.DragDrop)
+                @*Html.Partial("~/Views/Partial/_DragDrop.cshtml", Model.DragDrop)*@
+
+            </fieldset>
+        }
+    @Html.Partial("Partial/_QuestionTable", Model.Questions)
+    </div>
+</div>

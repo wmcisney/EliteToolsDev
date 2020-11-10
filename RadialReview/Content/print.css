@@ -1,0 +1,831 @@
+﻿body {
+    height: 0px;
+    line-height: normal;
+}
+body.body-normal-width ,html.body-normal-width ,html.body-normal-height  {	
+	background-color:white!important;
+}
+
+.noPrint {
+    display: none;
+}
+
+.onlyPrint{
+	display:block!important;
+}
+
+.body-content {
+    padding: 0px;
+}
+
+#main {
+    padding: 0px;
+    margin: 0px;
+}
+
+#footer {
+    display: none;
+}
+
+.pageBreak {
+    page-break-after: always;
+}
+
+.together {
+    -moz-page-break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.table-responsive {
+    overflow-x: hidden;
+}
+
+.panel {
+    border-radius: 3px;
+    border-color: black;
+}
+
+.panel-heading {
+    padding: 5px;
+    font-weight: bold;
+}
+
+.panel-body {
+    padding: 5px;
+}
+
+.landscape {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    page-break-inside: avoid;
+}
+
+.review {
+    border: 0px;
+    padding: 0px;
+}
+
+.shiftContainer {
+    padding-top: 0px;
+}
+
+.noMargin {
+    margin: 0px;
+}
+
+.bordered {
+    border: 1px solid black;
+}
+
+.smallBreak {
+    height: 4px;
+}
+
+.inlined {
+    display: inline-block;
+}
+
+
+.Manager {
+    fill: #6da1e1 !important;
+    stroke: black !important;
+}
+
+.Self {
+    stroke: black !important;
+    stroke-width: 3px;
+    fill: #ffcb00 !important;
+}
+
+.Subordinate {
+    stroke: black !important;
+    stroke-width: 2px;
+    fill: #be0505 !important;
+}
+
+.Peer {
+    stroke: black !important;
+    fill: url(#diagonalHatch_gray) !important;
+}
+
+.Teammate {
+    fill: url(#diagonalRightHatch_gray) !important;
+    stroke: black !important;
+}
+
+.NoRelationship {
+    fill: url(#crossHatch) !important;
+    stroke: black !important;
+}
+
+
+.Employee {
+    fill: #005d80;
+    fill-opacity: 1;
+}
+
+.Management {
+    fill: #ff0000;
+    fill-opacity: 1;
+}
+
+.You {
+    fill: #ffcb00;
+    fill-opacity: 1;
+}
+
+#freshwidget-button {
+    display: none !important;
+}
+
+#wrap {
+    min-height: 0%;
+}
+
+.row-title.first {
+    -ms-border-radius: 10px;
+    border-radius: 10px;
+    /*border: 7px solid #cacaca;*/
+    -ms-opacity: .5;
+    opacity: .5;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    border-top: 0px solid #E0E0E0;
+}
+
+.row-title {
+    font-weight: bold;
+    border-top: 2px none #cacaca;
+    border-bottom: 0px solid #cacaca;
+    padding: 0px;
+}
+
+.table-io.companyValues .fill:after {
+    /*color: black !important;*/
+    padding-top: 4px;
+}
+
+.table-io.companyValues .fill:not(.hasReason):not(.score):not(.Indeterminate):after {
+    background-color: transparent;
+}
+
+.fill.companyValues {
+    border-width: 4px !important;
+    border-style: solid !important;
+}
+
+.table-io .fill {
+    margin: 2px;
+    border-width: 4px !important;
+    border-style: solid;
+    color: white;
+}
+
+    
+
+.table-io.rocks .fill {
+    padding-top: 8px;
+}
+
+.table-io.companyValues .fill.companyValues-score {
+    padding-top: 6px !important;
+    font-size: 10px;
+}
+
+.chart {
+    height: 360px;
+}
+
+svg .legend {
+    display: none;
+}
+
+.legend {
+    font-size: 12px;
+}
+
+    .legend .title {
+        font-size: 8px;
+    }
+
+.axisTitle {
+    font-size: 24px;
+}
+
+.zoom8 {
+    /*zoom: 80%;
+	-moz-transform:  scale(0.8,0.8);
+	-moz-transform-origin: left center;*/
+    font-size: 80%;
+}
+
+.fill.Neutral, .fill.Neutral:after {
+    color: #EC971F !important;
+    font-weight: bold;
+}
+/*
+.fill.Negative {
+	padding-top: 1px !important;
+}*/
+
+.fill.Indeterminate, .fill.Indeterminate:after {
+    color: #ddd !important;
+    font-weight: bold;
+}
+
+.fill.False, .fill.Negative, .fill.Negative:after {
+    /*color: white !important;
+		background: #D9534F !important;*/
+    color: #D9534F !important;
+    font-weight: bold;
+}
+
+
+.roleTable .fill, .valueTable .fill {
+    position: relative;
+}
+
+.gwc .fill:before {
+    content: "";
+    border: 25px solid;
+    font-weight: bold;
+    position: absolute;
+    top: -4px !important;
+    left: -4px !important;
+    border-color: lightgray;
+}
+
+.roleTable .fill:before {
+    content: "";
+    border: 9px solid;
+    font-weight: bold;
+    position: absolute;
+    top: 0px !important;
+    left: 0px !important;
+    right: 0px !important;
+    bottom: 0px !important;
+}
+
+.companyValues .fill:before {
+    content: "";
+    border: 16px solid;
+    font-weight: bold;
+    position: absolute;
+    top: -4px !important;
+    left: -4px !important;
+    -moz-border-radius: 18px;
+    -webkit-border-radius: 18px;
+    -ms-border-radius: 18px;
+    border-radius: 18px;
+}
+
+.valueTable .fill:before {
+    content: "";
+    border: 8px solid !important;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -ms-border-radius: 8px;
+    border-radius: 8px;
+}
+
+
+/*.gwc .fill.True:before,.roleTable .fill.True:before,.companyValues .fill.Positive:before,.valueTable .fill.Positive:before {*/
+.gwc .fill.True:before, .roleTable .fill.True:before, .companyValues .fill.Positive:before, .valueTable .fill.Positive:before,
+.gwc .fill.Always:before, .roleTable .fill.Always:before {
+    border-color: #449D44 !important;
+    -ms-opacity: 0.2;
+    opacity: 0.2;
+}
+
+.gwc .fill.False:before, .roleTable .fill.False:before, .companyValues .fill.Negative:before, .valueTable .fill.Negative:before {
+    border-color: #D9534F !important;
+    -ms-opacity: 0.2;
+    opacity: 0.2;
+}
+
+.companyValues .fill.Neutral:before, .valueTable .fill.Neutral:before {
+    border-color: #EC971F !important;
+    -ms-opacity: 0.25;
+    opacity: 0.25;
+}
+
+.gwc .fill.Rarely:before, .roleTable .fill.Rarely:before {
+    border-color: #FC827F !important;
+    -ms-opacity: 0.2;
+    opacity: 0.2;
+}
+
+.gwc .fill.Mostly:before, .roleTable .fill.Mostly:before {
+    border-color: #71BE71 !important;
+    -ms-opacity: 0.2;
+    opacity: 0.2;
+}
+
+.fill .percent {
+    margin-right: -1px;
+}
+
+.fill.Negative .percent {
+    color: #D9534F !important;
+    font-size: 70%;
+    /*color: white !important;*/
+}
+
+.fill.Neutral .percent {
+    color: #EC971F !important;
+    font-size: 70%;
+}
+
+.fill.Positive .percent {
+    color: #449D44 !important;
+    font-size: 70%;
+}
+
+.fill.True, .fill.Positive, .fill.Positive:after {
+    color: #449D44 !important;
+    border-color: #449D44 !important;
+    font-weight: bold;
+}
+
+.zoom8 .table-io.gwc > tbody > tr > td {
+    height: 50px;
+}
+
+    .zoom8 .table-io.gwc > tbody > tr > td .fill {
+        height: 50px !important;
+        width: 50px !important;
+        padding-top: 12px !important;
+    }
+
+.zoom8 .fixedWidth:after {
+    max-width: 160px;
+}
+
+.fixed-width {
+    max-width: 100px;
+}
+
+.zoom8 .companyValues-client .fill:after {
+    font-size: 13px;
+}
+
+.zoom8 .valueTable .fill {
+    padding-top: 2px;
+    width: 16px;
+    height: 16px;
+    font-weight: bold;
+}
+
+.zoom8 .table-io.companyValues .fill.companyValues-score {
+    padding-top: 13px;
+}
+
+.roleTable td, .valueTable td {
+    white-space: normal;
+    padding: 0px 3px;
+}
+
+.subsection {
+    margin-bottom: 10px;
+}
+
+.print-pull-right {
+    float: right !important;
+}
+
+.print-col-xs-6 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    float: left;
+    width: 50%;
+}
+
+.print-col-xs-5 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    float: left;
+    width: 41.666666666%;
+}
+
+.print-col-xs-7 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    float: left;
+    width: 58.33333333%;
+}
+
+.print-col-xs-12 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    float: left;
+    width: 100%;
+}
+
+.reviewName {
+    right: 40px;
+}
+
+.reviewPosition {
+    left: 40px;
+}
+
+.completeincomplete input[value='True'] ~ .fill.cursor {
+    border: 4px solid #449D44 !important;
+}
+
+.completeincomplete input[value='False'] ~ .fill.cursor {
+    border: 4px solid #D9534F !important;
+}
+
+.gray {
+    color: #BBBBBB !important;
+}
+
+.rockstate input[value='Complete'] ~ .fill.cursor {
+    border: 4px solid #449D44 !important;
+}
+
+.rockstate input[value='AtRisk'] ~ .fill.cursor {
+    border: 4px solid #D9534F !important;
+}
+
+.rockstate input[value='OnTrack'] ~ .fill.cursor {
+    border: 4px solid #1F68EC !important;
+    color: #1F68EC !important;
+}
+
+
+.fill.cursor {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -ms-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
+}
+
+.completeincomplete .ico {
+    color: #515151 !important;
+}
+
+.completeincomplete .txt {
+    color: gray !important;
+}
+
+#alerts {
+    margin: 0px;
+    padding: 0px;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    -ms-transition: none;
+    transition: none;
+}
+
+#chart2 {
+    height: 350px;
+}
+
+.zoom8 .evaluation-heading {
+    font-size: 140%;
+}
+
+.companyValues .fixedWidth:after {
+    width: 80px;
+}
+
+.axis {
+    stroke: #ddd;
+    opacity: 1;
+}
+
+.row-title.first {
+    font-size: 28px;
+}
+
+.reviewPosition, .reviewName {
+    font-size: 14px;
+}
+
+
+
+.completeincomplete.display {
+    width: 30px;
+}
+
+.completeincomplete {
+    height: 29px;
+}
+
+    .completeincomplete .fill {
+        width: 26px;
+        height: 26px;
+    }
+
+    .completeincomplete .completeincomplete-val {
+        width: 30px;
+        height: 30px;
+    }
+
+    .completeincomplete .ico {
+        font-size: 16px;
+    }
+
+    .completeincomplete .txt {
+        -ms-opacity: 0;
+        opacity: 0;
+    }
+
+.rockReason {
+    height: 54px;
+}
+
+.markedAs {
+    font-size: 9px;
+}
+
+.chartItem {
+    width: calc( 100% - 108px );
+}
+
+.scatterLegend {
+    width: 108px;
+    padding-left: 0px;
+}
+
+.print-noPadLeft {
+    padding-right: 0px !important;
+}
+
+.legendItem {
+    width: 108px;
+}
+
+.fixHeight {
+    min-height: 352px;
+}
+
+
+.rockReasonHeight {
+    min-height: 0px;
+}
+
+.completion {
+    font-size: 9px;
+}
+
+.feedback {
+    font-size: 11px;
+}
+
+.feedback-heading {
+    font-size: 12px;
+}
+
+.tab-content {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+}
+
+.survey-feedback {
+    min-height: 400px;
+    overflow-y: visible !important;
+    height: inherit !important;
+}
+
+.table-io.companyValues .fill {
+    width: 32px;
+    height: 32px;
+    -moz-border-radius: 32px;
+    -webkit-border-radius: 32px;
+    -ms-border-radius: 32px;
+    border-radius: 32px;
+}
+
+.employee-name {
+    padding-bottom: 35px;
+    border-bottom: 1px solid #D0D0D0;
+}
+
+
+.table-header-rotated th.rotate-45 {
+    height: 80px;
+    width: 35px;
+    min-width: 35px;
+    max-width: 35px;
+    position: relative;
+    vertical-align: bottom;
+    padding: 0;
+    font-size: 12px;
+    line-height: 0.8;
+}
+
+    .table-header-rotated th.rotate-45 span {
+        -ms-transform: skew(45deg,0deg) rotate(315deg);
+        -moz-transform: skew(45deg,0deg) rotate(315deg);
+        -webkit-transform: skew(45deg,0deg) rotate(315deg);
+        -o-transform: skew(45deg,0deg) rotate(315deg);
+        transform: skew(45deg,0deg) rotate(315deg);
+        position: absolute;
+        bottom: 30px;
+        left: -29px;
+        display: inline-block;
+        width: 85px;
+        text-align: left;
+    }
+
+.fill.True, .fill.Always,
+.fill.False, .fill.Never,
+.table-io.companyValues .fill.Positive, .valueTable .fill.Positive,
+.table-io.companyValues .fill.Neutral, .valueTable .fill.Neutral,
+.table-io.companyValues .fill.Negative, .valueTable .fill.Negative {
+    background-color: inherit;
+}
+
+
+@page {
+    size: letter;
+}
+
+.score.fill:before {
+    border: 8px solid;
+    border-radius: 0px;
+    left: 0;
+    right: 0;
+    width: 32px;
+}
+
+.score.fill {
+    width: 32px !important;
+    /* width: 30px; */
+}
+
+/*.table-io.companyValues .fill:after {
+    padding-top: 6px;
+}*/
+
+.table-io.companyValues .fill.Indeterminate:after, .valueTable .fill.Indeterminate:after {
+    color: #000 !important;
+}
+
+.table-io.companyValues .fill:before {
+    opacity: .25;
+    -ms-opacity: .25;
+}
+
+.landscape-container {
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+    -moz-transform-origin: top left;
+    -ms-transform-origin: top left;
+    -o-transform-origin: top left;
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
+    /*transform-style: flat;*/
+    display: inline-block;
+    position: relative;
+}
+
+.landscape-contents {
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+    -moz-transform-origin: center center;
+    -ms-transform-origin: center center;
+    -o-transform-origin: center center;
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+    position: absolute;
+    margin-top: -20px;
+}
+
+
+.landscape-placeholder,
+.landscape-scale {
+    position: relative;
+    transform: scale(.7);
+    transform-origin: top right;
+}
+
+.landscape-shift {
+    display: block;
+}
+
+.landscape-placeholder {
+    display: inline-block;
+    float: left;
+}
+
+.scorecard-table .score .danger {
+    color: #C7254E !important;
+    background-color: #F9F2F4 !important;
+}
+
+.scorecard-table .score .success {
+    color: #468847 !important;
+    background-color: #DFF0D8 !important;
+}
+
+#ScorecardTable_Over {
+    display: none;
+}
+
+.review,
+body,
+html {
+    background-color: transparent !important;
+}
+
+.elastic-wrapper {
+    opacity: 0;
+    width: 0px;
+    height: 0px;
+}
+
+#local {
+    display: none;
+}
+
+.scorecard-table .date.current {
+    color: #ccc !important;
+}
+
+.ico.glyphicon-remove {
+    top: 10px;
+    left: -1px;
+}
+
+.empty-search{
+	display:none;
+}
+
+.row-title {
+	margin-left: 0px;
+	margin-right: 0px;
+	background-color:white;
+	border:none;
+	border-bottom:1px solid gray;
+	border-radius:0px;
+	text-transform:uppercase;
+}
+
+	.row-title.first {
+		border-bottom:none;
+
+	}
+
+	html.body-normal-height .scorecard-table .score input[disabled]{
+		background-color:white!important;
+	}
+	
+#ScorecardTable tbody tr:first-child score input {
+	border-top:1px solid #E0E0E0;
+}
+	
+.scorecard-table tr th:nth-last-child(2),
+.scorecard-table tr td:nth-last-child(2) input{
+    border-right:1px solid #E0E0E0;
+}
+.scorecard-table td{
+	height:inherit;
+}
+/*.scorecard-table tr:nth-last-child(1) .score.current input {
+    border-bottom: 1px solid #2c77ba;
+    height: calc(100% + 1px) !important;
+}
+
+.scorecard-table .score.current input {
+    border-left: 1px solid #2c77ba;
+    border-right: 1px solid #2c77ba;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.scorecard-table .score.current{
+    border:none !important;
+    height:inherit;
+}*/
+
+
+.chart-container-box {
+	background-color: none;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0;
+	border: none
+}

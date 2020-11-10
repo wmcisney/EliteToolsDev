@@ -1,0 +1,93 @@
+﻿@model Tuple<List<RadialReview.Models.CompanyValueAnswer>, bool>
+
+@using RadialReview.Models.Askables
+@using RadialReview.Models.Enums
+
+@if (Model.Item1.Any()) {
+	<div class="subsection subsection-values">
+		<table class="table-values">
+			<thead>
+				<tr class="hidden-xs">
+					<th></th>
+					<th>
+						<div class="row">
+							<div class="col-sm-6">
+								<table style="margin:auto;">
+									<tr class="alignCenter">
+										@*<td class="visible-xs1" style="width:50%"></td>*@
+										<td class="header-title">Hardly Ever</td>
+										<td class="header-title">Sometimes</td>
+										<td class="header-title">Almost Always</td>
+										@*<td class="visible-xs1" style="width:50%"></td>*@
+									</tr>
+								</table>
+							</div>
+							<div class="col-sm-6"></div>
+						</div>
+
+					</th>
+					<th></th>
+
+				</tr>
+			</thead>
+			<tbody>
+				@{
+				var questions = Model.Item1.OrderBy(x => x.Askable.GetQuestion()).ToList();
+				}
+				@for (var i = 0; i < questions.Count(); i++) {
+					<tr class="visible-xs">
+						<td colspan="1">
+							<div class="question alignCenter" style="padding-bottom: 0px;padding-top: 25px;">
+								<h4 style="margin-top: 0px;">@questions[i].Askable.GetQuestion()</h4>
+								<h5>@(((CompanyValueModel)questions[i].Askable).CompanyValueDetails)</h5>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align:top;" class="hidden-xs valueName">
+							<div class="question alignRight" style="padding-right:15px;padding-left:7px;padding-bottom: 7px;padding-top: 7px;">
+								<h4 style="margin-top: 0px;">@questions[i].Askable.GetQuestion()</h4>
+								<h5>@(((CompanyValueModel)questions[i].Askable).CompanyValueDetails)</h5>
+							</div>
+						</td>
+						<td style="vertical-align:top;text-align:center;padding-left:5px;" class="valueResponse">
+							<div class="row">
+								<div class="col-sm-6">
+									<span>
+										@if (Model.Item2) {
+											@Html.EditorFor(x => questions[i].Exhibits, new { name = "question_" + RadialReview.Models.Enums.QuestionType.CompanyValue + "_" + questions[i].Identifier })
+										} else {
+											@Html.DisplayFor(x => questions[i].Exhibits, new { name = "question_" + RadialReview.Models.Enums.QuestionType.CompanyValue + "_" + questions[i].Identifier })
+										}
+									</span>
+								</div>
+								<div class="col-sm-6">
+									<span>
+										@if (Model.Item2) {
+											<textarea name="question_@(QuestionType.CompanyValue)_@(questions[i].Identifier)_Reason" class="full-width changeable reason" placeholder="Add Comment">@questions[i].Reason</textarea>
+										} else {
+											<div class="full-width changeable reason">@questions[i].Reason</div>
+										}
+									</span>
+
+								</div>
+
+							</div>
+
+
+
+						</td>
+						@*<td><h4 class="question alignLeft noselect" style="padding-left:15px;color:transparent">@questions[i].Askable.GetQuestion()</h4></td>*@
+						@*<td style="vertical-align:top;padding-left:5px;width:50%;padding-top: 8px;"></td>*@
+					</tr>
+					<tr class="visible-xs">
+						<td style="padding-top:7px"></td>
+					</tr>
+
+				}
+			</tbody>
+		</table>
+		<div class="evaluation-heading">Core Values</div>
+	</div>
+	<blocksep class="block-separator"></blocksep>
+					}

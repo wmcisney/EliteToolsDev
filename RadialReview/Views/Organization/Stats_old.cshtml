@@ -1,0 +1,325 @@
+﻿@model List<RadialReview.Controllers.OrganizationController.OrgStats>
+@using RadialReview.Models.Enums
+@{
+	ViewBag.FullWidth = true;
+
+	/*var scoreOrder = new Dictionary<AccountType, int>() {
+		{AccountType.Demo, 1},
+		{AccountType.Implementer, 2},
+		{AccountType.Coach, 3},
+		{AccountType.Dormant, 4},
+		{AccountType.Cancelled, 5},
+		{AccountType.SwanServices, 6},
+		{AccountType.Other, 7},
+		{AccountType.Paying, 8},
+	};*/
+	var scoreOrder = new RadialReview.Utilities.DataTypes.DefaultDictionary<AccountType, int>(x => 6);
+	scoreOrder[AccountType.Demo] = 1;
+	scoreOrder[AccountType.Implementer] = 2;
+	scoreOrder[AccountType.Coach] = 3;
+	scoreOrder[AccountType.Dormant] = 4;
+	scoreOrder[AccountType.Cancelled] = 5;
+	scoreOrder[AccountType.SwanServices] = 6;
+	scoreOrder[AccountType.Other] = 7;
+	scoreOrder[AccountType.Paying] = 8;
+
+
+	var creditCardTxt = new Func<RadialReview.Controllers.OrganizationController.OrgStats, string>(x => {
+		if (x.CreditCardExp == null) {
+			if (x.Status == AccountType.Demo) {
+				if (x.TrialEnd < DateTime.UtcNow) {
+					return DateTime.UtcNow.AddDays(0).ToShortDateString();
+				} else if (x.TrialEnd < DateTime.UtcNow.AddDays(-9)) {
+					return DateTime.UtcNow.AddDays(2).ToShortDateString();
+				} else {
+					return DateTime.UtcNow.AddDays(3).ToShortDateString();
+				}
+			} else {
+				return DateTime.UtcNow.AddDays(4).ToShortDateString();
+			}
+		}
+		return x.CreditCardExp.Value.ToShortDateString();
+	});
+
+	var creditCardBG = new Func<RadialReview.Controllers.OrganizationController.OrgStats, string>(x => {
+		if (x.CreditCardExp != null) {
+			if (x.CreditCardExp < DateTime.UtcNow) {
+				return "#ff7979";
+			} else if (x.CreditCardExp < DateTime.UtcNow.Subtract(TimeSpan.FromDays(60))) {
+				return "orange";
+			} else {
+				return "transparent";
+			}
+		} else {
+			if (x.Status == AccountType.Demo) {
+				if (x.TrialEnd < DateTime.UtcNow) {
+					return "#ff7979";
+				} else if (x.TrialEnd < DateTime.UtcNow.AddDays(-9)) {
+					return "orange";
+				} else {
+					return "transparent";
+				}
+			} else {
+				return "transparent";
+			}
+		}
+	});
+
+}
+
+<div class="clearfix"></div>
+<table class="pull-right ">
+    @foreach (var type in Enum.GetValues(typeof(AccountType))) {
+        <tr>
+            <th style="color: orange;text-align:right;">@(((AccountType)type==AccountType.Demo?"Trial":""+(AccountType)type))</th>
+            <td>@Model.Count(x => x.Status == (AccountType)type)</td>
+        </tr>
+    }
+    <tr style="border-top:1px solid orange;">
+        <th style="color: orange;text-align:right;" title="Paying+Demo+Implementer">PTI</th>
+        <td>@Model.Count(x => x.Status == AccountType.Demo || x.Status == AccountType.Paying || x.Status == AccountType.Implementer)</td>
+    </tr>
+    <tr style="border-top:1px solid orange;">
+        <th style="color: orange;text-align:right;" title="Paying+Demo">PT</th>
+        <td>@Model.Count(x => x.Status == AccountType.Demo || x.Status == AccountType.Paying)</td>
+    </tr>
+    <tr style="border-top:1px solid orange">
+        <th style="color: orange;text-align:right;">Total</th>
+        <td>@Model.Count()</td>
+    </tr>
+</table>
+<div class="pull-left">
+
+    <h2 style="color: orange"><b> Stats</b></h2>
+    <h4 class="pull-left">Server Time</h4>
+    <h4 class="pull-left" style="color:orange"><b>@DateTime.UtcNow.ToString()</b></h4>
+</div>
+<div class="clearfix"></div>
+
+
+<table class="table table-condensed table-striped table-hover">
+    <thead class="table-header">
+        <tr><th style="border-right:1px solid black;">#</th><th>OrgId</th><th>OrgName</th><th>User</th><th>Position</th><th>CreateTime</th><th>Status</th><th>LastLogin</th><th>TrialEnd</th><th>Last Meeting</th><th>cc exp</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model) {
+            <tr>
+                <th class="rowId"></th>
+                <td>@i.OrgId</td>
+                <td class="alignRight"><a href="/Organization/Which/@i.OrgId">@i.OrgName</a></td>
+                <td style="width:120px;">@i.Username  </td>
+                <td>@i.Position</td>
+                <td class="alignLeft">@i.OrgCreateTime.NotNull(x => x.Value.ToShortDateString())</td>
+                <td class="account-@i.Status {sorter: 'digit'} account">
+                    <span style="display: none">@(scoreOrder[i.Status])</span>
+                    @if (i.Status == AccountType.Cancelled) {
+                @:Cancelled
+                } else {
+                @Html.EnumDropDownList("at-" + i.OrgId, i.Status, new { onchange = "changeAccountType(this," + i.OrgId + ")" })
+                }
+
+                </td>
+
+                @*<td class="account-@i.Status select" data-sort="@(scoreOrder[i.Status])"><span class="hidden">@(scoreOrder[i.Status])</span><span class="" data-sort="@(scoreOrder[i.Status])">@i.Status</span></td>*@
+                <td class="alignRight" style="color:@(i.LastLogin.NotNull(x =>{
+						                         if (x > DateTime.UtcNow.Subtract(TimeSpan.FromDays(14)))
+						                         {
+													 if (x > DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)))
+													 {
+														 if (x > DateTime.UtcNow.Subtract(TimeSpan.FromDays(1))){
+															 return "green";
+														 }
+														 return "lightgreen";
+							                         }
+													 return "#005ed7";
+						                         }
+						                         return "red";
+					                         })??"darkred")">
+                    @i.LastLogin.NotNull(x => x.Value.ToShortDateString())
+                </td>
+                <td title="@i.TrialEnd.NotNull(x => x.Value.ToShortDateString())" style="color:white;background-color:@(i.Status!=AccountType.Demo?"blueviolet":i.TrialEnd.NotNull(x => (x > DateTime.UtcNow) ? "blueviolet" : "deeppink") ?? "blueviolet");">
+                    @if (i.TrialEnd != DateTime.MinValue && i.Status == AccountType.Demo) {
+                @i.TrialEnd.NotNull(x => x.Value.ToShortDateString())
+                }
+                </td>
+                <td class="alignRight" style="background-color:@(i.LastMeeting.NotNull(x =>{
+						                         if (x > DateTime.UtcNow.Subtract(TimeSpan.FromDays(28)))
+						                         {
+													 if (x > DateTime.UtcNow.Subtract(TimeSpan.FromDays(14)))
+													 {
+														 if (x > DateTime.UtcNow.Subtract(TimeSpan.FromDays(7))){
+                                                             return "#4AB94A";
+														 }
+														 return "lightgreen";
+							                         }
+                                                     return "#FFAE76";
+						                         }
+                                                 return "#FF7979";
+					                         })??"lightgray")">
+                    @(i.LastMeeting.NotNull(x => x.Value.ToShortDateString()))
+                </td>
+                <td class="alignRight" style="background-color:@creditCardBG(i);color:@(i.CreditCardExp.NotNull(x=>"black")??"transparent")">
+                    @(creditCardTxt(i))
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@using (Html.BeginScripts()) {
+    <script>
+        $("table").tablesorter({
+            // sortForce: [[0, 1]],
+            sortList: [[1,1]],
+            sortStable: true,
+            headers: {
+                5: { sorter: 'attr' },
+            }
+        }).bind("sortEnd",function() { 
+            $("tbody .rowId").each(function(i){
+                $(this).html(i+1);
+            })
+        });
+        $("tbody .rowId").each(function(i){
+            $(this).html(i+1);
+        })
+
+        var acType = {
+            @foreach (var kv in scoreOrder) {
+                @:@(kv.Key):@(kv.Value),
+                                                                                                }
+        };
+
+        $("select").on('focus', function () {
+            // Store the current value on focus and on change
+            $(this).data("previous",this.value);
+        })
+
+        function changeAccountType(self, id) {
+            function updateAccountType(){
+                $.ajax("/organization/setaccounttype/" + id + "?type=" + $(self).val());
+                $(self).closest("td").removeClass(function (index, css) {
+                    return (css.match(/\baccount-\S+/g) || []).join(' ');
+                }).addClass("account-" + $(self).val());
+                $(self).find("span").html(acType[$(self).val()]);
+            }
+
+
+            if ("Cancelled"==$(self).val()){
+                showModal({
+                    title:"Are you sure you want to delete this organization?",
+                    icon:"warning",
+                    //fields:{type:"header",value:"This action will affect the organizations members"},
+                    success:function(){
+                        updateAccountType(); $(self).parent("td").html("Cancelled")
+                    },
+                    cancel:function(){
+                        $(self).val($(self).data("previous"));
+                        changeAccountType(self, id)
+                    }
+                });
+            }else{
+                updateAccountType();
+            }
+        }
+    </script>
+}
+
+<style>
+    .rowId{
+        border-right:1px solid black;
+    }
+    .account {
+        padding: 0 !important;
+        vertical-align: middle !important;
+    }
+
+        .account select {
+            width: 100%;
+        }
+
+    tr.delete td {
+        text-decoration: line-through;
+    }
+
+    .account-Paying select {
+        background-color: #1b6b74;
+        color: white;
+        font-weight: bold;
+    }
+
+    .account-Dormant {
+        color: gray;
+    }
+
+    .account-Other select {
+        background-color: gray;
+        color: white;
+        font-weight: bold;
+    }
+
+    .account-Cancelled {
+        color: lightgray;
+        font-style: italic;
+    }
+
+    .account-Demo select {
+        background-color: #d9534f;
+        color: white;
+        font-weight: bold;
+    }
+
+    .account-Implementer select {
+        background-color: #ff7d00;
+        color: white;
+        font-weight: bold;
+    }
+
+    td {
+        padding: 0 5px;
+    }
+
+    table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr :not(.tablesorter-headerUnSorted) .tablesorter-header-inner {
+        color: black;
+    }
+
+    .select {
+        vertical-align: middle;
+        text-align: center;
+        border-bottom: 1px solid white;
+    }
+
+    /*.account-Paying {
+        background-color: #1b6b74;
+        color: white;
+        font-weight: bold;
+    }
+
+    .account-Dormant {
+        color: gray;
+    }
+
+    .account-Other {
+        background-color: gray;
+        color: white;
+        font-weight: bold;
+    }
+
+    .account-Cancelled {
+        color: lightgray;
+        font-style: italic;
+    }
+
+    .account-Demo {
+        background-color: #d9534f;
+        color: white;
+        font-weight: bold;
+    }
+
+    .account-Implementer {
+        background-color: #ff7d00;
+        color: white;
+        font-weight: bold;
+    }*/
+</style>

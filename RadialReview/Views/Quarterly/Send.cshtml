@@ -1,0 +1,121 @@
+﻿@model RadialReview.Controllers.QuarterlyController.SendQuarterlyVM
+@{
+	var guid = Html.NewGuid();
+	var anyScheduled = Model.Scheduled != null && Model.Scheduled.Any();
+}
+
+<link href="~/Content/Inputs/IOSwitch.css" rel="stylesheet" />
+@Html.HiddenFor(x => x.RecurrenceId)
+
+
+<div class="@(guid)">
+	<div class="row">
+		<div class="@(anyScheduled?"col-sm-6":"")">
+			@if (anyScheduled) {
+				<div class="well well-sm row sch-table">
+					<table class="table col-sm-6" style="margin-bottom:0px">
+						<thead>
+							<tr>
+								<th>Address</th>
+								<th colspan="2">Scheduled Date</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var sch in Model.Scheduled.OrderByDescending(x => x.Date)) {
+								<tr class="sch sch-@(sch.Id)">
+									<td class="fullWidth">@sch.Email</td>
+									<td>@sch.Date</td>
+									<td>@(sch.Sent ? new HtmlString("<span class='label label-success'>sent!<span>") : new HtmlString("<span class='label label-default'>scheduled<span>"))</td>
+									<td>
+										@if (!sch.Sent) {
+											<span onclick="@(guid)_unschedule(@sch.Id)" class="glyphicon glyphicon-trash clickable"></span>
+										}
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			} else {
+			}
+
+		</div>
+		<div class="@(anyScheduled?"col-sm-6":"col-sm-12")">
+			<div class="row smallBreak2">
+				<div class="col-md-12">
+					<label class="pull-right send-btn clickable"  for="@Html.NameFor(x=>x.Later)">
+						<label class="clickable" for="@Html.NameFor(x=>x.Later)">Send later </label>
+						<label class="io-switch" style="margin-bottom: -2px;" title="">
+							<input type="checkbox" @(Model.Later ? "checked" : "") name="@Html.NameFor(x=>x.Later)" id="@Html.NameFor(x=>x.Later)" value="@Model.Later">
+							<span class="slider round"></span>
+						</label>
+					</label>
+					<label for="ImplementerEmail" class="control-label alignLeft">Your implementer's e-mail:</label>
+					@Html.TextBoxFor(x => x.ImplementerEmail, new { @class = "form-control" })
+				</div>
+
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="now-box @(Model.Later?"":"hidden")">
+						<label for="SendDate" style="width: 100%;" class="control-label alignLeft">Schedule to be sent on: <span class="pull-right glyphicon glyphicon-question-sign gray" title="Email is sent at 12:01 am on the selected day."></span></label>
+						@Html.EditorFor(x => x.SendDate, new { @class = "form-control", startDate = DateTime.UtcNow })
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+
+
+<script>
+	$(".@(guid) .io-switch input").change(function () {
+		$(this).val($(this).is(":checked"));
+		$(".@guid .now-box").toggleClass("hidden", !$(this).is(":checked"));
+	});
+
+	function @(guid)_unschedule(id) {
+		$.ajax({
+			url: "/quarterly/UnscheduledQuarterly/" + id,
+			success: function (d) {
+				$(".sch-" + id).remove();
+				if ($(".sch").length == 0) {
+					$(".sch-table").remove();
+				}
+			}
+		});
+
+	}
+</script>
+
+<style>
+	table tr.sch td {
+		padding: 2px 8px;
+	}
+
+	.sch .glyphicon {
+		top: 4px;
+		position: relative;
+	}
+
+	.@guid .send-btn{
+		    border: 2px solid #005ed7;
+		line-height: 0px;
+		padding: 2px 14px 5px;
+		margin-top: 4px;
+		border-radius: 12px;
+		color: #333;
+		color: #005ed7;
+	}
+
+	.@guid .io-switch input:checked + .slider {
+		background-color: #005ed7;
+	}
+
+
+
+</style>

@@ -1,0 +1,443 @@
+﻿@using RadialReview.Models.UserModels
+@model RadialReview.Models.OrganizationModel
+@{
+	ViewBag.Title = "Which";
+	ViewBag.FullWidth = true;
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+	var signups = (ViewBag.V2SignedUp as List<RadialReview.Models.V2.V2Signup>) ?? new List<RadialReview.Models.V2.V2Signup>();
+
+}
+
+@if (Model != null) {
+	<style>
+		h4 {
+			margin: 2px !important;
+		}
+
+		.v2-table td {
+			padding-right: 10px;
+		}
+	</style>
+
+	<div class="row">
+		<div class="col-xs-8">
+			<h1 class="pull-left">Which</h1>
+			<h1 style="color: orange" class="pull-left"><b> @Model.GetName() [@Model.Id]</b></h1>
+			<div class="clearfix"></div>
+			<h4 class="pull-left">Server Time</h4>
+			<h4 style="color:orange" class="pull-left"><b>@DateTime.UtcNow.ToString()</b></h4>
+			<div class="clearfix"></div>
+			<h4 class="pull-left">Count</h4>
+			<h4 style="color: orange" class="pull-left"><b> @(((List<UserLookup>)ViewBag.Members).Count())</b></h4>
+			<div class="clearfix"></div>
+			<table class="v2-table">
+				<tr>
+					<th>V2 Any Banner: &nbsp;&nbsp;</th>
+					<td>
+						@{
+							var anyBanner = (((List<UserLookup>)ViewBag.Members).Any(x => x.V2StatusBar == V2StatusBar.ShowAllowSignup || x.V2StatusBar == V2StatusBar.ShowDoNotAllowSignup));
+							var anySignups = signups.Any(x => x.HaltedBy == null);
+							var errors = "";
+							if (anyBanner) {
+								if ((((List<UserLookup>)ViewBag.Members).Where(x => (x.V2StatusBar == V2StatusBar.ShowAllowSignup || x.V2StatusBar == V2StatusBar.ShowDoNotAllowSignup)).All(x => !x.HasJoined))) {
+									errors += " (A) No joined members will see the banner.";
+								}
+
+								if ((((List<UserLookup>)ViewBag.Members).Where(x => x.HasJoined && (x.V2StatusBar == V2StatusBar.ShowAllowSignup || x.V2StatusBar == V2StatusBar.ShowDoNotAllowSignup)).All(x => x.V2StatusBar == V2StatusBar.ShowDoNotAllowSignup))) {
+									errors += " (B) No one is allowed to signup.";
+								}
+							}
+						}
+						<b style="color:@((anyBanner) ? "green" : (anySignups ? "gray" : "red"))">@(anyBanner)</b>
+					</td>
+					@if (!string.IsNullOrWhiteSpace(errors)) {
+						<td>
+							<i style="font-weight: bold;background: red;color: white;padding: 4px 8px;text-decoration: underline;">@errors</i>
+						</td>
+					}
+				</tr>
+				<tr>
+					<th>
+						V2 Signed up:
+					</th>
+					<td>
+						<b style="color:@(anySignups ? "green" : "red")">
+
+							@(anySignups)
+							@if (signups.Any(x => x.HaltedBy == null)) {
+								var signupName = ((List<UserLookup>)ViewBag.Members)
+									  .FirstOrDefault(x => x.UserId == signups.FirstOrDefault(z => z.HaltedBy == null).NotNull(y => y.ByUser))
+									  .NotNull(x => x.Name);
+
+								<span>[@(signupName)(@(signups.FirstOrDefault(z => z.HaltedBy == null).NotNull(y => y.ByUser)))]</span>
+							}
+						</b>
+					</td>
+				</tr>
+
+				@if (signups.Any()) {
+					<tr>
+						<th> V2 Migrated:</th>
+						<td>
+							<b style="color:@(signups.Any(x => x.MigrationExecuted != null) ? "green" : "red")">
+								@if (signups.Any(x => x.MigrationExecuted != null)) {
+									@(signups.FirstOrDefault(x => x.MigrationExecuted != null).NotNull(y => y.MigrationExecuted))
+								} else {
+									<i>False</i>
+								}
+							</b>
+						</td>
+					</tr>
+					if (!signups.Any(x => x.MigrationExecuted != null) && signups.Any(x => !x.ImmediateSignup)) {
+						<tr>
+							<th> V2 Waiting on:</th>
+							<td>
+								<b style="color:red"> @(signups.FirstOrDefault().NotNull(x => x.WaitingOn())) </b>
+							</td>
+						</tr>
+					}
+
+					if (!signups.Any(x => x.MigrationExecuted != null) && signups.Any(x => x.ImmediateSignup)) {
+						var allowedToday = signups.FirstOrDefault().NotNull(x => x.AllowedOnDate(DateTime.UtcNow - TimeSpan.FromHours(5)));
+
+						<tr>
+							<th> V2 Day of Week:</th>
+							<td>
+								<b> @(signups.FirstOrDefault().NotNull(x => x.DaysOfWeek())) </b>
+							</td>
+						</tr>
+					}
+				}
+
+
+			</table>
+			<br />
+		</div>
+
+		<div class="col-xs-4">
+			<div class="row">
+				<div class="col-xs-6">
+					<span><lable>Free until</lable>@Html.EditorFor(x => x.PaymentPlan.FreeUntil, new { startDate = Html.Organization().ConvertFromUTC(DateTime.UtcNow) })</span>
+				</div>
+				<div class="col-xs-6">
+					<lable>Account Status</lable>
+					<div>
+						@Html.EnumDropDownListFor(x => x.AccountType, new { onchange = "changeAccountType(this," + Model.Id + ")", @class = "form-control" })
+					</div>
+				</div>
+			</div>
+			<div class="clearfix smallBreak2"></div>
+			<div class="clearfix"></div>
+			<a class="pull-right" href="/payment/plan_monthly?orgid=@Model.Id">Go to Payment Plan</a>
+			<div class="clearfix"></div>
+			<a class="pull-right" href="/organization/flags/@Model.Id">Go to Flags</a>
+			<div class="clearfix"></div>
+			<a class="pull-right" href="/account/calculateorganizationcharge/@Model.Id">Calculate Charge...</a>
+			<div class="clearfix"></div>
+			<a class="pull-right v2-migrate-portal-btn" href="/Organization/Port/@Model.Id"><b style="color:red">V2 Migration Portal...</b></a>
+			<div class="clearfix"></div>
+			<a class="pull-right" href="/Organization/Which">Back to Listing...</a>
+
+			<div class="clearfix"></div>
+			<a class="pull-right" href="/Organization/Stats">Back to Stats...</a>
+		</div>
+	</div>
+
+
+
+	<a href="#meetings">#meetings</a> <a href="#credits">#credits</a> <a href="#events">#events</a> <a href="#invoices">#invoices</a>
+
+	<table class="table table-hover">
+		<thead style="background-color: orange">
+			<tr>
+				<th class="alignCenter">Last Login</th>
+				<th class="alignCenter">Invite Sent</th>
+				<th class="alignCenter">Joined</th>
+				<th class="alignCenter">UserId</th>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Login</th>
+				<th>Admin</th>
+				<th>V2</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var m in (List<UserLookup>)ViewBag.Members) {
+				var v2StatusColor = "lightgray";
+				if (m.V2StatusBar == RadialReview.Models.UserModels.V2StatusBar.ShowAllowSignup) {
+					v2StatusColor = "green";
+				} else if (m.V2StatusBar == RadialReview.Models.UserModels.V2StatusBar.ShowDoNotAllowSignup) {
+					v2StatusColor = "goldenrod";
+				} else if (m.V2StatusBar == RadialReview.Models.UserModels.V2StatusBar.DoNotShow) {
+					v2StatusColor = "red";
+				}
+				<tr>
+					<td class="alignCenter" style="color:@(m.LastLogin.NotNull(x => {
+					if (x > DateTime.UtcNow.Subtract(TimeSpan.FromDays(14))) {
+						if (x > DateTime.UtcNow.Subtract(TimeSpan.FromDays(7))) {
+							if (x > DateTime.UtcNow.Subtract(TimeSpan.FromDays(1))) {
+								return "green";
+							}
+							return "lightgreen";
+						}
+						return "#005ed7";
+					}
+					return "red";
+				}) ?? "darkred")">
+						@m.LastLogin.NotNull(x => x.ToString())
+					</td>
+					<td class="alignCenter">@m.HasSentInvite.GetIcon() <span style="display: none">@(m.HasSentInvite ? 1 : 0)</span></td>
+					<td class="alignCenter">@m.HasJoined.GetIcon()<span style="display: none">@(m.HasJoined ? 1 : 0)</span></td>
+					<td class="alignCenter">@m.UserId</td>
+					<td><a href="/Manage/UserDetails/@m.UserId">@m.Name</a></td>
+					<td>@m.Email</td>
+					<td class="alignCenter"><a href="/Account/SetRole/@(m.UserId)?ReturnUrl=%2FDashboard">login</a></td>
+					<td>@(m.IsAdmin ? "Y" : "")</td>
+
+					<td>
+						<span data-id="@m.UserId" class="hidden order">@m.V2StatusBar</span>
+						<span onclick="toggleV2Status(this)" data-id="@m.UserId" title="@m.V2StatusBar" data-status="@m.V2StatusBar" style="cursor:pointer;color:@(v2StatusColor)" title="V2 Status">(v2)</span>
+					</td>
+				</tr>}
+		</tbody>
+	</table>
+	<div id="meetings"></div>
+	<br />
+	<br />
+	<br />
+
+	<script>
+		function toggleV2Status(row) {
+			var id = $(row).attr("data-id");
+			var status = $(row).attr("data-status");
+			var color = "lightgray";
+			console.log(status);
+			if (status == "ShowAllowSignup") {
+				status = "ShowDoNotAllowSignup";
+				color = "goldenrod";
+			} else if (status == "ShowDoNotAllowSignup") {
+				status = "DoNotShow";
+				color = "lightgray";
+			} else {
+				status = "ShowAllowSignup";
+				color = "green";
+			}
+
+			$.ajax({
+				url: "/v2020/setstatus/" + id + "?status=" + status,
+				success: function (res) {
+					debugger;
+					$("[data-id='" + id + "'].order").html(status);
+					$(row).attr("data-status", status);
+					$(row).attr("title", status);
+					$(row).css("color", color);
+				}
+			})
+
+		}
+	</script>
+
+
+
+
+
+
+
+
+
+
+
+
+	if (ViewBag.Meetings != null && ((List<RadialReview.Models.L10.L10Meeting>)ViewBag.Meetings).Any()) {
+		<table class="table table-hover">
+			<thead style="background-color: orange">
+				<tr>
+					<th colspan="4">Meetings in the last 90 days</th>
+				</tr>
+				<tr>
+					<th class="">Meeting Name</th>
+					<th class="">Date</th>
+					<th class="">Attendees</th>
+					<th class="">Duration</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var m in ((List<RadialReview.Models.L10.L10Meeting>)ViewBag.Meetings).OrderByDescending(x => x.CreateTime)) {
+
+					var totalMin = m.CompleteTime.NotNull(x => Math.Round((x.Value - m.CreateTime).TotalMinutes * 10) / 10);
+					<tr>
+						<td><a href="/l10/timeline/@(m.L10RecurrenceId)">@m.L10Recurrence.Name</a></td>
+						<td style="background-color:hsl(127,@(100-Math.Min(30,(DateTime.UtcNow-m.CreateTime).TotalDays)/30*100)%,@(53+Math.Min(100,(DateTime.UtcNow-m.CreateTime).TotalDays)/100*56)%)">
+							@m.CreateTime
+						</td>
+						<td>@(m._MeetingAttendees.NotNull(x => x.Count()))</td>
+						<td style="color:@(m.CompleteTime.NotNull(x=>{
+										 if (totalMin > 200)
+											 return "darkred";
+
+									 if (totalMin > 10){
+											if (totalMin > 60)
+											{
+												if (totalMin >80){
+													return "green";
+												}
+												return "lightgreen";
+											}
+											return "#005ed7";
+										}
+										return "red";
+									}))">
+							@(totalMin + "m")
+						</td>
+					</tr>}
+			</tbody>
+		</table>
+	} else {
+		<div class="panel panel-default">
+			<div class="panel-heading">Meetings</div>
+			<div class="panel-body gray">
+				No meetings to show.
+			</div>
+		</div>
+	}
+
+	<div id="credits"></div>
+	<br />
+	<br />
+	<br />
+
+	<div id="creditsTable"></div>
+
+
+	//using (Html.BeginScripts()) {
+
+	<script>
+		var creditLoader= function(){
+			if (typeof(DataTable) == "undefined"){
+				setTimeout(creditLoader,100);
+			}else{
+
+				var creditData =  @Html.ArrayToString(((List<RadialReview.Models.Payments.PaymentCredit>)ViewBag.Credits));
+
+				var creditModal = {
+					title:"Apply a credit to @Model.GetName()",
+					fields:[
+						{name:"Message",text:"Message",placeholder:"Why are we applying the credit?"},
+						{name:"OriginalAmount",text:"Amount",type:"number"},
+						{name:"OrgId",type:"hidden",value:@Model.Id},
+					],
+					pushUrl:"/Payment/ApplyCredit",
+					success:function(){
+						showAlert("Credit Applied.");
+					}
+				};
+
+				var creditTable = DataTable({
+					container:"#creditsTable",
+					data: creditData,
+					addButton : {text:"Add credit"},
+					clickAdd: creditModal,
+					clickRemove:"/payment/RemoveCredit/{0}",
+					cells:[
+						{rowNum:true},
+						{name:"Credits",contents:function(x){return x.Message;},title:"Message",classes:"fullWidth",},
+						{name:"Amount",contents:function(x){return "<b>$"+x.AmountRemaining.toFixed(2)+"</b>/<small>$"+x.OriginalAmount.toFixed(2)+"</small>";},title:"Amount"},
+						{name:"Date",contents:function(x){return getFormattedDate(x.CreateTime);},title:"Date",classes:"nowrap"},
+						{remove:true}
+					]
+				});
+			}
+		};
+		creditLoader();
+
+	</script>
+	//}
+
+
+
+
+
+
+
+
+	<div id="events"></div>
+	<br />
+	<br />
+	<br />
+
+	<div class="panel panel-default">
+		<div class="panel-heading">Events</div>
+		<div class="panel-body">
+			@{ Html.RenderAction("Events", "Admin", new { orgId = Model.Organization.Id });}
+
+		</div>
+	</div>
+
+	<div id="invoices"></div>
+	<br />
+	<br />
+	<br />
+
+	@*<div class="panel panel-default">
+		<div class="panel-heading">Invoices</div>
+		<div class="panel-body">*@
+	<div class="">
+		@{ Html.RenderAction("List", "Invoice", new { id = Model.Organization.Id });}
+	</div>
+	@*</div>
+		</div>*@
+
+
+
+
+
+
+
+} else {
+	<h1 class="pull-left">Which</h1>
+	<h1 style="color: #D0D0D0" class="pull-left"><b> NULL</b></h1>
+	<div class="clearfix"></div>
+	<h4 class="pull-left">Server Time</h4>
+	<h4 style="color:orange" class="pull-left"><b>@DateTime.UtcNow.ToString()</b></h4>
+}
+<hr />
+
+@using (Html.BeginScripts()) {
+	<script>
+		$("table").tablesorter({
+			// sortForce: [[0, 1]],
+			sortStable: true,
+		});
+
+		function changeAccountType(self, id) {
+			$.ajax("/organization/setaccounttype/" + id + "?type=" + $(self).val());
+		}
+
+		$("body").on("change", "[name='PaymentPlan.FreeUntil']", function () {
+			$.get("/payment/FreeUntil/@Model.Id?date=" + $(this).val());
+		});
+
+	</script>
+}
+
+@using (Html.BeginStyles()) {
+	<style>
+		.alignRight .display-label {
+			padding-right: 0px;
+		}
+
+		.display-label {
+			padding-right: 10px;
+			font-weight: bold;
+		}
+
+		.display-field {
+			height: 20px;
+		}
+
+		.grayed {
+			color: #888;
+		}
+	</style>
+}

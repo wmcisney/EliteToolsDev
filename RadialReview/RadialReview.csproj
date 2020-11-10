@@ -1,0 +1,3061 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7104473E-4E35-4107-9B11-4346291F8B4E}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RadialReview</RootNamespace>
+    <AssemblyName>RadialReview</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
+    <MvcBuildViews>false</MvcBuildViews>
+    <!--<MvcBuildViews Condition="'$(Configuration)'=='Debug'">false</MvcBuildViews>
+    <MvcBuildViews Condition="'$(Configuration)'!='Debug'">true</MvcBuildViews>-->
+    <Use64BitIISExpress>true</Use64BitIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DocumentationFile>bin\XmlComments.xml</DocumentationFile>
+    <NoWarn>1591,1998,0219,0618,0168</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Globalization" />
+    <Reference Include="System.ObjectModel" />
+    <Reference Include="System.Net.Primitives" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\packages\System.Data.SQLite.1.0.88.0\lib\net45\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq">
+      <HintPath>..\packages\System.Data.SQLite.1.0.88.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accessors\AccountabilityAccessor.cs" />
+    <Compile Include="Accessors\AdminAccessor.cs" />
+    <Compile Include="Accessors\ApplicationAccessor.cs" />
+    <Compile Include="Accessors\ArchiveAccessor.cs" />
+    <Compile Include="Accessors\AskableAccessor.cs" />
+    <Compile Include="Accessors\AttachAccessor.cs" />
+    <Compile Include="Accessors\AwsMetadataAccessor.cs" />
+    <Compile Include="Accessors\BaseAccessor.cs" />
+    <Compile Include="Accessors\CategoryAccessor.cs" />
+    <Compile Include="Accessors\FileAccessor.cs" />
+    <Compile Include="Accessors\OrgExport.cs" />
+    <Compile Include="Accessors\PDF\Hangfire\GenerateVtoPdf.cs" />
+    <Compile Include="Accessors\PDF\Partial\CoverPagePartial.cs" />
+    <Compile Include="Accessors\PDF\Partial\HeadlinesPartial.cs" />
+    <Compile Include="Accessors\PDF\Partial\IPdfPartial.cs" />
+    <Compile Include="Accessors\PDF\Partial\IssuesPartial.cs" />
+    <Compile Include="Accessors\PDF\Partial\QuarterlyPdf.cs" />
+    <Compile Include="Accessors\PDF\Partial\RocksPartial.cs" />
+    <Compile Include="Accessors\PDF\Partial\ScorecardsPartial.cs" />
+    <Compile Include="Accessors\PDF\Partial\TodosPartial.cs" />
+    <Compile Include="Accessors\PDF\V2\Generators\IPdfPageGenerator.cs" />
+    <Compile Include="Accessors\PDF\V2\Generators\QuarteryTitlePagePdfGenerator.cs" />
+    <Compile Include="Accessors\V2Accessor.cs" />
+    <Compile Include="Controllers\DocumentsController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\Upload\Upload_L10Controller.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IQuarterHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Internal\ZapierUserHooks.cs" />
+    <Compile Include="Crosscutting\Hooks\Notifications\NotificationOnNewQuarterHooks.cs" />
+    <Compile Include="Models\Angular\Organization\AngularOrganization.cs" />
+    <Compile Include="Crosscutting\Schedulers\Debounce.cs" />
+    <Compile Include="Models\Downloads\EncryptedFileModel.cs" />
+    <Compile Include="Models\Payments\InvoiceUserItemModel.cs" />
+    <Compile Include="Models\Quarterly\QuarterModel.cs" />
+    <Compile Include="Models\UserModels\HangfireCaller.cs" />
+    <Compile Include="Models\V2\V2Signup.cs" />
+    <Compile Include="Models\V2\V2ViewCount.cs" />
+    <Compile Include="Models\ViewModels\QuarterViewModel.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\Encrypt\EncryptionUtility.cs" />
+    <Compile Include="Utilities\Files\MimeTypeMap.cs" />
+    <Compile Include="Utilities\Libraries\Cors\CorsConstants.cs" />
+    <Compile Include="Utilities\Libraries\Cors\CorsEngine.cs" />
+    <Compile Include="Utilities\Libraries\Cors\CorsExtensions.cs" />
+    <Compile Include="Utilities\Libraries\Cors\CorsMiddleware.cs" />
+    <Compile Include="Utilities\Libraries\Cors\CorsOptions.cs" />
+    <Compile Include="Utilities\Libraries\Cors\CorsPolicy.cs" />
+    <Compile Include="Utilities\Libraries\Cors\CorsPolicyProvider.cs" />
+    <Compile Include="Utilities\Libraries\Cors\CorsRequestContext.cs" />
+    <Compile Include="Utilities\Libraries\Cors\CorsResult.cs" />
+    <Compile Include="Utilities\Libraries\Cors\ICorsEngine.cs" />
+    <Compile Include="Utilities\Libraries\Cors\ICorsPolicyProvider.cs" />
+    <Compile Include="Utilities\Libraries\Cors\SRResources.cs" />
+    <Compile Include="Utilities\NHibernate\AuditForeignKeyInterceptor.cs" />
+    <Compile Include="Utilities\NHibernate\AuditForeignKeyInterceptorData.cs" />
+    <Compile Include="Utilities\PermissionsLister\L10Permissions.cs" />
+    <Compile Include="Accessors\SelectListAccessor.cs" />
+    <Compile Include="Accessors\ZapierAccessor.cs" />
+    <Compile Include="Accessors\ConsentAccessor.cs" />
+    <Compile Include="Accessors\CustomizeAccessor.cs" />
+    <Compile Include="Accessors\DashboardAccessor.cs" />
+    <Compile Include="Accessors\DatabaseUtility.cs" />
+    <Compile Include="Accessors\DbWrapper.cs" />
+    <Compile Include="Accessors\DeepAccessor.cs" />
+    <Compile Include="Accessors\DeepSubordianteAccessor.cs" />
+    <Compile Include="Accessors\Emailer.cs" />
+    <Compile Include="Accessors\EventAccessor.cs" />
+    <Compile Include="Accessors\ExportAccessor.cs" />
+    <Compile Include="Accessors\ForModelAccessor.cs" />
+    <Compile Include="Accessors\GroupAccessor.cs" />
+    <Compile Include="Accessors\HeadlineAccessor.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorMeetingSummary.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorPeopleTools.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorVideo.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorHelpers.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorAudit.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorStats.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorAngular.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorPeopleHeadlines.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorIssues.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorTodos.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorScorecard.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorRocks.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorNotes.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorEditMeeting.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorMeetingData.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorSessionMethods.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorLoadData.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorMeetingActions.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorAttendees.cs" />
+    <Compile Include="Accessors\NotificationAccessor.cs" />
+    <Compile Include="Accessors\OrganizationAccessors\JoinOrganizationAccessor.cs" />
+    <Compile Include="Accessors\PdfChartAccessor.cs" />
+    <Compile Include="Accessors\PDF\AccountabilityChartPDF.cs" />
+    <Compile Include="Accessors\PDF\AccountabilityChartSettings.cs" />
+    <Compile Include="Accessors\PDF\JS\D3.js.cs" />
+    <Compile Include="Accessors\PDF\DocumentPlacer.cs" />
+    <Compile Include="Accessors\PDF\JS\Tree.js.cs" />
+    <Compile Include="Accessors\PDF\PdfSettings.cs" />
+    <Compile Include="Accessors\PDF\QuarterlyPrintoutPdf.cs" />
+    <Compile Include="Accessors\PDF\VTO\PdfAccessor_VTO.cs" />
+    <Compile Include="Accessors\PDF\VTO\VtoPdfSettings.cs" />
+    <Compile Include="Accessors\PostQuarterAccessor.cs" />
+    <Compile Include="Accessors\QuarterlyAccessor.cs" />
+    <Compile Include="Accessors\ReferralAccessor.cs" />
+    <Compile Include="Accessors\ReportAccessor.cs" />
+    <Compile Include="Accessors\SearchAccessor.cs" />
+    <Compile Include="Accessors\StatsAccessor.cs" />
+    <Compile Include="Accessors\SwitchesAccessor.cs" />
+    <Compile Include="Accessors\TinyUserAccessor.cs" />
+    <Compile Include="Accessors\VideoConferenceProviders\VideoProviderAccessor.cs" />
+    <Compile Include="Accessors\WebhooksAccessor.cs" />
+    <Compile Include="Api\ActionFiltersAttribute.cs" />
+    <Compile Include="Api\V1\App.cs" />
+    <Compile Include="Api\V1\PostQuarter.cs" />
+    <Compile Include="Api\V1\Headlines.cs" />
+    <Compile Include="Api\V1\Issue.cs" />
+    <Compile Include="Api\V1\L10.cs" />
+    <Compile Include="Api\V1\Notification.cs" />
+    <Compile Include="Api\V1\Rocks.cs" />
+    <Compile Include="Api\V1\Scorecard.cs" />
+    <Compile Include="Api\V1\Search.cs" />
+    <Compile Include="Api\V1\AccountabilityChart.cs" />
+    <Compile Include="Api\V1\Teams.cs" />
+    <Compile Include="Api\V1\Todo.cs" />
+    <Compile Include="Api\V1\Users.cs" />
+    <Compile Include="Api\V1\Zapier.cs" />
+    <Compile Include="App_Start\DateTimeModelBinder.cs" />
+    <Compile Include="App_Start\HangfireConfig.cs" />
+    <Compile Include="App_Start\HookConfig.cs" />
+    <Compile Include="App_Start\SwaggerConfig.cs" />
+    <Compile Include="Api\V1\CoreProcess.cs" />
+    <Compile Include="Areas\People\Accessors\PDF\PeopleAnalyzerPdf.cs" />
+    <Compile Include="Areas\People\Controllers\ErrorController.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Impl\QuarterlyConversation\Sections\RockCompletionSection.cs" />
+    <Content Include="Content\Accessibility\Colorblind.css">
+      <DependentUpon>Colorblind.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Angular\angular-material.css">
+      <DependentUpon>angular-material.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Angular\angular-material.less" />
+    <Content Include="Areas\People\Views\QuarterlyConversation\Archive.cshtml" />
+    <Content Include="Areas\People\Views\QuarterlyConversation\EditModal.cshtml" />
+    <Content Include="Areas\People\Views\QuarterlyConversation\Admin.cshtml" />
+    <Content Include="Content\Accessibility\Colorblind.less" />
+    <Content Include=".ebextensions\websockets.config" />
+    <None Include="Content\Chart\metric-graphics.less" />
+    <Compile Include="Controllers\AbstractController\BaseExpensiveController.cs" />
+    <Compile Include="Controllers\ClientSuccessController.cs" />
+    <Compile Include="Controllers\EventsController.cs" />
+    <Compile Include="Controllers\ExportController.cs" />
+    <Compile Include="Controllers\ReadonlyController.cs" />
+    <Compile Include="Controllers\ReferralController.cs" />
+    <Compile Include="Controllers\Integrations\AsanaIntegrationsController.cs" />
+    <Compile Include="Controllers\RedirectController.cs" />
+    <Compile Include="Controllers\Upload\Upload_OrgUsersController.cs" />
+    <Compile Include="Crosscutting\AttachedPermission\IAttachedPermission.cs" />
+    <Compile Include="Crosscutting\AttachedPermission\HeadlineAttachedPermissionHandler.cs" />
+    <Compile Include="Crosscutting\AttachedPermission\MeasurableAttachedPermissionHandler.cs" />
+    <Compile Include="Crosscutting\AttachedPermission\TodoAttachedPermissionHandler.cs" />
+    <Compile Include="Crosscutting\AttachedPermission\RockAttachedPermissionHandler.cs" />
+    <Compile Include="Crosscutting\AttachedPermission\IssueAttachedPermissionHandler.cs" />
+    <Compile Include="Crosscutting\AttachedPermission\PermissionRegistry.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\AgileCrm\AgileCRM.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\AgileCrm\AgileCrmConstants.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\AgileCrm\AgileCrmMeetings.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\AgileCrm\AgileCrmOrgEventHook.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\AgileCrm\AgileCrmUserEventHooks.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\AgileCrm\AgileCrmUtility.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\EnterpriseAgileCrm.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\EnterprisePrice.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\SetPeopleToolsTrial.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\Zapier\ZapierEventSubscription.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\Zapier\ZapierSubscription.cs" />
+    <Compile Include="Crosscutting\Hooks\Integrations\AsanaTodoHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IEnterpriseHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IMilestoneHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IPositionHooks.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IQuarterlyConversationHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IRecurrenceSettings.cs" />
+    <Compile Include="Crosscutting\Hooks\Payment\UnlockOnCard.cs" />
+    <Compile Include="Crosscutting\Hooks\QuarterlyConversation\QuarterlyConversationCreationNotifications.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\Dashboard\RealTime_Dashboard_Headline.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\Dashboard\RealTime_Dashboard_Rock.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\Position\RealTime_Positions.cs" />
+    <Compile Include="Crosscutting\Integrations\Asana\AsanaAccessor.cs" />
+    <Compile Include="Crosscutting\Schedulers\HangfireConstants.cs" />
+    <Compile Include="Crosscutting\Schedulers\Scheduler.cs" />
+    <Compile Include="Crosscutting\Schedulers\TodoEmailsScheduler.cs" />
+    <Compile Include="Exceptions\AdminSetRoleException.cs" />
+    <Compile Include="Exceptions\RedirectToActionException.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\L10\RealTime_L10_Milestone.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\EventsFactory.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Events\Base\BaseL10EventAnaylzerGenerators.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Events\MissL10PastQuarter.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Events\MemberwiseTodoCompletion.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Models\EventSubscription.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Searchers\SearchAllRecentScoresForRecurrence.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Searchers\SearchAllTodosForRecurrence.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Searchers\_old\SearchTodoCompletionForUserAndMeeting.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\Formula\CascadeScorecardUpdates.cs" />
+    <Compile Include="Crosscutting\Hooks\Payment\ExecutePaymentOnCardUpdate.cs" />
+    <Compile Include="Crosscutting\Hooks\Payment\FirstPaymentEmail.cs" />
+    <Compile Include="Crosscutting\Flags\OrganizationFlag.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IOrganizationFlagHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Payment\CardExpireEmail.cs" />
+    <Compile Include="Crosscutting\Hooks\Payment\SetDelinquentFlag.cs" />
+    <Compile Include="Exceptions\TestException.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\EventExecutor.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Events\Base\BaseL10EventAnalyzers.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Events\ConsecutiveLateEnds.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Events\ConsecutiveLateStarts.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Events\DaysWithoutL10.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Events\AverageMeetingRatingBelowForWeeksInARow.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Events\TodoCompletionConsecutiveWeeks.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Models\EventLogModel.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Models\IEventAnalyzer.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Searchers\SearchL10Meeting.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Searchers\SearchL10RecurrenceIds.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Searchers\SearchLeadershipL10RecurrenceIds.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Searchers\SearchMeetingAttendees.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Searchers\SearchHisoricalRecurrenceAttendees.cs" />
+    <Compile Include="Crosscutting\EventAnalyzers\Searchers\SearchPageTimers.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\CreateFinancialPermItems.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\SwapScorecardOnRegister.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\ActiveCampaign\ActiveCampaignFirstThreeMeetings.cs" />
+    <Compile Include="Crosscutting\Hooks\HookData.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IEventHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\INotificationHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Meeting\AttendeeHooks.cs" />
+    <Compile Include="Crosscutting\Hooks\Meeting\AuditLogHooks.cs" />
+    <Compile Include="Crosscutting\Hooks\Meeting\CalculateCumulative.cs" />
+    <Compile Include="Crosscutting\Hooks\Meeting\DepristineHooks.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\Dashboard\RealTime_Dashboard_Scorecard.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\L10\Realtime_L10Scorecard.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\L10\RealTime_L10_Issues.cs" />
+    <Compile Include="Crosscutting\Hooks\Meeting\MeetingRockCompletion.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\RealTimeHelpers.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\Dashboard\RealTime_Dashboard_UpdateL10Rocks.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\Dashboard\RealTime_Dashboard_Todo.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\L10\RealTime_L10_Todo.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\L10\RealTime_L10_UpdateRocks.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\VTO\RealTime_VTO_UpdateRocks.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\CoreProcess\RealTime_Tasks.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\UpdateUserCache.cs" />
+    <Compile Include="Crosscutting\Hooks\UserRegistration\UpdatePlaceholder.cs" />
+    <Compile Include="Hubs\ToFix\CoreProcessHub.cs" />
+    <Compile Include="Hubs\RealTimeHub.cs" />
+    <Compile Include="Models\Admin\AdminAuditLog.cs" />
+    <Compile Include="Models\Angular\CoreProcess\AngularTask.cs" />
+    <Compile Include="Models\Angular\CoreProcess\AngularCoreProcess.cs" />
+    <Compile Include="Models\Angular\LocalDateTime.cs" />
+    <Compile Include="Models\Angular\Notifications\AngularAppNotification.cs" />
+    <Compile Include="Models\Angular\Organization\AngularOrganizationUnsafe.cs" />
+    <Compile Include="Models\Angular\Rocks\AngularRockAndMilestones.cs" />
+    <Compile Include="Models\Angular\Users\AngularUserRole.cs" />
+    <Compile Include="Models\Application\FeatureSwitch.cs" />
+    <Compile Include="Models\Application\ReferralModel.cs" />
+    <Compile Include="Models\Application\Variable.cs" />
+    <Compile Include="Models\Charts\MetricGraphic.cs" />
+    <Compile Include="Models\ClientSuccess\TooltipModels.cs" />
+    <Compile Include="Models\Components\ColorComponent.cs" />
+    <Compile Include="Models\Enums\DashboardType.cs" />
+    <Compile Include="Models\Frontend\EditorModels.cs" />
+    <Compile Include="Models\Integrations\Asana\AsanaDTOs.cs" />
+    <Compile Include="Models\Integrations\Asana\AsanaModels.cs" />
+    <Compile Include="Models\Integrations\TodoLink.cs" />
+    <Compile Include="Models\L10\L10LookupCache.cs" />
+    <Compile Include="Models\Meeting\MeetingSummaryWhoModel.cs" />
+    <Compile Include="Models\Notifications\NotificationModel.cs" />
+    <Compile Include="Models\Payments\UserProductEvent.cs" />
+    <Compile Include="Models\PostQuarter\PostQuarterModel.cs" />
+    <Compile Include="Models\Quarterly\QuarterlyEmail.cs" />
+    <Compile Include="Models\Tasks\TaskExecutionResults.cs" />
+    <Compile Include="Models\UserModels\ConsentModel.cs" />
+    <Compile Include="Models\Payments\PaymentCredit.cs" />
+    <Compile Include="Models\UserModels\TinyUserOrgModel.cs" />
+    <Compile Include="Models\ViewModels\EditRockViewModel.cs" />
+    <Compile Include="Models\ViewModels\CreateMeasurableViewModel.cs" />
+    <Compile Include="Models\UserModels\UserRole.cs" />
+    <Compile Include="Models\ViewModels\MeetingSummarySettings.cs" />
+    <Compile Include="Models\ViewModels\WorkspaceDropdownVM.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Utilities\Attributes\TodoAttribute.cs" />
+    <Compile Include="Utilities\Attributes\Untested.cs" />
+    <Compile Include="Utilities\Algorithms\BinPacking.cs" />
+    <Compile Include="Utilities\Algorithms\BreakOptimization.cs" />
+    <Compile Include="Utilities\Calculators\UserCalculator.cs" />
+    <Compile Include="Utilities\Constants\KeyManager.cs" />
+    <Compile Include="Utilities\CoreProcess\AmazonSQSUtility.cs" />
+    <Compile Include="Utilities\AsyncUtility.cs" />
+    <Compile Include="Areas\People\Accessors\QuarterlyConversationAccessor.cs" />
+    <Compile Include="Areas\People\Accessors\SurveyAccessor.cs" />
+    <Compile Include="Areas\People\Accessors\PDF\SurveyPdfAccessor.cs" />
+    <Compile Include="Areas\People\Angular\AngularPeopleAnalyzer.cs" />
+    <Compile Include="Areas\People\Angular\Survey\AngularForModel.cs" />
+    <Compile Include="Areas\People\Angular\Survey\SurveyAbout\AngularSurveyAbout.cs" />
+    <Compile Include="Areas\People\Angular\Survey\AngularSurveyContainer.cs" />
+    <Compile Include="Areas\People\Angular\Survey\AngularSurvey.cs" />
+    <Compile Include="Areas\People\Angular\Survey\AngularSurveyItem.cs" />
+    <Compile Include="Areas\People\Angular\Survey\SurveyAbout\AngularSurveyAboutContainer.cs" />
+    <Compile Include="Areas\People\Angular\Survey\SurveyAbout\AngularSurveyAboutSection.cs" />
+    <Compile Include="Areas\People\Angular\Survey\SurveyAbout\AngularSurveyItemContainerAbout.cs" />
+    <Compile Include="Areas\People\Controllers\AngularTemplatesController.cs" />
+    <Compile Include="Areas\People\Controllers\MainController.cs" />
+    <Compile Include="Areas\People\Controllers\PeopleAnalyzerController.cs" />
+    <Compile Include="Areas\People\Controllers\QuarterlyConversationController.cs" />
+    <Compile Include="Areas\People\Controllers\SurveyController.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Impl\QuarterlyConversation\Sections\GeneralCommentsSection.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Impl\QuarterlyConversation\Sections\LeadershipAssessmentSection.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Impl\QuarterlyConversation\Sections\ManagementAssessmentSection.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Impl\InputItemIntializer.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Impl\TextItemIntializer.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Strategies\PostProcesses\PostProcessorFixPrettyNames.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Strategies\PostProcesses\PostProcessorNoOp.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Strategies\Transformers\TransformAboutAccountabilityNodes.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Strategies\Transformers\TransformByAboutNoop.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Strategies\Traverse\TraverseBuildAboutAngular.cs" />
+    <Compile Include="Areas\People\Models\Survey\ByAbout.cs" />
+    <Compile Include="Areas\People\Models\Survey\SurveyItemFormat.cs" />
+    <Compile Include="Areas\People\Models\Survey\SurveyItemResponse.cs" />
+    <Compile Include="Areas\People\Models\Survey\SurveyResponse.cs" />
+    <Compile Include="Areas\People\Models\Survey\SurveyItem.cs" />
+    <Compile Include="Areas\People\Models\Survey\SurveySection.cs" />
+    <Compile Include="Areas\People\Models\Survey\Survey.cs" />
+    <Compile Include="Areas\People\Models\Survey\SurveyContainer.cs" />
+    <Compile Include="Areas\People\Models\Survey\SurveyEnums.cs" />
+    <Compile Include="Areas\People\Models\Survey\SurveyUserNode.cs" />
+    <Compile Include="Areas\People\PeopleAreaRegistration.cs" />
+    <Compile Include="Areas\People\ViewModels\QuarterlyConversationVM.cs" />
+    <None Include="Areas\People\Views\Main\Diagonal.cshtml" />
+    <Content Include="Content\AngularTemplates\People\PeopleAnalyzer\peopleAnalyzerTable.html" />
+    <Content Include="Content\AngularTemplates\People\PeopleAnalyzer\rzSliderTpl.html" />
+    <Content Include="Content\AngularTemplates\People\Survey\Items\bs\number-item.html" />
+    <Content Include="Content\AngularTemplates\People\Survey\Items\bs\textarea-item.html" />
+    <Content Include="Content\AngularTemplates\People\Survey\Items\bs\text-item.html" />
+    <Content Include="Content\AngularTemplates\People\Survey\Items\bs\radio-item.html" />
+    <Content Include="Content\AngularTemplates\People\Survey\Items\md\radio-item.html" />
+    <Content Include="Content\AngularTemplates\People\Survey\surveyItemContainer.html" />
+    <Content Include="Content\AngularTemplates\People\Survey\survey.html" />
+    <Content Include="Content\AngularTemplates\People\Survey\surveySection.html" />
+    <Compile Include="Controllers\Ac\AngularAccountabilityController.cs" />
+    <Compile Include="Controllers\AuditController.cs" />
+    <Compile Include="Controllers\HeadlinesController.cs" />
+    <Compile Include="Controllers\MilestoneController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\PdfController.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Strategies\Events\SurveyReconstructionEventsNoOp.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Strategies\OuterLookup.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Impl\QuarterlyConversation\QuarterlyConversationClasses.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Impl\QuarterlyConversation\Sections\RockSection.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Impl\QuarterlyConversation\Sections\RoleSection.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Impl\QuarterlyConversation\Sections\ValueSection.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Interfaces\SurveyReconstructionInterfaces.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Strategies\Reconstructor\DatabaseAggregator.cs" />
+    <Compile Include="Areas\People\Angular\Survey\AngularSurveySection.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Strategies\Traverse\TraverseBuild.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Strategies\Traverse\TraverseBuildAngular.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\SurveyBuilderEngine.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Interfaces\SurveyBuilderInterfaces.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Strategies\Events\SurveyBuilderEventsNoOp.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\Strategies\Events\SurveyBuilderEventsSaveStrategy.cs" />
+    <Compile Include="Areas\People\Engines\Surveys\SurveyReconstructionEngine.cs" />
+    <Compile Include="Controllers\SuController.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\ActiveCampaign\ActiveCampaignEventHooks.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\EnterpriseHook.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\UpdateRoles_Notifications.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\UpdateUserModel_TeamNames.cs" />
+    <Compile Include="Crosscutting\Hooks\Webhook\IssueWebhook.cs" />
+    <Compile Include="Crosscutting\Hooks\Webhook\TodoWebhook.cs" />
+    <Compile Include="Hubs\ToFix\PeopleHub.cs" />
+    <Compile Include="Models\Angular\Base\AngularPicture.cs" />
+    <Compile Include="Models\Angular\Dashboard\AngularDashboard.cs" />
+    <Compile Include="Models\Angular\DataType\AngularString.cs" />
+    <Compile Include="Models\Angular\Headlines\AngularHeadline.cs" />
+    <Compile Include="Models\Angular\Meeting\AngularIssuesSolved.cs" />
+    <Compile Include="Models\Angular\Notifications\AngularNotification.cs" />
+    <Compile Include="Models\Angular\Rocks\AngularMilestone.cs" />
+    <Compile Include="Models\Angular\Scorecard\AngularMeasurableGroup.cs" />
+    <Compile Include="Models\Angular\Team\AngularTeam.cs" />
+    <Compile Include="Models\Application\Campaign.cs" />
+    <Compile Include="Models\Application\SupportMember.cs" />
+    <Compile Include="Models\Application\Coach.cs" />
+    <Compile Include="Models\Application\WebhookModel.cs" />
+    <Compile Include="Models\Enums\RGMType.cs" />
+    <Compile Include="Models\Enums\VideoConferenceType.cs" />
+    <Compile Include="Models\Events\Event.cs" />
+    <Compile Include="Models\Interfaces\IByAbout.cs" />
+    <Compile Include="Models\Interfaces\ICaller.cs" />
+    <Compile Include="Models\Issues\HeadlineIssueVM.cs" />
+    <Compile Include="Models\L10\L10RecurrenceOrder.cs" />
+    <Compile Include="Models\L10\L10Page.cs" />
+    <Compile Include="Models\L10\PeopleHeadline.cs" />
+    <Compile Include="Models\L10\L10RockType.cs" />
+    <Compile Include="Models\L10\PeopleHeadlineType.cs" />
+    <Compile Include="Models\Askables\AskableSectionModel.cs" />
+    <Compile Include="Models\Reviews\WhoReviewsWho.cs" />
+    <Compile Include="Models\Rocks\Milestone.cs" />
+    <Compile Include="Models\ViewModels\WebhooksEventSubscriptionViewModel.cs" />
+    <Compile Include="Models\ViewModels\WebHookViewModel.cs" />
+    <Compile Include="Notifications\Notification.cs" />
+    <Compile Include="Models\Reviews\ValueBar.cs" />
+    <Compile Include="Models\Todo\HeadlineTodoVm.cs" />
+    <Compile Include="Models\VideoConference\AbstractVCProvider.cs" />
+    <Compile Include="Models\VideoConference\JoinedVideo.cs" />
+    <Compile Include="Models\VideoConference\ZoomUserLink.cs" />
+    <Compile Include="Notifications\PubSub.cs" />
+    <Compile Include="Utilities\AngularTreeUtil.cs" />
+    <Compile Include="Utilities\Constants\PdfImageConst.cs" />
+    <Compile Include="Utilities\DataTypes\FixedSizedQueue.cs" />
+    <Compile Include="Utilities\DataTypes\LazyCollection.cs" />
+    <Compile Include="Utilities\DatePointAnalyzerUtility.cs" />
+    <Compile Include="Utilities\DivisorUtility.cs" />
+    <Compile Include="Utilities\Integrations\Slack.cs" />
+    <Compile Include="Utilities\Locale\LocaleUtility.cs" />
+    <Compile Include="Utilities\LockoutUtility.cs" />
+    <Compile Include="Utilities\Pdf\BreakoutDuration.cs" />
+    <Compile Include="Utilities\Pdf\DocumentMerger.cs" />
+    <Compile Include="Utilities\EmailUtil.cs" />
+    <Compile Include="Controllers\Integrations\ZoomIntegrationsController.cs" />
+    <Compile Include="Crosscutting\Hooks\Integrations\BasecampTodoHook.cs" />
+    <Compile Include="Crosscutting\Hooks\CrossCutting\CreateUserOrganization_UpdateHierarchy.cs" />
+    <Compile Include="Accessors\Hydrators\ResponsibilityGroupHydration.cs" />
+    <Compile Include="Accessors\Hydrators\UserHydration.cs" />
+    <Compile Include="Accessors\ImageAccessor.cs" />
+    <Compile Include="Accessors\InvoiceAccessor.cs" />
+    <Compile Include="Accessors\IssuesAccessor.cs" />
+    <Compile Include="Accessors\KeyValueAccessor.cs" />
+    <Compile Include="Accessors\L10Accessor\L10AccessorPages.cs" />
+    <Compile Include="Accessors\MandrillAccessor.cs" />
+    <Compile Include="Accessors\MessageAccessor.cs" />
+    <Compile Include="Accessors\NetworkAccessor.cs" />
+    <Compile Include="Accessors\NexusAccessor.cs" />
+    <Compile Include="Accessors\OnboardingAccessor.cs" />
+    <Compile Include="Accessors\OrganizationAccessors\OrganizationAccessor.cs" />
+    <Compile Include="Accessors\OriginAccessor.cs" />
+    <Compile Include="Accessors\OxyplotAccessor.cs" />
+    <Compile Include="Accessors\PadAccessor.cs" />
+    <Compile Include="Accessors\PaymentAccessor.cs" />
+    <Compile Include="Accessors\PDF\PdfAccessor.cs" />
+    <Compile Include="Accessors\PeriodAccessor.cs" />
+    <Compile Include="Accessors\PermissionsAccessor.cs" />
+    <Compile Include="Accessors\PhoneAccessor.cs" />
+    <Compile Include="Accessors\PngExporter.cs" />
+    <Compile Include="Accessors\PositionAccessor.cs" />
+    <Compile Include="Accessors\PrereviewAccessor.cs" />
+    <Compile Include="Accessors\QuestionAccessor.cs" />
+    <Compile Include="Accessors\RelationshipAccessor.cs" />
+    <Compile Include="Accessors\ResponsibilitiesAccessor.cs" />
+    <Compile Include="Accessors\ReviewAccessor\Coworkers.cs" />
+    <Compile Include="Accessors\ReviewAccessor\CreateReview.cs" />
+    <Compile Include="Accessors\ReviewAccessor\DeleteReview.cs" />
+    <Compile Include="Accessors\ReviewAccessor\FastReviewQueries.cs" />
+    <Compile Include="Accessors\ReviewAccessor\GenerateReview.cs" />
+    <Compile Include="Accessors\ReviewAccessor\GetReview.cs" />
+    <Compile Include="Accessors\ReviewAccessor\PopulateReview.cs" />
+    <Compile Include="Accessors\ReviewAccessor\ReviewAccessor.cs" />
+    <Compile Include="Accessors\ReviewAccessor\UpdateClientReport.cs" />
+    <Compile Include="Accessors\ReviewAccessor\UpdateEOSAnswers.cs" />
+    <Compile Include="Accessors\ReviewAccessor\UpdateReview.cs" />
+    <Compile Include="Accessors\ReviewAccessor\UpdateStandardAnswers.cs" />
+    <Compile Include="Accessors\RockAccessor.cs" />
+    <Compile Include="Accessors\RoleAccessor.cs" />
+    <Compile Include="Accessors\S3Response.cs" />
+    <Compile Include="Accessors\ScorecardAccessor.cs" />
+    <Compile Include="Accessors\SettingsAccessor.cs" />
+    <Compile Include="Accessors\SupportAccessor.cs" />
+    <Compile Include="Accessors\OldSurveyAccessor.cs" />
+    <Compile Include="Accessors\TaskAccessor.cs" />
+    <Compile Include="Accessors\TeamAccessor.cs" />
+    <Compile Include="Accessors\TestAccessor.cs" />
+    <Compile Include="Accessors\TodoAccessor.cs" />
+    <Compile Include="Accessors\TodoIntegrations\BaseCampAccessor.cs" />
+    <Compile Include="Accessors\TodoIntegrations\ExternalTodoAccessor.cs" />
+    <Compile Include="Accessors\TodoIntegrations\TrelloAccessor.cs" />
+    <Compile Include="Accessors\TrackingAccessor.cs" />
+    <Compile Include="Accessors\TranscriptAccessor.cs" />
+    <Compile Include="Accessors\UploadAccessor.cs" />
+    <Compile Include="Accessors\UserAccessor.cs" />
+    <Compile Include="Accessors\UserTemplateAccessor.cs" />
+    <Compile Include="Accessors\VtoAccessor.cs" />
+    <Compile Include="Api\V0\Admin.cs" />
+    <Compile Include="Api\V0\Users.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\FluentConfigs.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Api\V0\Scorecard.cs" />
+    <Compile Include="Api\BaseApiController.cs" />
+    <Compile Include="Controllers\ArchiveController.cs" />
+    <Compile Include="Controllers\CustomizeController.cs" />
+    <Compile Include="Controllers\HealthCheckController.cs" />
+    <Compile Include="Controllers\L10\L10AngularController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\GetStartedController.cs" />
+    <Compile Include="Controllers\QuarterlyController.cs" />
+    <Compile Include="Controllers\SupportController.cs" />
+    <Compile Include="Controllers\Upload\Upload_RocksController.cs" />
+    <Compile Include="Controllers\Upload\Upload_UsersController.cs" />
+    <Compile Include="Controllers\Upload\Upload_TodosController.cs" />
+    <Compile Include="Controllers\Upload\Upload_IssuesController.cs" />
+    <Compile Include="Controllers\Upload\Upload_ScorecardController.cs" />
+    <Compile Include="Controllers\WebhookController.cs" />
+    <Compile Include="Controllers\Ac\AccountabilityController.cs" />
+    <Compile Include="Controllers\CallbackController.cs" />
+    <Compile Include="Controllers\CompanyValuesController.cs" />
+    <Compile Include="Controllers\ConsoleController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\DropDownController.cs" />
+    <Compile Include="Controllers\EmailController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\FaqController.cs" />
+    <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Controllers\IssueController.cs" />
+    <Compile Include="Controllers\IssuesController.cs" />
+    <Compile Include="Controllers\JobDescriptionController.cs" />
+    <Compile Include="Controllers\L10\L10Controller.cs" />
+    <Compile Include="Controllers\L10\L10DataController.cs" />
+    <Compile Include="Controllers\L10\L10DetailsController.cs" />
+    <Compile Include="Controllers\L10\L10SubPageController.cs" />
+    <Compile Include="Controllers\LogStreamController.cs" />
+    <Compile Include="Controllers\MeasurableController.cs" />
+    <Compile Include="Controllers\MeetingController.cs" />
+    <Compile Include="Controllers\MeetingDataController.cs" />
+    <Compile Include="Controllers\OrganizationQuestionController.cs" />
+    <Compile Include="Controllers\PeriodController.cs" />
+    <Compile Include="Controllers\PermissionsController.cs" />
+    <Compile Include="Controllers\RocksController.cs" />
+    <Compile Include="Controllers\ScorecardController.cs" />
+    <Compile Include="Controllers\TileDataController.cs" />
+    <Compile Include="Controllers\TodoController.cs" />
+    <Compile Include="Controllers\TranscriptController.cs" />
+    <Compile Include="Controllers\TwilioApiController.cs" />
+    <Compile Include="Controllers\UserTemplateController.cs" />
+    <Compile Include="Controllers\VideoController.cs" />
+    <Compile Include="Controllers\VTOController.cs" />
+    <Compile Include="Controllers\VtoDataController.cs" />
+    <Compile Include="Controllers\WebRtcController.cs" />
+    <Compile Include="Controllers\PrereviewController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\RockstarController.cs" />
+    <Compile Include="Controllers\RolesController.cs" />
+    <Compile Include="Controllers\SchedulerController.cs" />
+    <Compile Include="Controllers\StatisticsController.cs" />
+    <Compile Include="Controllers\TasksController.cs" />
+    <Compile Include="Controllers\UnitTestController.cs" />
+    <Compile Include="Data.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Data.resx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\DataController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImageController.cs" />
+    <Compile Include="Controllers\LegalController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NexusController.cs" />
+    <Compile Include="Controllers\OrganizationController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
+    <Compile Include="Controllers\PositionController.cs" />
+    <Compile Include="Controllers\QuestionController.cs" />
+    <Compile Include="Controllers\ResponsibilitiesController.cs" />
+    <Compile Include="Controllers\ReviewController.cs" />
+    <Compile Include="Controllers\ReviewsController.cs" />
+    <Compile Include="Controllers\SurveysController.cs" />
+    <Compile Include="Controllers\TeamController.cs" />
+    <Compile Include="Controllers\TemplateController.cs" />
+    <Compile Include="Controllers\Upload\UploadController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="DependencyResolution\IoC.cs" />
+    <Compile Include="Engines\BaseEngine.cs" />
+    <Compile Include="Engines\ReviewEngine.cs" />
+    <Compile Include="Engines\UserEngine.cs" />
+    <Compile Include="Exceptions\FileTypeException.cs" />
+    <Compile Include="Exceptions\MeetingExceptions\MeetingException.cs" />
+    <Compile Include="Exceptions\NoUserOrganizationException.cs" />
+    <Compile Include="Exceptions\PaymentException.cs" />
+    <Compile Include="Exceptions\FallthroughException.cs" />
+    <Compile Include="Exceptions\PhoneException.cs" />
+    <Compile Include="Exceptions\SchedulerException.cs" />
+    <Compile Include="Exceptions\SyncException.cs" />
+    <Compile Include="Utilities\Helpers\HtmlPrefixScopeExtensions.cs" />
+    <Compile Include="Utilities\Helpers\SecuredValueHtmlHelper.cs" />
+    <Compile Include="Utilities\Helpers\SelectExtensions.cs" />
+    <Compile Include="Crosscutting\Hooks\HooksRegistry.cs" />
+    <Compile Include="Crosscutting\Hooks\Integrations\Outlook_TodoHook.cs" />
+    <Compile Include="Hubs\ToFix\AlertHub.cs" />
+    <Compile Include="Hubs\BaseHub.cs" />
+    <Compile Include="Hubs\ToFix\MessageHub.cs" />
+    <Compile Include="Hubs\ToFix\MeetingHub.cs" />
+    <Compile Include="Hubs\ToFix\OrganizationHub.cs" />
+    <Compile Include="Hubs\ToFix\VtoHub.cs" />
+    <Compile Include="Models\Accountability\AccountabilityModel.cs" />
+    <Compile Include="Models\Angular\Accountability\AngularAccountability.cs" />
+    <Compile Include="Models\Angular\DataType\AngularTree.cs" />
+    <Compile Include="Models\Angular\Base\Angularized.cs" />
+    <Compile Include="Models\Angular\Base\AngularList.cs" />
+    <Compile Include="Models\Angular\Base\BaseAngular.cs" />
+    <Compile Include="Models\Angular\Base\IAngularize.cs" />
+    <Compile Include="Models\Angular\CompanyValue\AngularCompanyValue.cs" />
+    <Compile Include="Models\Angular\Issues\AngularIssue.cs" />
+    <Compile Include="Models\Angular\Issues\AngularIssuesList.cs" />
+    <Compile Include="Models\Angular\Meeting\AngularAgendaItems.cs" />
+    <Compile Include="Models\Angular\Base\AngularUpdate.cs" />
+    <Compile Include="Models\Angular\Meeting\AngularMeetingMeasurable.cs" />
+    <Compile Include="Models\Angular\Meeting\AngularMeeting.cs" />
+    <Compile Include="Models\Angular\Base\AngularPointer.cs" />
+    <Compile Include="Models\Angular\Meeting\AngularMeetingNotes.cs" />
+    <Compile Include="Models\Angular\Meeting\AngularMeetingRock.cs" />
+    <Compile Include="Models\Angular\Meeting\AngularRecurrence.cs" />
+    <Compile Include="Models\Angular\Meeting\AngularWeek.cs" />
+    <Compile Include="Models\Angular\Positions\AngularPosition.cs" />
+    <Compile Include="Models\Angular\Rocks\AngularRock.cs" />
+    <Compile Include="Models\Angular\Roles\AngularRole.cs" />
+    <Compile Include="Models\Angular\Scorecard\AngularMeasurable.cs" />
+    <Compile Include="Models\Angular\Scorecard\AngularScore.cs" />
+    <Compile Include="Models\Angular\Scorecard\AngularScorecard.cs" />
+    <Compile Include="Models\Angular\Todos\AngularTodo.cs" />
+    <Compile Include="Models\Angular\Users\AngularUser.cs" />
+    <Compile Include="Models\Angular\Base\IAngular.cs" />
+    <Compile Include="Models\Angular\VTO\AngularVTO.cs" />
+    <Compile Include="Models\Application\KeyValueModel.cs" />
+    <Compile Include="Models\Application\MailModel.cs" />
+    <Compile Include="Models\Application\NameId.cs" />
+    <Compile Include="Models\Application\Tracker.cs" />
+    <Compile Include="Models\Application\UploadModel.cs" />
+    <Compile Include="Models\Application\YearStart.cs" />
+    <Compile Include="Models\Askables\AboutCompanyAskable.cs" />
+    <Compile Include="Models\Askables\RockModel.cs" />
+    <Compile Include="Models\Askables\CompanyValueModel.cs" />
+    <Compile Include="Models\Attach\AttachModel.cs" />
+    <Compile Include="Models\Audit\Audit.cs" />
+    <Compile Include="Models\Audit\RevisionEntity.cs" />
+    <Compile Include="Models\Charts\Checktree.cs" />
+    <Compile Include="Models\Charts\Histogram.cs" />
+    <Compile Include="Models\Charts\Line.cs" />
+    <Compile Include="Models\Charts\Scatter.cs" />
+    <Compile Include="Models\Charts\Table.cs" />
+    <Compile Include="Models\Completion\MultibarCompletion.cs" />
+    <Compile Include="Models\Components\Completion.cs" />
+    <Compile Include="Models\Components\ForModel.cs" />
+    <Compile Include="Models\Customize\CustomL10.cs" />
+    <Compile Include="Models\Dashboard\DashboardModel.cs" />
+    <Compile Include="Models\Dashboard\TileModel.cs" />
+    <Compile Include="Models\DeepAccountability.cs" />
+    <Compile Include="Models\DeepSubordinateModel.cs" />
+    <Compile Include="Models\Enums\AccountType.cs" />
+    <Compile Include="Models\Enums\AlertType.cs" />
+    <Compile Include="Models\Enums\AttachType.cs" />
+    <Compile Include="Models\Enums\BrandingType.cs" />
+    <Compile Include="Models\Enums\ChartDataSource.cs" />
+    <Compile Include="Models\Enums\DateOffset.cs" />
+    <Compile Include="Models\Enums\DateRangeType.cs" />
+    <Compile Include="Models\Enums\Env.cs" />
+    <Compile Include="Models\Enums\ExternalTodoType.cs" />
+    <Compile Include="Models\Enums\UserEnums.cs" />
+    <Compile Include="Models\Enums\LessGreater.cs" />
+    <Compile Include="Models\Enums\Month.cs" />
+    <Compile Include="Models\Enums\NumberFormat.cs" />
+    <Compile Include="Models\Enums\PaymentPlanType.cs" />
+    <Compile Include="Models\Enums\PositiveNegativeNeutral.cs" />
+    <Compile Include="Models\Enums\RepeatsType.cs" />
+    <Compile Include="Models\Enums\RockState.cs" />
+    <Compile Include="Models\Enums\FiveState.cs" />
+    <Compile Include="Models\Enums\TaskType.cs" />
+    <Compile Include="Models\Enums\Tristate.cs" />
+    <Compile Include="Models\Enums\UnitType.cs" />
+    <Compile Include="Models\ExtraTab.cs" />
+    <Compile Include="Models\Interfaces\ICompletable.cs" />
+    <Compile Include="Models\Enums\AboutType.cs" />
+    <Compile Include="Models\Interfaces\ICompletionModel.cs" />
+    <Compile Include="Models\Interfaces\IGuidIdentifiable.cs" />
+    <Compile Include="Models\Interfaces\IHistorical.cs" />
+    <Compile Include="Models\Interfaces\ITemporal.cs" />
+    <Compile Include="Models\Interfaces\IIssue.cs" />
+    <Compile Include="Models\Interfaces\IOneToMany.cs" />
+    <Compile Include="Models\Interfaces\IPagination.cs" />
+    <Compile Include="Models\Interfaces\IStringIdentifiable.cs" />
+    <Compile Include="Models\Charts\ChartOptions.cs" />
+    <Compile Include="Models\Charts\ScatterPlot.cs" />
+    <Compile Include="Models\Interfaces\ITimeline.cs" />
+    <Compile Include="Models\Interfaces\ITodo.cs" />
+    <Compile Include="Models\Issues\CopyIssueVM.cs" />
+    <Compile Include="Models\Issues\IssueModel.cs" />
+    <Compile Include="Models\Issues\IssueVM.cs" />
+    <Compile Include="Models\Issues\RockIssueVM.cs" />
+    <Compile Include="Models\Issues\ScoreCardIssueVM.cs" />
+    <Compile Include="Models\L10\AgendaItemType.cs" />
+    <Compile Include="Models\L10\L10Note.cs" />
+    <Compile Include="Models\L10\AV\AudioVideoUser.cs" />
+    <Compile Include="Models\L10\Transcript.cs" />
+    <Compile Include="Models\Log\LogItem.cs" />
+    <Compile Include="Models\Onboard\OnboardingUser.cs" />
+    <Compile Include="Models\Payments\PaymentMethodVM.cs" />
+    <Compile Include="Models\Payments\Itemized.cs" />
+    <Compile Include="Models\Payments\PaymentErrorLog.cs" />
+    <Compile Include="Models\Payments\PaymentOptions.cs" />
+    <Compile Include="Models\Payments\PaymentSpringCustomerCard.cs" />
+    <Compile Include="Models\Payments\PaymentSpringsCustomer.cs" />
+    <Compile Include="Models\Payments\PaymentTokenVM.cs" />
+    <Compile Include="Models\PermissionItem.cs" />
+    <Compile Include="Models\Permissions\PermissionDropdownVM.cs" />
+    <Compile Include="Models\Permissions\PermissionOverride.cs" />
+    <Compile Include="Models\PhoneModel.cs" />
+    <Compile Include="Models\Scorecard\ScorecardType.cs" />
+    <Compile Include="Models\Survey_OLD\SurveyContainerModel.cs" />
+    <Compile Include="Models\Survey_OLD\SurveyResultVMs.cs" />
+    <Compile Include="Models\Survey_OLD\SurveyTake.cs" />
+    <Compile Include="Models\Synchronize\Sync.cs" />
+    <Compile Include="Models\Tests\TestUrl.cs" />
+    <Compile Include="Models\Timeline\MeetingTimeline.cs" />
+    <Compile Include="Models\Todo\ExternalTodoCreds.cs" />
+    <Compile Include="Models\Todo\RockTodoVM.cs" />
+    <Compile Include="Models\Todo\ScoreCardTodoVM.cs" />
+    <Compile Include="Models\L10\FocusType.cs" />
+    <Compile Include="Models\L10\L10Meeting.cs" />
+    <Compile Include="Models\L10\L10MeetingAttendee.cs" />
+    <Compile Include="Models\L10\L10Rock.cs" />
+    <Compile Include="Models\L10\old\L10Meeting_Item.cs" />
+    <Compile Include="Models\L10\L10Recurrence.cs" />
+    <Compile Include="Models\L10\VM\L10EditVM.cs" />
+    <Compile Include="Models\L10\VM\L10IssuesData.cs" />
+    <Compile Include="Models\L10\VM\L10ListingVM.cs" />
+    <Compile Include="Models\L10\VM\L10MeetingStatsVM.cs" />
+    <Compile Include="Models\L10\VM\L10MeetingVM.cs" />
+    <Compile Include="Models\L10\VM\L10TodoData.cs" />
+    <Compile Include="Models\L10\VM\L10VM.cs" />
+    <Compile Include="Models\Pdf\PdfModel.cs" />
+    <Compile Include="Models\Periods\PeriodModel.cs" />
+    <Compile Include="Models\Prereview\PrereviewMatchModel.cs" />
+    <Compile Include="Models\Prereview\PrereviewModel.cs" />
+    <Compile Include="Models\RatioModel.cs" />
+    <Compile Include="Models\Askables\AskableAbout.cs" />
+    <Compile Include="Models\Enums\WeightType.cs" />
+    <Compile Include="Models\Reviews\ClientReviewModel.cs" />
+    <Compile Include="Models\Reviews\CustomizeModel.cs" />
+    <Compile Include="Models\Reviews\ReviewContainerStats.cs" />
+    <Compile Include="Models\Reviews\ReviewParameters.cs" />
+    <Compile Include="Models\Reviews\ReviewWhoModel.cs" />
+    <Compile Include="Models\Rockstars\RockstarModel.cs" />
+    <Compile Include="Models\Scheduler\EventModel.cs" />
+    <Compile Include="Models\Scheduler\RecurrenceModel.cs" />
+    <Compile Include="Models\Scorecard\MeasurableModel.cs" />
+    <Compile Include="Models\Scorecard\ScoreModel.cs" />
+    <Compile Include="Models\Tasks\ScheduledTask.cs" />
+    <Compile Include="Models\Tasks\TaskModel.cs" />
+    <Compile Include="Models\Template\TemplateItem.cs" />
+    <Compile Include="Models\Template\TemplateItemChart.cs" />
+    <Compile Include="Models\Template\TemplateItemFeedback.cs" />
+    <Compile Include="Models\Template\TemplateItemGroup.cs" />
+    <Compile Include="Models\Template\TemplateModel.cs" />
+    <Compile Include="Models\Todo\TodoModel.cs" />
+    <Compile Include="Models\Todo\TodoFromIssueVM.cs" />
+    <Compile Include="Models\Todo\TodoVM.cs" />
+    <Compile Include="Models\UserModels\ManagerDuration.cs" />
+    <Compile Include="Models\Askables\RoleModel.cs" />
+    <Compile Include="Models\UserModels\ProfilePictureVM.cs" />
+    <Compile Include="Models\UserModels\TempUserModel.cs" />
+    <Compile Include="Models\UserModels\UserLookup.cs" />
+    <Compile Include="Models\UserModels\UserStyleSettings.cs" />
+    <Compile Include="Models\UserTemplate\IUserTemplateItem.cs" />
+    <Compile Include="Models\UserTemplate\UserTemplate.cs" />
+    <Compile Include="Models\UserTemplate\UserTemplateVM.cs" />
+    <Compile Include="Models\VideoConference\VideoConferenceVM.cs" />
+    <Compile Include="Models\ViewModels\AdditionalReviewViewModel.cs" />
+    <Compile Include="Models\Completion\TwoBarCompletion.cs" />
+    <Compile Include="Models\Enums\TeamType.cs" />
+    <Compile Include="Models\Askables\Askable.cs" />
+    <Compile Include="Models\Askables\ResponsibilityModel.cs" />
+    <Compile Include="Models\Askables\ResponsibilityGroups.cs" />
+    <Compile Include="Models\Enums\ThumbsType.cs" />
+    <Compile Include="Models\Askables\PositionModel.cs" />
+    <Compile Include="Models\Reviews\AnswerModels.cs" />
+    <Compile Include="Models\Enums\BootstrapGlyphs.cs" />
+    <Compile Include="Models\Enums\OriginType.cs" />
+    <Compile Include="Models\Enums\QuestionType.cs" />
+    <Compile Include="Models\Enums\UploadType.cs" />
+    <Compile Include="Models\Application\ImageModel.cs" />
+    <Compile Include="Models\Application\IndustryModel.cs" />
+    <Compile Include="Models\Interfaces\ILongIdentifiable.cs" />
+    <Compile Include="Models\Interfaces\IOrigin.cs" />
+    <Compile Include="Models\Application\LocalizedStringModel.cs" />
+    <Compile Include="Models\Application\LongModel.cs" />
+    <Compile Include="Models\Application\Origin.cs" />
+    <Compile Include="Models\Payments\PaymentPlanModel.cs" />
+    <Compile Include="Models\Enums\RelativeComparisonType.cs" />
+    <Compile Include="Models\Reviews\ReviewModel.cs" />
+    <Compile Include="Models\Reviews\ReviewsModel.cs" />
+    <Compile Include="Models\UserModels\PositionDuration.cs" />
+    <Compile Include="Models\UserModels\TeamDuration.cs" />
+    <Compile Include="Models\ViewModels\ProfileViewModel.cs" />
+    <Compile Include="Models\ViewModels\ScorecardRowVM.cs" />
+    <Compile Include="Models\ViewModels\TemplateViewModel.cs" />
+    <Compile Include="Models\ViewModels\UserOrganizationViewModel.cs" />
+    <Compile Include="Models\ViewModels\ImageUploadViewModel.cs" />
+    <Compile Include="Models\ViewModels\IssueReviewViewModel.cs" />
+    <Compile Include="Models\ViewModels\ManageUserViewModel.cs" />
+    <Compile Include="Models\ViewModels\OrganizationMembersViewModel.cs" />
+    <Compile Include="Models\ViewModels\OrganizationPositionViewModel.cs" />
+    <Compile Include="Models\ViewModels\OrganizationTeamViewModels.cs" />
+    <Compile Include="Models\ViewModels\OrganizationViewModel.cs" />
+    <Compile Include="Models\ViewModels\OrgReviewsViewModel.cs" />
+    <Compile Include="Models\ViewModels\PositionViewModel.cs" />
+    <Compile Include="Models\ViewModels\QuestionModalViewModel.cs" />
+    <Compile Include="Models\ViewModels\QuestionsViewModel.cs" />
+    <Compile Include="Models\ViewModels\ResponsibilitiesViewModel.cs" />
+    <Compile Include="Models\ViewModels\ResponsibilityViewModel.cs" />
+    <Compile Include="Models\ViewModels\ReviewsListViewModel.cs" />
+    <Compile Include="Models\ViewModels\ReviewsViewModel.cs" />
+    <Compile Include="Models\ViewModels\TeamResponsibilitiesViewModel.cs" />
+    <Compile Include="Models\ViewModels\UserPositionViewModel.cs" />
+    <Compile Include="Models\ViewModels\UserTemplateVM.cs" />
+    <Compile Include="Models\VTO\VtoModel.cs" />
+    <Compile Include="Models\Webhook\BasecampWebhook.cs" />
+    <Compile Include="Properties\ErrorMessageStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorMessageStrings.resx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Properties\DisplayNameStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DisplayNameStrings.resx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Exceptions\LoginException.cs" />
+    <Compile Include="Exceptions\OrganizationIdException.cs" />
+    <Compile Include="Exceptions\PermissionsException.cs" />
+    <Compile Include="Exceptions\RedirectException.cs" />
+    <Compile Include="Exceptions\UnknownException.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\Helpers\HtmlExtensions.cs" />
+    <Compile Include="Models\Interfaces\IDeletable.cs" />
+    <Compile Include="Properties\MessageStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MessageStrings.resx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Models\ViewModels\AccountViewModels.cs" />
+    <Compile Include="Models\Application\ApplicationWideModel.cs" />
+    <Compile Include="Models\Attributes\IndexAttribute.cs" />
+    <Compile Include="Models\Application\EmailModel.cs" />
+    <Compile Include="Models\Enums\Currency.cs" />
+    <Compile Include="Models\Enums\NexusActions.cs" />
+    <Compile Include="Models\Application\GroupModels.cs" />
+    <Compile Include="Models\Interfaces\ICustomQuestions.cs" />
+    <Compile Include="Models\Payments\InvoiceItemModel.cs" />
+    <Compile Include="Models\Payments\InvoiceModel.cs" />
+    <Compile Include="Models\Json\ResultObject.cs" />
+    <Compile Include="Models\Application\NexusModels.cs" />
+    <Compile Include="Models\NHibernateUtility\GuidStringGenerator.cs" />
+    <Compile Include="Models\Application\OrganizationModel.cs" />
+    <Compile Include="Models\Payments\PaymentModel.cs" />
+    <Compile Include="Models\QuestionModels\QuestionCategoryModel.cs" />
+    <Compile Include="Models\QuestionModels\QuestionKeyValues.cs" />
+    <Compile Include="Models\QuestionModels\QuestionModel.cs" />
+    <Compile Include="Models\Application\UrlModel.cs" />
+    <Compile Include="Models\Application\UserLogin.cs" />
+    <Compile Include="Models\UserModels\UserClaim.cs" />
+    <Compile Include="Models\UserModels\UserModel.cs" />
+    <Compile Include="Models\UserModels\UserOrganizationModel.cs" />
+    <Compile Include="Models\UserModels\UserRoleModel.cs" />
+    <Compile Include="Models\ViewModels\DragDropViewModel.cs" />
+    <Compile Include="Models\ViewModels\GroupViewModel.cs" />
+    <Compile Include="Models\ViewModels\ManageViewModel.cs" />
+    <Compile Include="Models\ViewModels\OrganizationUserViewModel.cs" />
+    <Compile Include="NHibernate\NHibernateUserManager.cs" />
+    <Compile Include="NHibernate\NHibernateUserStore.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\ConstantStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConstantStrings.resx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Properties\EmailStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmailStrings.resx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Properties\ExceptionStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExceptionStrings.resx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Properties\EmailTypes.Designer.cs">
+      <DependentUpon>EmailTypes.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Properties\ProductStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductStrings.resx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Properties\MandrillStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MandrillStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Startup.cs" />
+    <Compile Include="Models\Enums\AccessLevel.cs" />
+    <Compile Include="Controllers\TController.cs" />
+    <Compile Include="Utilities\AwsUtil.cs" />
+    <Compile Include="Utilities\Attributes\Cache\Cache.cs" />
+    <Compile Include="Utilities\Attributes\Cache\CacheKeys.cs" />
+    <Compile Include="Utilities\DataTypes\AccountabilityTree.cs" />
+    <Compile Include="Utilities\DataTypes\Chart.cs" />
+    <Compile Include="Utilities\DataTypes\DateRange.cs" />
+    <Compile Include="Utilities\DataTypes\DiscreteDistribution.cs" />
+    <Compile Include="Utilities\DataTypes\Histogram.cs" />
+    <Compile Include="Utilities\DataTypes\Ratio.cs" />
+    <Compile Include="Utilities\Config.cs" />
+    <Compile Include="Utilities\DataTypes\Rect.cs" />
+    <Compile Include="Utilities\DataTypes\TimeData.cs" />
+    <Compile Include="Utilities\DataTypes\TinyUser.cs" />
+    <Compile Include="Utilities\DbUtil.cs" />
+    <Compile Include="Utilities\Encrypt\Crypto.cs" />
+    <Compile Include="Utilities\Events\EventType.cs" />
+    <Compile Include="Utilities\Events\EventUtil.cs" />
+    <Compile Include="Utilities\ExceptionUtility.cs" />
+    <Compile Include="Utilities\Extensions\AuditExtensions.cs" />
+    <Compile Include="Utilities\Extensions\ExpressionExtensions.cs" />
+    <Compile Include="Utilities\Extensions\IssuesExtensions.cs" />
+    <Compile Include="Utilities\Extensions\Math2.cs" />
+    <Compile Include="Utilities\Audit.cs" />
+    <Compile Include="Utilities\Extensions\TimespanExtensions.cs" />
+    <Compile Include="Utilities\Extensions\ViewBagExtensions.cs" />
+    <Compile Include="Utilities\FileUtilities.cs" />
+    <Compile Include="Utilities\Algorithms\DistanceUtility.cs" />
+    <Compile Include="Utilities\ForModelUtil.cs" />
+    <Compile Include="Utilities\FormulaUtility.cs" />
+    <Compile Include="Utilities\GraphUtility.cs" />
+    <Compile Include="Utilities\HashUtil.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IAccountEvent.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\ICreateIssue.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IHeadlineHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IMeasurableHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IMeetingEvents.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IMeetingItemHooks.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IOrganizationHooks.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IUserRoleHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IScoreHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IRockHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\ITaskHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\ITodoHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IUserHooks.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IRolesHook.cs" />
+    <Compile Include="Utilities\HtmlUtility.cs" />
+    <Compile Include="Utilities\Integrations\ActiveCampaign.cs" />
+    <Compile Include="Utilities\NHibernateHelper.cs" />
+    <Compile Include="Utilities\NHibernate\AuditEventListener.cs" />
+    <Compile Include="Utilities\NHibernate\Context.cs" />
+    <Compile Include="Utilities\NHibernate\CustomAuditStrategy.cs" />
+    <Compile Include="Utilities\NHibernate\NHibernateProxyJsonConvert.cs" />
+    <Compile Include="Utilities\NHibernate\OrderedSession.cs" />
+    <Compile Include="Utilities\NHibernate\SingleRequestTransaction.cs" />
+    <Compile Include="Utilities\NHibernate\SingleRequestSession.cs" />
+    <Compile Include="Utilities\NumberUtility.cs" />
+    <Compile Include="Utilities\PaymentSpringUtil.cs" />
+    <Compile Include="Utilities\Pdf\LayoutOptimizer.cs" />
+    <Compile Include="Utilities\Pdf\LayoutTimeoutException.cs" />
+    <Compile Include="Utilities\Pdf\LayoutTrialResult.cs" />
+    <Compile Include="Utilities\Pdf\MultiPageDocument.cs" />
+    <Compile Include="Utilities\Pdf\PdfDocumentAndStats.cs" />
+    <Compile Include="Utilities\Pdf\PdfOptimizer.cs" />
+    <Compile Include="Utilities\Pdf\PdfWordWrapper.cs" />
+    <Compile Include="Utilities\PermissionItemHelper.cs" />
+    <Compile Include="Utilities\PermissionsLister\MultiUserPermissionsUtility.cs" />
+    <Compile Include="Utilities\PermissionsLister\UserPermissions.cs" />
+    <Compile Include="Utilities\Productivity\ChromeExtensionComms.cs" />
+    <Compile Include="Utilities\RandomUtil.cs" />
+    <Compile Include="Utilities\RealTime\OrganizationUpdater.cs" />
+    <Compile Include="Utilities\RealTime\RealTimeUtility.cs" />
+    <Compile Include="Utilities\RealTime\RecurrenceUpdater.cs" />
+    <Compile Include="Utilities\RealTime\RTUserUpdater.cs" />
+    <Compile Include="Utilities\RealTime\VtoUpdater.cs" />
+    <Compile Include="Utilities\ReflectionUtility.cs" />
+    <Compile Include="Utilities\ResourceUtility.cs" />
+    <Compile Include="Utilities\SearchUtil.cs" />
+    <Compile Include="Utilities\Security\CorsUtility.cs" />
+    <Compile Include="Utilities\SelectExistingOrCreateUtility.cs" />
+    <Compile Include="Utilities\Serializers\AttachedPermissionSerializer.cs" />
+    <Compile Include="Utilities\Serializers\JsonSerializer.cs" />
+    <Compile Include="Utilities\Serializers\AngularSerializer.cs" />
+    <Compile Include="Utilities\ServerSettings.cs" />
+    <Compile Include="Utilities\SetUtility.cs" />
+    <Compile Include="Utilities\AskableUtility.cs" />
+    <Compile Include="Utilities\Attributes\IconAttribute.cs" />
+    <Compile Include="Utilities\Attributes\AccessAttribute.cs" />
+    <Compile Include="Engines\ChartsEngine.cs" />
+    <Compile Include="Utilities\DataTypes\CounterSet.cs" />
+    <Compile Include="Utilities\DataTypes\MultiQuery.cs" />
+    <Compile Include="Utilities\Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Utilities\DataTypes\Pool.cs" />
+    <Compile Include="Utilities\Extensions\PaginationExtensions.cs" />
+    <Compile Include="Utilities\Extensions\StreamExtension.cs" />
+    <Compile Include="Utilities\Pop3Utility.cs" />
+    <Compile Include="Utilities\ServerUtility.cs" />
+    <Compile Include="Utilities\Chart\ChartUtility.cs" />
+    <Compile Include="Utilities\CsvUtility.cs" />
+    <Compile Include="Utilities\DataTypes\Coworker.cs" />
+    <Compile Include="Utilities\DataTypes\Csv.cs" />
+    <Compile Include="Utilities\DataTypes\DefaultDictionary.cs" />
+    <Compile Include="Utilities\DataTypes\EqualityComparer.cs" />
+    <Compile Include="Utilities\DataTypes\Multimap.cs" />
+    <Compile Include="Utilities\DataTypes\Tree.cs" />
+    <Compile Include="Utilities\DragDropUtility.cs" />
+    <Compile Include="Utilities\Extensions\AboutTypeExtensions.cs" />
+    <Compile Include="Utilities\Extensions\ChartExtensions.cs" />
+    <Compile Include="Utilities\Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Utilities\Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Utilities\Extensions\EnumExtensions.cs" />
+    <Compile Include="Utilities\Extensions\JavascriptExtensions.cs" />
+    <Compile Include="Utilities\Extensions\ObjectExtensions.cs" />
+    <Compile Include="Utilities\Extensions\OrganizationExtensions.cs" />
+    <Compile Include="Utilities\Extensions\OriginExtensions.cs" />
+    <Compile Include="Utilities\Extensions\QuestionModelExtensions.cs" />
+    <Compile Include="Utilities\Extensions\ReviewExtensions.cs" />
+    <Compile Include="Utilities\Extensions\SessionExtensions.cs" />
+    <Compile Include="Utilities\Extensions\StringExtensions.cs" />
+    <Compile Include="Utilities\Extensions\UserOrganizationExtensions.cs" />
+    <Compile Include="Utilities\HeatMapBinner.cs" />
+    <Compile Include="Utilities\NHibernate\HibernateSession.cs" />
+    <Compile Include="Utilities\Extensions\LocalizationExtensions.cs" />
+    <Compile Include="Utilities\HttpContextUtility.cs" />
+    <Compile Include="Utilities\PermissionsUtility.cs" />
+    <Compile Include="Utilities\Query\AbstractQuery.cs" />
+    <Compile Include="Utilities\Query\AbstractUpdate.cs" />
+    <Compile Include="Utilities\Query\DataInteraction.cs" />
+    <Compile Include="Utilities\Query\IEnumerableQuery.cs" />
+    <Compile Include="Utilities\Query\IEnumerableTransaction.cs" />
+    <Compile Include="Utilities\Query\SessionQuery.cs" />
+    <Compile Include="Utilities\Query\SessionUpdate.cs" />
+    <Compile Include="Utilities\RandomUtility.cs" />
+    <Compile Include="Utilities\ShortenerUtility.cs" />
+    <!--<Compile Include="Utilities\NHibernate\SingleRequestTransaction.cs" />-->
+    <Compile Include="Utilities\StreamUtil.cs" />
+    <Compile Include="Utilities\SubordinateUtility.cs" />
+    <Compile Include="Utilities\Synchronize\CancellationException.cs" />
+    <Compile Include="Utilities\Synchronize\SyncAction.cs" />
+    <Compile Include="Utilities\Synchronize\SyncUtil.cs" />
+    <Compile Include="Utilities\Testing\RandomWordUtility.cs" />
+    <Compile Include="Utilities\TestUtilities.cs" />
+    <Compile Include="Utilities\TimingUtility.cs" />
+    <Compile Include="Utilities\ViewUtility.cs" />
+    <Compile Include="Models\Audit\LogModel.cs" />
+    <Compile Include="Utilities\ZipUtility.cs" />
+    <Compile Include="WebHooks\DataSecurity.cs" />
+    <Compile Include="WebHooks\RadialWebHookStore.cs" />
+    <Compile Include="WebHooks\TestHandler.cs" />
+    <None Include=".bin\bower.cmd" />
+    <None Include=".bin\git.cmd" />
+    <None Include=".bin\node.cmd" />
+    <Content Include="Content\AccountabilityChart\AccountabilityChart.less">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\AccountabilityChart\AccountabilityChart.css">
+      <DependentUpon>AccountabilityChart.less</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Angular\Issues.css">
+      <DependentUpon>Issues.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Angular\LineChart.css">
+      <DependentUpon>LineChart.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Angular\livesearch.css" />
+    <Content Include="Areas\People\Views\web.config" />
+    <Content Include="Areas\People\Views\Main\Index.cshtml" />
+    <Content Include="Areas\People\Views\QuarterlyConversation\Index.cshtml" />
+    <Content Include="Content\AngularTemplates\People\Survey\surveyContainer.html" />
+    <Content Include="Areas\People\Views\QuarterlyConversation\Questions.cshtml" />
+    <Content Include="Areas\People\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\People\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\People\Views\QuarterlyConversation\Issue.cshtml" />
+    <Content Include="Areas\People\Views\PeopleAnalyzer\Index.cshtml" />
+    <Content Include="Areas\People\Views\QuarterlyConversation\Surveys.cshtml" />
+    <None Include="bundleconfig.json" />
+    <None Include="Content\Angular\ngsortable.less" />
+    <Content Include="Content\Angular\ngsortable.css">
+      <DependentUpon>ngsortable.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Angular\ProfilePicture.css">
+      <DependentUpon>ProfilePicture.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Angular\Rocks.css">
+      <DependentUpon>Rocks.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Angular\tablesort.css" />
+    <Content Include="Content\Angular\xeditable.min.css" />
+    <Content Include="Content\bootstrap-duallistbox.css" />
+    <Content Include="Content\bootstrap\buttons.css">
+      <DependentUpon>buttons.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\custom\XEditable.css">
+      <DependentUpon>XEditable.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Chart\metric-graphics.css">
+      <DependentUpon>metric-graphics.less</DependentUpon>
+    </Content>
+    <Content Include="Content\creditcard_icon\bank.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\etherpad\web.css" />
+    <Content Include="Content\favicon-local.ico" />
+    <Content Include="Content\GettingStarted\GettingStarted.css">
+      <DependentUpon>GettingStarted.less</DependentUpon>
+    </Content>
+    <Content Include="Content\img\Elite_Tools_Logo_Horizontal_Wht_B.png" />
+    <Content Include="Content\img\Elite_Tools_Logo_Large_Vertical_Wht_A.png" />
+    <Content Include="Content\img\Elite_Tools_Logo_Vertical_Wht_B.png" />
+    <Content Include="Content\img\TRACTION-TOOLS_large_stacked_2c.png" />
+    <Content Include="Content\img\TractionTools Email Banner.jpg" />
+    <Content Include="Content\Inputs\IOSwitch.css">
+      <DependentUpon>IOSwitch.less</DependentUpon>
+    </Content>
+    <Content Include="Content\L10\L10Scorecard.css">
+      <DependentUpon>L10Scorecard.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Inputs\TagInput.css">
+      <DependentUpon>TagInput.less</DependentUpon>
+    </Content>
+    <Content Include="Content\People\MaterialRadio.css">
+      <DependentUpon>MaterialRadio.less</DependentUpon>
+    </Content>
+    <Content Include="Content\People\PeopleAnalyzer.css">
+      <DependentUpon>PeopleAnalyzer.less</DependentUpon>
+    </Content>
+    <Content Include="Content\People\QuarterlyConversation.css">
+      <DependentUpon>QuarterlyConversation.less</DependentUpon>
+    </Content>
+    <Content Include="Content\People\rzslider.css">
+      <DependentUpon>rzslider.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Quarterly\main.css" />
+    <Content Include="Content\Quarterly\print.css" />
+    <Content Include="Content\SnackbarAlerts.css">
+      <DependentUpon>SnackbarAlerts.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="Content\Swagger\CustomSwaggerStyle.css">
+      <DependentUpon>CustomSwaggerStyle.less</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Content\test.css" />
+    <Content Include="Content\test.html" />
+    <Content Include="Content\img\graystripe-light.png" />
+    <Content Include="Content\L10\Archive\Archive.css">
+      <DependentUpon>Archive.less</DependentUpon>
+    </Content>
+    <Content Include="Content\L10\l10-ie-only.css">
+      <DependentUpon>l10-ie-only.less</DependentUpon>
+    </Content>
+    <Content Include="Content\L10\L10.css">
+      <DependentUpon>L10.less</DependentUpon>
+    </Content>
+    <Content Include="Content\L10\L10Headlines.css">
+      <DependentUpon>L10Headlines.less</DependentUpon>
+    </Content>
+    <Content Include="Content\L10\L10IDS.V2.css">
+      <DependentUpon>L10IDS.V2.less</DependentUpon>
+    </Content>
+    <Content Include="Content\L10\L10Rocks.css">
+      <DependentUpon>L10Rocks.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Manage\Manage.css">
+      <DependentUpon>Manage.less</DependentUpon>
+    </Content>
+    <Content Include="Content\MaterialDesign\Components\Animations.css">
+      <DependentUpon>Animations.less</DependentUpon>
+    </Content>
+    <Content Include="Content\MaterialDesign\Components\Buttons.css">
+      <DependentUpon>Buttons.less</DependentUpon>
+    </Content>
+    <Content Include="Content\MaterialDesign\Components\DataTable.css">
+      <DependentUpon>DataTable.less</DependentUpon>
+    </Content>
+    <Content Include="Content\MaterialDesign\Components\MaterialDesign.css">
+      <DependentUpon>MaterialDesign.less</DependentUpon>
+    </Content>
+    <Content Include="Content\MaterialDesign\Components\Shading.css">
+      <DependentUpon>Shading.less</DependentUpon>
+    </Content>
+    <Content Include="Content\MaterialDesign\Components\Inputs.css">
+      <DependentUpon>Inputs.less</DependentUpon>
+    </Content>
+    <Content Include="Content\MaterialDesign\Components\Progress.css">
+      <DependentUpon>Progress.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\custom\modal.css">
+      <DependentUpon>modal.less</DependentUpon>
+    </Content>
+    <Content Include="Content\creditcard_icon\amex.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\creditcard_icon\discover.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\creditcard_icon\mastercard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\creditcard_icon\visa.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\email\Checked.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\email\Unchecked.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\images\glyphicons-halflings-white.png" />
+    <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\img\123.png" />
+    <Content Include="Content\img\ajax-loader-ob.gif" />
+    <Content Include="Content\img\ajax-loader-orange.gif" />
+    <EmbeddedResource Include="Content\embedded\EOS_Model.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Content\img\EOS_Model.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\img\material-indefinite-spinner.svg">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Content\img\particles.gif" />
+    <Content Include="Content\L10\fireworks.css" />
+    <Content Include="Content\L10\L10ChatLog.css">
+      <DependentUpon>L10ChatLog.less</DependentUpon>
+    </Content>
+    <Content Include="Content\L10\L10Transcribe.css" />
+    <Content Include="Content\L10\L10Wizard.css">
+      <DependentUpon>L10Wizard.less</DependentUpon>
+    </Content>
+    <Content Include="Content\MaterialDesign\Components\Snackbar.css">
+      <DependentUpon>Snackbar.less</DependentUpon>
+    </Content>
+    <Content Include="Content\MaterialDesign\Libraries\lf-ng-md-file-input.css" />
+    <Content Include="Content\MaterialDesign\Libraries\md-stepper.css" />
+    <Content Include="Content\Reports\ClientDetails.css">
+      <DependentUpon>ClientDetails.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Reports\ReportDetails.css">
+      <DependentUpon>ReportDetails.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Reports\Reports.css">
+      <DependentUpon>Reports.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Tour\anno.css" />
+    <Content Include="Content\Upload.css" />
+    <Content Include="Content\V2\fireworksd.gif" />
+    <Content Include="Content\Upload\Upload.css">
+      <DependentUpon>Upload.less</DependentUpon>
+    </Content>
+    <Content Include="Content\V2\airplane.gif" />
+    <Content Include="Content\V2\copyright.gif" />
+    <Content Include="Content\V2\error.png" />
+    <Content Include="Content\V2\fire.gif" />
+    <Content Include="Content\V2\info.png" />
+    <Content Include="Content\V2\maggie.png" />
+    <Content Include="Content\V2\play.gif" />
+    <Content Include="Content\V2\play0.gif" />
+    <Content Include="Content\V2\play2.gif" />
+    <Content Include="Content\V2\play3.gif" />
+    <Content Include="Content\V2\play5.gif" />
+    <Content Include="Content\V2\success.png" />
+    <Content Include="Content\V2\tetris.jpg" />
+    <Content Include="Content\V2\tt.gif" />
+    <Content Include="Content\V2\tv.gif" />
+    <Content Include="Content\VTO\VTO.css">
+      <DependentUpon>VTO.less</DependentUpon>
+    </Content>
+    <Content Include="Data\nickname.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Content\ttf\Arial.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Content\ttf\Arial Bold.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Content\ttf\Arial Narrow Bold.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Content\ttf\Arial Narrow.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Content\L10\L10Wizard.less" />
+    <Content Include="Content\Angular\Rocks.less" />
+    <Content Include="Content\Angular\Issues.less" />
+    <Content Include="Content\Inputs\IOSwitch.less" />
+    <None Include="Data\APS.cert" />
+    <Content Include="IIS\install.zip" />
+    <Content Include="Content\bootstrap\custom\modal.less" />
+    <Content Include="Content\MaterialDesign\Components\Progress.less" />
+    <Content Include="Content\Angular\ProfilePicture.less" />
+    <Content Include="Content\MaterialDesign\Components\MaterialDesign.less" />
+    <Content Include="Content\MaterialDesign\Components\Shading.less" />
+    <Content Include="Content\MaterialDesign\Components\Buttons.less" />
+    <Content Include="Content\MaterialDesign\Components\Inputs.less" />
+    <Content Include="Content\Upload\Upload.less" />
+    <Content Include="Content\MaterialDesign\Components\Snackbar.less" />
+    <Content Include="Content\MaterialDesign\Components\Animations.less" />
+    <Content Include="Content\MaterialDesign\Components\DataTable.less" />
+    <Content Include="Content\L10\Archive\Archive.less" />
+    <Content Include="Content\GettingStarted\GettingStarted.less" />
+    <Content Include="Content\L10\L10.less" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="Content\Manage\Manage.less" />
+    <Content Include="Content\bootstrap\custom\XEditable.less" />
+    <Content Include="Content\Angular\LineChart.less" />
+    <Content Include="Content\L10\L10Headlines.less" />
+    <Content Include="Content\Reports\Reports.less" />
+    <Content Include="Content\Reports\ReportDetails.less" />
+    <Content Include="Content\Reports\ClientDetails.less" />
+    <Content Include="Content\VTO\VTO.less" />
+    <Content Include="Content\L10\L10IDS.V2.less" />
+    <Content Include="Content\L10\l10-ie-only.less" />
+    <Content Include="Content\L10\L10Rocks.less" />
+    <Content Include="Content\SnackbarAlerts.less" />
+    <Content Include="Content\People\QuarterlyConversation.less" />
+    <Content Include="Content\People\PeopleAnalyzer.less" />
+    <Content Include="Content\People\rzslider.less" />
+    <Content Include="Content\People\MaterialRadio.less" />
+    <Content Include="project.json" />
+    <Content Include="Content\Swagger\CustomSwaggerStyle.less" />
+    <Compile Include="Crosscutting\Hooks\Interfaces\IPaymentHook.cs" />
+    <Compile Include="Crosscutting\Hooks\Realtime\L10\RealTime_L10_Headline.cs" />
+    <Content Include="Content\Inputs\TagInput.less" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\Checked.png" />
+    <None Include="Resources\star.png" />
+    <None Include="Resources\Unchecked.png" />
+    <None Include="Resources\EOS_Model.png" />
+    <None Include="Resources\closed.gif" />
+    <None Include="Resources\open.gif" />
+    <None Include="Resources\AppleAPS.txt" />
+    <Content Include="Scripts\Angular\AccountabilityChart\ACController.js" />
+    <Content Include="Scripts\Angular\angular.js" />
+    <Content Include="Scripts\Angular\GettingStartd\GSApp.js" />
+    <Content Include="Scripts\Angular\GettingStartd\GSController.js" />
+    <Content Include="Scripts\Angular\Helpers\angular-content-editable.js" />
+    <Content Include="Scripts\Angular\Helpers\angular-elastic-input.js" />
+    <Content Include="Scripts\Angular\Helpers\d3\LineChart.js" />
+    <Content Include="Scripts\Angular\Helpers\d3\panzoom.js" />
+    <Content Include="Scripts\Angular\Helpers\d3\tree.js" />
+    <Content Include="Scripts\Angular\Helpers\d3\barchart.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\AnywhereButHere.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\ElemReady.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\FastWidth.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\fcsaNumber.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\LiveSearch.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\PriorityTemplates.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\RightClick.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\ScoreTemplates.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\TableSort.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\vsRepeat.js" />
+    <Content Include="Scripts\Angular\Helpers\Libraries\angular-material-custom.js" />
+    <Content Include="Scripts\Angular\Helpers\Libraries\angular-xeditable.js" />
+    <Content Include="Scripts\Angular\Helpers\Libraries\ngfittext.js" />
+    <Content Include="Scripts\Angular\Helpers\Libraries\ngsortable.js" />
+    <Content Include="Scripts\Angular\Helpers\Libraries\vs-repeat.js" />
+    <Content Include="Scripts\Angular\Helpers\radialModule.js" />
+    <Content Include="Scripts\Angular\Helpers\updater.js" />
+    <Content Include="Scripts\Angular\MaterialDesign\lf-ng-md-file-input.js" />
+    <Content Include="Scripts\Angular\MaterialDesign\lf-ng-md-file-input.min.js">
+      <DependentUpon>lf-ng-md-file-input.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Angular\MaterialDesign\md-data-table.js" />
+    <Content Include="Scripts\Angular\MaterialDesign\md-stepper.js" />
+    <Content Include="Scripts\Angular\People\PeopleAnalyzer\PeopleAnalyzer.js" />
+    <Content Include="Scripts\Angular\People\init.js" />
+    <Content Include="Scripts\Angular\People\Survey\SurveyComponents.js" />
+    <Content Include="Scripts\Angular\Tiles\L10StatsTile.js" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
+    <Content Include="Scripts\Charts\metrics-graphics.js" />
+    <Content Include="Scripts\components\jquery.bootstrap-duallistbox.js" />
+    <Content Include="Scripts\AccountabilityChart\accountabilityChart.js" />
+    <Content Include="Scripts\components\milestones.js" />
+    <Content Include="Scripts\CoreProcess\coreProcessRT.js" />
+    <Content Include="Scripts\d3\d3.v4.12.2.js" />
+    <Content Include="Scripts\d3\d3.v4.js" />
+    <Content Include="Scripts\d3\radial.d3.tree.js" />
+    <Content Include="Scripts\Dashboard\dashboard.js" />
+    <Content Include="Scripts\home\html2canvas.js" />
+    <Content Include="Scripts\home\jspdf.js" />
+    <Content Include="Scripts\home\screenshot.js" />
+    <Content Include="Scripts\home\landscape.js" />
+    <Content Include="Scripts\home\pretty-json.min.js" />
+    <Content Include="Scripts\Inputs\backbone.min.js" />
+    <Content Include="Scripts\Inputs\backbone.subviews.js" />
+    <Content Include="Scripts\Inputs\bullseye.js" />
+    <Content Include="Scripts\Inputs\jquery.min.js" />
+    <Content Include="Scripts\Inputs\liquidmetal.js" />
+    <Content Include="Scripts\Inputs\list.png" />
+    <Content Include="Scripts\Inputs\require.js" />
+    <Content Include="Scripts\Inputs\token-editor.js" />
+    <Content Include="Scripts\Inputs\underscore.min.js" />
+    <Content Include="Scripts\Inputs\underscore.string.min.js" />
+    <Content Include="Scripts\Dashboard\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery-3.4.1.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.1.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.1.min.js" />
+    <Content Include="Scripts\jquery\jquery.autoresize.min.js">
+      <DependentUpon>jquery.autoresize.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery\jquery.html5-placeholder-shim.js" />
+    <Content Include="Scripts\jquery\jquery.tabbable.js" />
+    <Content Include="Scripts\jquery\jquery.attrchange.js" />
+    <Content Include="Scripts\jquery\jquery.autoNumeric.min.js" />
+    <Content Include="Scripts\jquery\jquery.autoresize.js" />
+    <Content Include="Scripts\jquery\jquery.ba-throttle-debounce.min.js">
+      <DependentUpon>jquery.ba-throttle-debounce.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery\jquery.vide.js" />
+    <Content Include="Scripts\L10\fireworks.js" />
+    <Content Include="Scripts\L10\L10ChatLog.js" />
+    <Content Include="Scripts\L10\L10Headlines.js" />
+    <Content Include="Scripts\L10\L10Transcribe.js" />
+    <Content Include="Scripts\L10\L10Wizard.js" />
+    <Content Include="Scripts\Main\ajaxintercepters.js" />
+    <Content Include="Scripts\Main\alerts.js" />
+    <Content Include="Scripts\Main\backwardcompatability.js" />
+    <Content Include="Scripts\Main\beta.js" />
+    <Content Include="Scripts\Main\chart.js" />
+    <Content Include="Scripts\Main\clickableclass.js" />
+    <Content Include="Scripts\Main\compliance.js" />
+    <Content Include="Scripts\Main\datatable.js" />
+    <Content Include="Scripts\Main\datepickers.js" />
+    <Content Include="Scripts\Main\iefixes.js" />
+    <Content Include="Scripts\Main\intercom.min.js" />
+    <Content Include="Scripts\Main\keyboard.js" />
+    <Content Include="Scripts\Main\libraries.js" />
+    <Content Include="Scripts\Main\linq.js" />
+    <Content Include="Scripts\Main\log-helper.js" />
+    <Content Include="Scripts\Main\modals.js" />
+    <Content Include="Scripts\Main\notifications.js" />
+    <Content Include="Scripts\Main\profilepicture.js" />
+    <Content Include="Scripts\Main\support.js" />
+    <Content Include="Scripts\Main\time.js" />
+    <Content Include="Scripts\Main\tooltips.js" />
+    <Content Include="Scripts\Main\tours.js" />
+    <Content Include="Scripts\Main\uploadBtn.js" />
+    <Content Include="Scripts\People\DiagonalTable.js" />
+    <Content Include="Scripts\People\rzslider.js" />
+    <Content Include="Scripts\speechrecog.js" />
+    <EmbeddedResource Include="Scripts\Swagger\CustomSwaggerScripts.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Scripts\test\SiganlRTestSuite.js" />
+    <Content Include="Scripts\Tour\startL10.js" />
+    <Content Include="Scripts\Tour\createL10.js" />
+    <Content Include="Scripts\Tour\lib\anno.js" />
+    <Content Include="Scripts\Tour\lib\jquery.scrollintoview.min.js" />
+    <Content Include="Scripts\Tour\texttodoissue.js" />
+    <Content Include="Scripts\undo.js" />
+    <Content Include="Scripts\Upload\UploadL10.js" />
+    <Content Include="Scripts\Upload\UploadRocks.js" />
+    <Content Include="Scripts\Upload\UploadUsers.js" />
+    <Content Include="Scripts\Upload\UploadTodos.js" />
+    <Content Include="Scripts\Upload\UploadIssues.js" />
+    <Content Include="Scripts\Upload\UploadSteps.js" />
+    <Content Include="Scripts\Upload\UploadScorecard.js" />
+    <Content Include="Scripts\video\Obsolete\FileBufferReader.js" />
+    <Content Include="Scripts\video\hark.js" />
+    <Content Include="Scripts\video\Obsolete\RTCMultiConnection.js" />
+    <Content Include="Scripts\video\Obsolete\serverRTCMultiConnection.js" />
+    <Content Include="Scripts\video\Obsolete\socket.io.js" />
+    <Content Include="Scripts\video\video.js" />
+    <Content Include="Scripts\Wizard\wizard.js" />
+    <Content Include="SoftwareUpdates\20151216.txt" />
+    <Content Include="SoftwareUpdates\20160125.txt" />
+    <Content Include="SoftwareUpdates\20151229.txt" />
+    <Content Include="SoftwareUpdates\20160401.txt" />
+    <Content Include="SoftwareUpdates\20160201.txt" />
+    <Content Include="SoftwareUpdates\20160613.txt" />
+    <Content Include="SoftwareUpdates\20170417.txt" />
+    <Content Include="SoftwareUpdates\20161113.txt" />
+    <Content Include="SoftwareUpdates\20161017.txt" />
+    <Content Include="SoftwareUpdates\20160927.txt" />
+    <Content Include="SoftwareUpdates\20160818.txt" />
+    <Content Include="SoftwareUpdates\20160622.txt" />
+    <Content Include="SoftwareUpdates\20160620.txt" />
+    <Content Include="SoftwareUpdates\20180728.txt" />
+    <Content Include="SoftwareUpdates\20171207.txt" />
+    <Compile Include="Utilities\QuarterGuessUtility.cs" />
+    <Content Include="Views\Dashboard\Dropdown.cshtml" />
+    <Content Include="Views\Permissions\Dropdown.cshtml" />
+    <Content Include="Content\Bootstrap-tabs.css" />
+    <Content Include="Content\bootstrap.vertical-tabs.css" />
+    <Content Include="Content\bootstrap\bootstrap.css">
+      <DependentUpon>bootstrap.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\custom\dashboard.css">
+      <DependentUpon>dashboard.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\media.css">
+      <DependentUpon>media.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins.css">
+      <DependentUpon>mixins.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\alerts.css">
+      <DependentUpon>alerts.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\alerts.min.css">
+      <DependentUpon>alerts.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\background-variant.css">
+      <DependentUpon>background-variant.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\background-variant.min.css">
+      <DependentUpon>background-variant.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\border-radius.css">
+      <DependentUpon>border-radius.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\border-radius.min.css">
+      <DependentUpon>border-radius.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\buttons.css">
+      <DependentUpon>buttons.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\buttons.min.css">
+      <DependentUpon>buttons.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\center-block.css">
+      <DependentUpon>center-block.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\center-block.min.css">
+      <DependentUpon>center-block.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\clearfix.css">
+      <DependentUpon>clearfix.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\clearfix.min.css">
+      <DependentUpon>clearfix.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\forms.css">
+      <DependentUpon>forms.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\forms.min.css">
+      <DependentUpon>forms.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\gradients.css">
+      <DependentUpon>gradients.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\gradients.min.css">
+      <DependentUpon>gradients.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\grid-framework.css">
+      <DependentUpon>grid-framework.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\grid-framework.min.css">
+      <DependentUpon>grid-framework.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\grid.css">
+      <DependentUpon>grid.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\grid.min.css">
+      <DependentUpon>grid.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\hide-text.css">
+      <DependentUpon>hide-text.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\hide-text.min.css">
+      <DependentUpon>hide-text.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\image.css">
+      <DependentUpon>image.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\image.min.css">
+      <DependentUpon>image.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\labels.css">
+      <DependentUpon>labels.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\labels.min.css">
+      <DependentUpon>labels.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\list-group.css">
+      <DependentUpon>list-group.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\list-group.min.css">
+      <DependentUpon>list-group.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\nav-divider.css">
+      <DependentUpon>nav-divider.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\nav-divider.min.css">
+      <DependentUpon>nav-divider.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\nav-vertical-align.css">
+      <DependentUpon>nav-vertical-align.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\nav-vertical-align.min.css">
+      <DependentUpon>nav-vertical-align.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\opacity.css">
+      <DependentUpon>opacity.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\opacity.min.css">
+      <DependentUpon>opacity.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\pagination.css">
+      <DependentUpon>pagination.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\pagination.min.css">
+      <DependentUpon>pagination.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\panels.css">
+      <DependentUpon>panels.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\panels.min.css">
+      <DependentUpon>panels.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\progress-bar.css">
+      <DependentUpon>progress-bar.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\progress-bar.min.css">
+      <DependentUpon>progress-bar.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\reset-filter.css">
+      <DependentUpon>reset-filter.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\reset-filter.min.css">
+      <DependentUpon>reset-filter.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\reset-text.css">
+      <DependentUpon>reset-text.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\reset-text.min.css">
+      <DependentUpon>reset-text.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\resize.css">
+      <DependentUpon>resize.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\resize.min.css">
+      <DependentUpon>resize.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\responsive-visibility.css">
+      <DependentUpon>responsive-visibility.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\responsive-visibility.min.css">
+      <DependentUpon>responsive-visibility.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\size.css">
+      <DependentUpon>size.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\size.min.css">
+      <DependentUpon>size.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\tab-focus.css">
+      <DependentUpon>tab-focus.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\tab-focus.min.css">
+      <DependentUpon>tab-focus.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\table-row.css">
+      <DependentUpon>table-row.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\table-row.min.css">
+      <DependentUpon>table-row.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\text-emphasis.css">
+      <DependentUpon>text-emphasis.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\text-emphasis.min.css">
+      <DependentUpon>text-emphasis.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\text-overflow.css">
+      <DependentUpon>text-overflow.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\text-overflow.min.css">
+      <DependentUpon>text-overflow.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\utils.css">
+      <DependentUpon>utils.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\utils.min.css">
+      <DependentUpon>utils.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\custom\Site.css">
+      <DependentUpon>Site.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\vendor-prefixes.css">
+      <DependentUpon>vendor-prefixes.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\mixins\vendor-prefixes.min.css">
+      <DependentUpon>vendor-prefixes.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\normalize.css">
+      <DependentUpon>normalize.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\print.css">
+      <DependentUpon>print.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\responsive-embed.css">
+      <DependentUpon>responsive-embed.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\theme.css">
+      <DependentUpon>theme.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\variables.css">
+      <DependentUpon>variables.less</DependentUpon>
+    </Content>
+    <Content Include="Content\components\daterangepicker-bs3.css" />
+    <Content Include="Content\components\fivestate.css" />
+    <Content Include="Content\favicon.ico" />
+    <Content Include="Content\img\TRACTION-TOOLS_large_horizontal_wh.png" />
+    <Content Include="Content\img\TRACTION-TOOLS_large_icon_wh.png" />
+    <Content Include="Content\img\TRACTION-TOOLS_large_stacked_wh.png" />
+    <Content Include="Content\img\TRACTION-TOOLS_small_horizontal_wh.png" />
+    <Content Include="Content\img\TRACTION-TOOLS_small_icon_wh.png" />
+    <Content Include="Content\Theme.css">
+      <DependentUpon>Theme.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Theme.less" />
+    <Content Include="Content\VTO\VtoPrint.css" />
+    <Content Include="Content\_dashboard_OLD.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\L10\L10Conference.css" />
+    <Content Include="Content\L10\L10Notes.css" />
+    <Content Include="Content\ReportBuilder\ClientDetails.css" />
+    <Content Include="Content\VTO\VTO_old.css" />
+    <Content Include="libeay32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libgcc_s_dw2-1.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="mingwm10.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Angular\Helpers\ClockController.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\bindUnsafeHtml.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\ImageTemplates.js" />
+    <Content Include="Scripts\Angular\Helpers\angular-timer.min.js" />
+    <Content Include="Scripts\Angular\Helpers\Directives\ModalTemplates.js" />
+    <Content Include="Scripts\Angular\Helpers\Libraries\angular-daterangepicker.js" />
+    <Content Include="Scripts\Angular\Helpers\Libraries\angular-filter.min.js" />
+    <Content Include="Scripts\Angular\Helpers\_oldtransform.js" />
+    <Content Include="Scripts\Angular\helpers.js" />
+    <Content Include="Scripts\Angular\Meetings\ButtonBar.js" />
+    <Content Include="Scripts\Angular\Meetings\L10App.js" />
+    <Content Include="Scripts\Angular\Meetings\L10Controller.js" />
+    <Content Include="Scripts\Angular\Helpers\signalR.js" />
+    <Content Include="Scripts\Angular\Meetings\RockState.js" />
+    <Content Include="Scripts\Angular\VTO\VtoApp.js" />
+    <Content Include="Scripts\Angular\VTO\VtoController.js" />
+    <Content Include="Scripts\components\fivestate.js" />
+    <Content Include="Scripts\Grid\fixtures.js" />
+    <Content Include="Scripts\Grid\loadTiles.js" />
+    <Content Include="Scripts\Grid\src\gridList.js" />
+    <Content Include="Scripts\Grid\src\jquery.gridList.js" />
+    <Content Include="Scripts\Grid\style.css" />
+    <Content Include="Scripts\home\colResizable-1.5.min.js" />
+    <Content Include="Scripts\home\resizeable-tables.js" />
+    <Content Include="Scripts\jquery\jquery.redirect.js" />
+    <Content Include="Scripts\L10\AV\adapter.js" />
+    <Content Include="Scripts\L10\AV\app.js" />
+    <Content Include="Scripts\L10\AV\connectionManager.js" />
+    <Content Include="Scripts\L10\AV\viewModel.js" />
+    <Content Include="Scripts\L10\charts\sparklines.min.js" />
+    <Content Include="Scripts\L10\L10Notes.js" />
+    <Content Include="Scripts\Main\moment.min.js" />
+    <Content Include="Scripts\payment\PaymentSprings.js" />
+    <Content Include="Scripts\survey\submitAnswers.js" />
+    <Content Include="Scripts\VTO\vto.js" />
+    <Content Include="ssleay32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\JobDescription\TemplateModal.cshtml" />
+    <Content Include="Views\Rocks\TemplateModal.cshtml" />
+    <Content Include="Views\Rocks\_TemplateRockRow.cshtml" />
+    <Content Include="Views\Roles\TemplateModal.cshtml" />
+    <Content Include="Views\Roles\_TemplateRoleRow.cshtml" />
+    <Content Include="Views\Measurable\TemplateModal.cshtml" />
+    <Content Include="Views\Measurable\_TemplateMeasurableRow.cshtml" />
+    <Content Include="Views\Shared\_TemplateDetails.cshtml" />
+    <Content Include="Content\fonts\fontastic.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\fonts\fontastic.ttf" />
+    <Content Include="Content\fonts\fontastic.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\L10\l10IDS.v2.old.css" />
+    <Content Include="Content\L10\L10Rocks.old.css" />
+    <Content Include="Content\L10\L10Todo.css" />
+    <Content Include="Scripts\L10\jquery-ui.color.js" />
+    <Content Include="Scripts\L10\jquery-ui.sortable.min.js" />
+    <Content Include="Scripts\L10\jquery.mjs.nestedSortable.js" />
+    <Content Include="Scripts\L10\sortable.js" />
+    <Content Include="Scripts\L10\L10Rocks.js" />
+    <Content Include="Scripts\L10\L10Todo.js" />
+    <Content Include="Views\L10\partial\IssueRow.cshtml" />
+    <Content Include="Views\UserTemplate\Edit.cshtml" />
+    <Content Include="Views\VTO\partial\editable.cshtml" />
+    <Content Include="Views\VTO\partial\pagescripts.cshtml" />
+    <Content Include="Views\Upload\Index.cshtml" />
+    <Content Include="Views\Upload\L10.cshtml" />
+    <Content Include="Views\Upload\old\UploadScorecard.cshtml" />
+    <Content Include="Views\Upload\old\SelectScorecard.cshtml" />
+    <Content Include="Views\User\Reviews.cshtml" />
+    <Content Include="Views\Upload\UploadScorecardSelected.cshtml" />
+    <Content Include="Views\Upload\UploadL10.cshtml" />
+    <Content Include="Views\Upload\old\SelectIssues.cshtml" />
+    <Content Include="Views\Upload\UploadIssuesSelected.cshtml" />
+    <Content Include="Views\Upload\UploadTodosSelected.cshtml" />
+    <Content Include="Views\Upload\UploadRocksSelected.cshtml" />
+    <Content Include="Views\Upload\UploadVTO2.cshtml" />
+    <Content Include="Views\Shared\Partial\MaterialIndefiniteLoader.cshtml" />
+    <Content Include="Views\User\partial\list.cshtml" />
+    <Content Include="Views\Upload\UploadUsers.cshtml" />
+    <Content Include="Views\Upload\UploadUsersSelected.cshtml" />
+    <Content Include="Views\TileData\OrganizationValues.cshtml" />
+    <Content Include="Views\TileData\UserRoles.cshtml" />
+    <Content Include="Views\Roles\partial\list.cshtml" />
+    <Content Include="Views\Rocks\Archive.cshtml" />
+    <Content Include="Views\TileData\FAQTips.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
+    <Content Include="Views\TileData\UserNotes.cshtml" />
+    <Content Include="Views\Review\Details\Scorecard.cshtml" />
+    <Content Include="Views\Support\Details.cshtml" />
+    <Content Include="Views\Support\List.cshtml" />
+    <Content Include="Views\TileData\L10Notes.cshtml" />
+    <Content Include="Views\Upload\UploadVTOResults.cshtml" />
+    <Content Include="Views\TileData\L10Stats.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SearchUsers.cshtml" />
+    <Content Include="Views\Todo\HeadlineTodoModal.cshtml" />
+    <Content Include="Views\TileData\UserNotifications.cshtml" />
+    <Content Include="Views\Review\Take\Radio.cshtml" />
+    <Content Include="Views\TileData\L10SolvedIssues.cshtml" />
+    <Content Include="Views\Todo\EditModal.cshtml" />
+    <Content Include="Views\Webhook\Create.cshtml" />
+    <Content Include="Views\Webhook\Index.cshtml" />
+    <Content Include="Views\Webhook\CreateEvents.cshtml" />
+    <Content Include="Views\Webhook\Events.cshtml" />
+    <Content Include="Views\Webhook\API.cshtml" />
+    <Content Include="Views\L10\MeetingSummary.cshtml" />
+    <Content Include="Views\Rocks\EditModal.cshtml" />
+    <Content Include="Views\Milestone\EditModal.cshtml" />
+    <Content Include="Views\Admin\Implementers.cshtml" />
+    <Content Include="Views\Admin\EditImplementers.cshtml" />
+    <Content Include="Views\Admin\EditSupportMember.cshtml" />
+    <Content Include="Views\Admin\SupportMembers.cshtml" />
+    <Content Include="Views\Admin\EditCampaign.cshtml" />
+    <Content Include="Views\Admin\Campaigns.cshtml" />
+    <Content Include="Views\Phone\Index.cshtml" />
+    <Content Include="Views\TileData\CoreProcesses.cshtml" />
+    <Content Include="Views\TileData\Tasks.cshtml" />
+    <Content Include="Views\Tasks\partial\list.cshtml" />
+    <Content Include="Views\Tasks\partial\coreProcessList.cshtml" />
+    <Content Include="Views\ClientSuccess\Tooltips.cshtml" />
+    <Content Include="Views\ClientSuccess\Index.cshtml" />
+    <Content Include="Views\ClientSuccess\Modal.cshtml" />
+    <Content Include="Views\TileData\Milestones.cshtml" />
+    <Content Include="Views\Audit\L10.cshtml" />
+    <Content Include="Views\Audit\MeasurableScores.cshtml" />
+    <Content Include="Views\Audit\Index.cshtml" />
+    <Content Include="Views\TileData\L10Headlines.cshtml" />
+    <Content Include="Views\User\SelectExistingOrCreate.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SelectExistingOrCreate.cshtml" />
+    <Content Include="Views\UnitTest\SelectExistingOrCreate.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TinyUser.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CreateUserOrganizationViewModel.cshtml" />
+    <Content Include="Views\L10\AddAttendee.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CreateMeasurableViewModel.cshtml" />
+    <Content Include="Views\L10\AddMeasurableModal.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CreateRockViewModel.cshtml" />
+    <Content Include="Views\L10\AddRockModal.cshtml" />
+    <Content Include="Views\Manage\Payment.cshtml" />
+    <Content Include="Views\Headlines\EditModal.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\LocalDateTime.cshtml" />
+    <Content Include="Views\L10\Pages.cshtml" />
+    <Content Include="Views\Organization\ResendJoinEmailManual.cshtml" />
+    <Content Include="Views\L10\EditRating.cshtml" />
+    <Content Include="Views\Scorecard\FormulaPartial.cshtml" />
+    <Content Include="Views\ClientSuccess\Close.cshtml" />
+    <Content Include="Views\Data\Dashboard.cshtml" />
+    <Content Include="Views\Admin\EmployeeCount.cshtml" />
+    <Content Include="Views\Upload\UploadOrg.cshtml" />
+    <Content Include="Views\Faq\GenerateTokenInstruction.cshtml" />
+    <Content Include="Views\L10\Delete.cshtml" />
+    <Content Include="Views\Events\Index.cshtml" />
+    <Content Include="Views\ClientSuccess\HFCategories.cshtml" />
+    <Content Include="Views\Account\Consent.cshtml" />
+    <Content Include="Views\User\EditUserDetails.cshtml" />
+    <Content Include="Views\Organization\Flags.cshtml" />
+    <Content Include="Views\Rocks\All.cshtml" />
+    <Content Include="Views\Admin\AllEmails.cshtml" />
+    <Content Include="Views\Account\AdminSetRole.cshtml" />
+    <Content Include="Views\Account\AdminAuditLog.cshtml" />
+    <Content Include="Views\Admin\AccountsAtRisk.cshtml" />
+    <Content Include="Views\Admin\Variables.cshtml" />
+    <Content Include="Views\Admin\Errors.cshtml" />
+    <Content Include="Views\Payment\Lockout.cshtml" />
+    <Content Include="Views\Payment\LockoutNonadmin.cshtml" />
+    <Content Include="Views\Quarterly\Send.cshtml" />
+    <Content Include="Views\Integrations\Asana.cshtml" />
+    <Content Include="Views\Integrations\AsanaActionModal.cshtml" />
+    <Content Include="Views\Integrations\AsanaNoConnection.cshtml" />
+    <Content Include="Views\Referral\Modal.cshtml" />
+    <Content Include="Views\Admin\Switches.cshtml" />
+    <Content Include="Views\Rocks\Edit.cshtml" />
+    <Content Include="Views\Scorecard\MeasurablePartial.cshtml" />
+    <Content Include="Scripts\Main\select2.full.js" />
+    <Content Include="Views\Shared\EditorTemplates\AngularMeasurable.cshtml" />
+    <Content Include="Views\Organization\Stats.cshtml" />
+    <Content Include="Views\Readonly\_ReadonlyLayout.cshtml" />
+    <Content Include="Views\Readonly\Index.cshtml" />
+    <Content Include="Views\Readonly\Meeting.cshtml" />
+    <Content Include="Views\Readonly\Error.cshtml" />
+    <Content Include="Views\Scorecard\ArchiveMeasurable.cshtml" />
+    <Content Include="Views\L10\MeetingSummarySettings.cshtml" />
+    <Content Include="Views\Shared\Partial\WorkspaceDropdown.cshtml" />
+    <Content Include="Views\Notification\Modal.cshtml" />
+    <Content Include="Views\Notification\Index.cshtml" />
+    <Content Include="Views\Notification\AdminCreate.cshtml" />
+    <Content Include="Views\Quarterly\UpdateQuarter.cshtml" />
+    <Content Include="Views\UnitTest\SignalrCors.cshtml" />
+    <Content Include="Views\UnitTest\IframeWebsockets.cshtml" />
+    <Content Include="Views\UnitTest\RealTimeEdge.cshtml" />
+    <Content Include="Views\UnitTest\RealTimeEdgePart.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\EditRockViewModel.cshtml" />
+    <Content Include="Views\Quarterly\CoverPagePartial-old.cshtml" />
+    <Content Include="Views\Quarterly\HeadlinesPartial.cshtml" />
+    <Content Include="Views\Quarterly\IssuesPartial.cshtml" />
+    <Content Include="Views\Quarterly\Modal2.cshtml" />
+    <Content Include="Views\Quarterly\RocksPartial.cshtml" />
+    <Content Include="Views\Quarterly\ScorecardsPartial.cshtml" />
+    <Content Include="Views\Quarterly\TodosPartial.cshtml" />
+    <Content Include="Views\Quarterly\_TemplatePartial.cshtml" />
+    <Content Include="Views\Quarterly\PdfHtml.cshtml" />
+    <Content Include="Views\Quarterly\PdfHtml_Styles.cshtml" />
+    <Content Include="Views\Quarterly\Footer.cshtml" />
+    <Content Include="Views\Quarterly\CoverPagePartial.cshtml" />
+    <Content Include="Views\V2020\Index.cshtml" />
+    <Content Include="Views\V2020\Signup.cshtml" />
+    <Content Include="Views\Organization\Port.cshtml" />
+    <None Include="web.AWS.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="web.QA.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Base.config">
+      <DependentUpon>web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <!--<None Include="web.UPDATE DATABSE.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>-->
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-responsive.css" />
+    <Content Include="Content\bootstrap-responsive.min.css" />
+    <Content Include="Content\bootstrap-switch.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\chart.css" />
+    <Content Include="Content\Chart\Chart.css" />
+    <Content Include="Content\Chart\Histogram.css" />
+    <Content Include="Content\Chart\Line.v1.css" />
+    <Content Include="Content\Chart\PieChart.css" />
+    <Content Include="Content\components\ApproveReject.css" />
+    <Content Include="Content\components\checktree.css" />
+    <Content Include="Content\components\CompleteIncomplete.css" />
+    <Content Include="Content\components\posneg.css" />
+    <Content Include="Content\components\rockstate.css" />
+    <Content Include="Content\components\table.css" />
+    <Content Include="Content\components\tristate.css" />
+    <Content Include="Content\datepicker.css" />
+    <Content Include="Content\favicon-old.ico" />
+    <Content Include="Content\favicon3.ico" />
+    <Content Include="Content\favicon2.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Fonts.css" />
+    <Content Include="Content\fonts\fontastic.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\icons-reference.html" />
+    <Content Include="Content\fonts\new.svg" />
+    <Content Include="Content\fonts\Ref\icons-reference.html" />
+    <Content Include="Content\fonts\Ref\styles.css" />
+    <Content Include="Content\fonts\styles.css" />
+    <Content Include="Content\Home.css" />
+    <Content Include="Content\home\bootstrap.css" />
+    <Content Include="Content\home\cityscape.jpg" />
+    <Content Include="Content\home\Cover.jpg" />
+    <Content Include="Content\home\custom.css" />
+    <Content Include="Content\home\denim.png" />
+    <Content Include="Content\home\font-awesome.css" />
+    <Content Include="Content\home\magnific-popup.css" />
+    <Content Include="Content\home\prettify.css" />
+    <Content Include="Content\home\social_icons_gray.png" />
+    <Content Include="Content\home\social_icons_white.png" />
+    <Content Include="Content\home\testimonial1.jpg" />
+    <Content Include="Content\img\ajax-loader.gif" />
+    <Content Include="Content\img\blank.gif" />
+    <Content Include="Content\img\box.png" />
+    <Content Include="Content\home\features1.png" />
+    <Content Include="Content\home\features2.png" />
+    <Content Include="Content\home\features3.png" />
+    <Content Include="Content\home\features4.png" />
+    <Content Include="Content\home\features5.png" />
+    <Content Include="Content\home\features6.png" />
+    <Content Include="Content\img\footer.png" />
+    <Content Include="Content\img\graystripe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\img\greenlight.png" />
+    <Content Include="Content\img\little_pluses.png" />
+    <Content Include="Content\home\logo1.png" />
+    <Content Include="Content\home\logo2.png" />
+    <Content Include="Content\home\logo3.png" />
+    <Content Include="Content\home\logo4.png" />
+    <Content Include="Content\home\placelogo1.png" />
+    <Content Include="Content\home\placelogo2.png" />
+    <Content Include="Content\home\placelogo3.png" />
+    <Content Include="Content\home\placelogo4.png" />
+    <Content Include="Content\home\placelogo5.png" />
+    <Content Include="Content\home\placelogo6.png" />
+    <Content Include="Content\home\placelogo7.png" />
+    <Content Include="Content\home\placelogo8.png" />
+    <Content Include="Content\home\radial.png" />
+    <Content Include="Content\home\radial2.png" />
+    <Content Include="Content\img\logoWhite.png" />
+    <Content Include="Content\img\logoWhiteTiny.png" />
+    <Content Include="Content\img\redlight.png" />
+    <Content Include="Content\img\redstripe.png" />
+    <Content Include="Content\img\slider.png" />
+    <Content Include="Content\jquery.nouislider.css" />
+    <Content Include="Content\jquery.qtip.css" />
+    <Content Include="Content\L10\L10IDS.css" />
+    <None Include="Content\L10\L10Scorecard.less" />
+    <Content Include="Content\L10\L10Stats.css" />
+    <Content Include="Content\print.css" />
+    <Content Include="Content\ReportBuilder\evaluation.css" />
+    <Content Include="Content\ReportBuilder\ReportBuilder.css" />
+    <Content Include="Content\Review.css" />
+    <Content Include="Content\Scorecard\Scorecard.css" />
+    <Content Include="Content\select2-bootstrap.css" />
+    <Content Include="Content\select2-spinner.gif" />
+    <Content Include="Content\select2.css" />
+    <Content Include="Content\select2.png" />
+    <Content Include="Content\select2x2.png" />
+    <Content Include="Content\simple-slider.css" />
+    <Content Include="Content\slider.css" />
+    <Content Include="Content\audio\tick.mp3" />
+    <Content Include="Content\table\cTable.css" />
+    <Content Include="Content\table\grid.css" />
+    <Content Include="Content\toggle.css" />
+    <Content Include="favicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\fonts\reports.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\img\titlebarTiles.png" />
+    <Content Include="orgPlaceholder.png" />
+    <Content Include="placeholder.png" />
+    <Content Include="Scripts\animations\circles.js" />
+    <Content Include="Scripts\bootstrap-datepicker-old.js" />
+    <Content Include="Scripts\bootstrap-slider.js" />
+    <Content Include="Scripts\bootstrap-switch.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Charts.js" />
+    <Content Include="Scripts\components\checktree.js" />
+    <Content Include="Scripts\components\completeincomplete.js" />
+    <Content Include="Scripts\components\rockstate.js" />
+    <Content Include="Scripts\components\posneg.js" />
+    <Content Include="Scripts\components\approvereject.js" />
+    <Content Include="Scripts\components\tristate.js" />
+    <Content Include="Scripts\d3\d3.csv.js" />
+    <Content Include="Scripts\d3\d3.js" />
+    <Content Include="Scripts\d3\d3.min.js" />
+    <Content Include="Scripts\d3\d3.v3.js" />
+    <Content Include="Scripts\d3\d3.v3.min.js" />
+    <Content Include="Scripts\d3\line.v1.js" />
+    <Content Include="Scripts\d3\Scatter.v2.js" />
+    <Content Include="Scripts\d3\line.js" />
+    <Content Include="Scripts\d3\orgchartBU.js" />
+    <Content Include="Scripts\d3\orgchart.js" />
+    <Content Include="Scripts\d3\Plot.js" />
+    <Content Include="Scripts\d3\Tweens.js" />
+    <Content Include="Scripts\d3\underscore.js" />
+    <Content Include="Scripts\home\analytics.js" />
+    <Content Include="Scripts\home\application.js" />
+    <Content Include="Scripts\home\fluidvids.js" />
+    <Content Include="Scripts\home\holder.js" />
+    <Content Include="Scripts\home\jQuery.equalHeights.js" />
+    <Content Include="Scripts\home\jquery.magnific-popup.js" />
+    <Content Include="Scripts\home\prettify.js" />
+    <Content Include="Scripts\home\widgets.js" />
+    <Content Include="Scripts\isVisible.js" />
+    <Content Include="Scripts\jquery\jquery.filtertable.min.js" />
+    <Content Include="Scripts\jquery.svg.js" />
+    <Content Include="Scripts\jquery.svgdom.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery\jquery-simple-slider.js" />
+    <Content Include="Scripts\jquery\jquery.ba-throttle-debounce.js" />
+    <Content Include="Scripts\jquery\jquery.fittext.js" />
+    <Content Include="Scripts\jquery\jquery.hashchange.js" />
+    <Content Include="Scripts\L10\jquery.nestable.js" />
+    <Content Include="Scripts\jquery\jquery.nouislider.js" />
+    <Content Include="Scripts\jquery\jquery.rotate-1.0.1.js" />
+    <Content Include="Scripts\jquery\jquery.scrollTo.js" />
+    <Content Include="Scripts\jquery\jquery.sortable.js" />
+    <Content Include="Scripts\L10\jquery.sortable.min.js" />
+    <Content Include="Scripts\jquery\jquery.tablesorter.js" />
+    <Content Include="Scripts\jquery\jquery.unveil.js" />
+    <Content Include="Scripts\L10\L10.js" />
+    <Content Include="Scripts\L10\L10Ids.js" />
+    <Content Include="Scripts\L10\L10Scorecard.js" />
+    <Content Include="Scripts\L10\rtL10.js" />
+    <Content Include="Scripts\Main\finally.js" />
+    <Content Include="Scripts\Main\radial.js" />
+    <Content Include="Scripts\Main\realtime.js" />
+    <Content Include="Scripts\moment-with-langs.js" />
+    <Content Include="Scripts\moment-with-langs.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\d3\ScatterChart.js" />
+    <Content Include="Scripts\report\reportbuilder.js" />
+    <Content Include="Scripts\review\review.js" />
+    <Content Include="Scripts\review\translateSlider.js" />
+    <Content Include="Scripts\select2.min.js" />
+    <Content Include="Scripts\table\cTable.js" />
+    <Content Include="Scripts\table\fixedTabel.js" />
+    <Content Include="Scripts\table\grid.js" />
+    <Content Include="Scripts\table\sortable_table.js" />
+    <Content Include="Views\Review\Details\ChartBuilder2.cshtml" />
+    <Content Include="Views\Review\Details\AggregateAnswers.cshtml" />
+    <Content Include="Views\JobDescription\Edit.cshtml" />
+    <Content Include="Views\JobDescription\Modal.cshtml" />
+    <Content Include="Views\Accountability\Chart2.cshtml" />
+    <Content Include="Views\Charts\Line.cshtml" />
+    <Content Include="Views\Reviews\EditDueDateModal.cshtml" />
+    <Content Include="Views\Organization\Upload.cshtml" />
+    <Content Include="Views\Organization\Fields.cshtml" />
+    <Content Include="Views\CompanyValues\_ValueRow.cshtml" />
+    <Content Include="Views\CompanyValues\Modal.cshtml" />
+    <Content Include="Views\Email\Remind.cshtml" />
+    <Content Include="Content\Chart\Scatter.v2.css" />
+    <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\Measurable\Modal.cshtml" />
+    <Content Include="Views\Measurable\_MeasurableRow.cshtml" />
+    <Content Include="Views\Reviews\EditNameModal.cshtml" />
+    <Content Include="Views\Period\Index.cshtml" />
+    <Content Include="Views\Period\Modal.cshtml" />
+    <Content Include="Views\Prereview\Update.cshtml" />
+    <Content Include="Views\Review\Details\ChartBuilder3.cshtml" />
+    <Content Include="Views\Reports\Stats.cshtml" />
+    <Content Include="Views\L10\Index.cshtml" />
+    <Content Include="Views\L10\Edit.cshtml" />
+    <Content Include="Views\Shared\_ProfilePicture.cshtml" />
+    <Content Include="Views\L10\Meeting.cshtml" />
+    <Content Include="Views\L10\Scorecard.cshtml" />
+    <Content Include="Views\L10\StartMeeting.cshtml" />
+    <Content Include="Views\L10\Segue.cshtml" />
+    <Content Include="Views\L10\Error.cshtml" />
+    <Content Include="Views\L10\AddMeasurable.cshtml" />
+    <Content Include="Views\L10\Conclusion.cshtml" />
+    <Content Include="Views\L10\MeetingStats.cshtml" />
+    <Content Include="Scripts\d3\LICENSE" />
+    <Content Include="Views\Charts\Histogram.cshtml" />
+    <Content Include="Scripts\Charts.js.map" />
+    <Content Include="Views\L10\BasePage.cshtml" />
+    <Content Include="Views\L10\_SetupScript.cshtml" />
+    <Content Include="Views\Issues\ScorecardIssueModal.cshtml" />
+    <Content Include="Views\L10\IDS.cshtml" />
+    <Content Include="Views\Issues\CopyIssueModal.cshtml" />
+    <Content Include="Views\Issues\CreateIssueModal.cshtml" />
+    <Content Include="Views\L10\Todo.cshtml" />
+    <Content Include="Views\L10\partial\TodoRow.cshtml" />
+    <Content Include="Views\L10\Rocks.cshtml" />
+    <Content Include="Views\L10\Headlines.cshtml" />
+    <Content Include="Views\Position\Template.cshtml" />
+    <Content Include="Views\Issues\RockIssueModal.cshtml" />
+    <Content Include="Views\L10\partial\ButtonBar.cshtml" />
+    <Content Include="Views\L10\CreateNote.cshtml" />
+    <Content Include="Views\Organization\Products.cshtml" />
+    <Content Include="Views\Permissions\Edit.cshtml" />
+    <Content Include="Views\Permissions\Modal.cshtml" />
+    <Content Include="Views\L10\Details.cshtml" />
+    <Content Include="Views\OrganizationQuestion\_CompanyQuestionRow.cshtml" />
+    <Content Include="Views\OrganizationQuestion\Modal.cshtml" />
+    <Content Include="Views\L10\External.cshtml" />
+    <Content Include="Views\Callback\PickList.cshtml" />
+    <Content Include="Views\L10\partial\ScorecardRow.cshtml" />
+    <Content Include="Views\L10\partial\RockGroup.cshtml" />
+    <Content Include="Views\L10\RocksNew.cshtml" />
+    <Content Include="Views\L10\Details\todo.cshtml" />
+    <Content Include="Views\L10\Details\issues.cshtml" />
+    <Content Include="Views\L10\Details\scorecard.cshtml" />
+    <Content Include="Views\L10\Details\notes.cshtml" />
+    <Content Include="Views\Employee\Listing.cshtml" />
+    <Content Include="Scripts\jquery\jquery.ui.sortable.js" />
+    <Content Include="Scripts\L10\resize-columns.js" />
+    <Content Include="Views\L10\Timeline.cshtml" />
+    <Content Include="Views\Home\partial\DashboardScripts.cshtml" />
+    <Content Include="Views\Manage\partial\members.cshtml" />
+    <Content Include="Views\Issues\CreateIssueRecurrenceModal.cshtml" />
+    <Content Include="Views\L10\DeleteNote.cshtml" />
+    <Content Include="Views\L10\AddRock.cshtml" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\bootstrap\wells.less" />
+    <Content Include="Content\bootstrap\variables.less" />
+    <Content Include="Content\bootstrap\utilities.less" />
+    <Content Include="Content\bootstrap\type.less" />
+    <Content Include="Content\bootstrap\tooltip.less" />
+    <Content Include="Content\bootstrap\thumbnails.less" />
+    <Content Include="Content\bootstrap\theme.less" />
+    <Content Include="Content\bootstrap\tables.less" />
+    <Content Include="Content\bootstrap\scaffolding.less" />
+    <Content Include="Content\bootstrap\responsive-utilities.less" />
+    <Content Include="Content\bootstrap\responsive-embed.less" />
+    <Content Include="Content\bootstrap\progress-bars.less" />
+    <Content Include="Content\bootstrap\print.less" />
+    <Content Include="Content\bootstrap\popovers.less" />
+    <Content Include="Content\bootstrap\panels.less" />
+    <Content Include="Content\bootstrap\pagination.less" />
+    <Content Include="Content\bootstrap\pager.less" />
+    <Content Include="Content\bootstrap\normalize.less" />
+    <Content Include="Content\bootstrap\navs.less" />
+    <Content Include="Content\bootstrap\navbar.less" />
+    <Content Include="Content\bootstrap\modals.less" />
+    <Content Include="Content\bootstrap\mixins\vendor-prefixes.less" />
+    <Content Include="Content\bootstrap\mixins\text-overflow.less" />
+    <Content Include="Content\bootstrap\mixins\text-emphasis.less" />
+    <Content Include="Content\bootstrap\mixins\table-row.less" />
+    <Content Include="Content\bootstrap\mixins\tab-focus.less" />
+    <Content Include="Content\bootstrap\mixins\size.less" />
+    <Content Include="Content\bootstrap\mixins\responsive-visibility.less" />
+    <Content Include="Content\bootstrap\mixins\resize.less" />
+    <Content Include="Content\bootstrap\mixins\reset-text.less" />
+    <Content Include="Content\bootstrap\mixins\reset-filter.less" />
+    <Content Include="Content\bootstrap\mixins\progress-bar.less" />
+    <Content Include="Content\bootstrap\mixins\panels.less" />
+    <Content Include="Content\bootstrap\mixins\pagination.less" />
+    <Content Include="Content\bootstrap\mixins\opacity.less" />
+    <Content Include="Content\bootstrap\mixins\nav-vertical-align.less" />
+    <Content Include="Content\bootstrap\mixins\nav-divider.less" />
+    <Content Include="Content\bootstrap\mixins\list-group.less" />
+    <Content Include="Content\bootstrap\mixins\labels.less" />
+    <Content Include="Content\bootstrap\mixins\image.less" />
+    <Content Include="Content\bootstrap\mixins\hide-text.less" />
+    <Content Include="Content\bootstrap\mixins\grid-framework.less" />
+    <Content Include="Content\bootstrap\mixins\grid.less" />
+    <Content Include="Content\bootstrap\mixins\gradients.less" />
+    <Content Include="Content\bootstrap\mixins\forms.less" />
+    <Content Include="Content\bootstrap\mixins\clearfix.less" />
+    <Content Include="Content\bootstrap\mixins\center-block.less" />
+    <Content Include="Content\bootstrap\mixins\buttons.less" />
+    <Content Include="Content\bootstrap\mixins\border-radius.less" />
+    <Content Include="Content\bootstrap\mixins\background-variant.less" />
+    <Content Include="Content\bootstrap\mixins\alerts.less" />
+    <Content Include="Content\bootstrap\mixins.less" />
+    <Content Include="Content\bootstrap\media.less" />
+    <Content Include="Content\bootstrap\list-group.less" />
+    <Content Include="Content\bootstrap\labels.less" />
+    <Content Include="Content\bootstrap\jumbotron.less" />
+    <Content Include="Content\bootstrap\input-groups.less" />
+    <Content Include="Content\bootstrap\grid.less" />
+    <Content Include="Content\bootstrap\glyphicons.less" />
+    <Content Include="Content\bootstrap\forms.less" />
+    <Content Include="Content\bootstrap\dropdowns.less" />
+    <Content Include="Content\bootstrap\component-animations.less" />
+    <Content Include="Content\bootstrap\code.less" />
+    <Content Include="Content\bootstrap\close.less" />
+    <Content Include="Content\bootstrap\carousel.less" />
+    <Content Include="Content\bootstrap\buttons.less" />
+    <Content Include="Content\bootstrap\button-groups.less" />
+    <Content Include="Content\bootstrap\breadcrumbs.less" />
+    <Content Include="Content\bootstrap\bootstrap.less" />
+    <Content Include="Content\bootstrap\badges.less" />
+    <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Content\bootstrap\mixins\utils.less" />
+    <Content Include="Content\bootstrap\custom\Site.less" />
+    <Content Include="Content\bootstrap\custom\dashboard.less" />
+    <Content Include="Views\Manage\Advanced.cshtml" />
+    <Content Include="Views\Payment\SetCard.cshtml" />
+    <Content Include="Views\Payment\Plan.cshtml" />
+    <Content Include="Views\Payment\Plan_Monthly.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\Dashboard\CreateTileModal.cshtml" />
+    <Content Include="Views\Payment\Errors.cshtml" />
+    <Content Include="Views\Payment\AllCharges.cshtml" />
+    <Content Include="Views\Permissions\PermItemRow.cshtml" />
+    <Content Include="Content\L10\L10ChatLog.less" />
+    <Content Include="Views\Organization\Which.cshtml" />
+    <Content Include="Views\Organization\WhichList.cshtml" />
+    <Content Include="Views\Invoice\List.cshtml" />
+    <Content Include="Views\Invoice\Details.cshtml" />
+    <Content Include="Views\LogStream\Index.cshtml" />
+    <Content Include="Views\Customize\EditModal.cshtml" />
+    <Content Include="Views\Customize\Index.cshtml" />
+    <Content Include="Views\L10\partial\CompanyRockGroup.cshtml" />
+    <Content Include="Views\Measurable\partial\list.cshtml" />
+    <Content Include="Views\Faq\API.cshtml" />
+    <Content Include="Views\Log\Row.cshtml" />
+    <Content Include="Views\Log\Index.cshtml" />
+    <Content Include="Views\Account\FixEmail.cshtml" />
+    <Content Include="Views\Account\Headers.cshtml" />
+    <Content Include=".ebextensions\SetupIIS.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\L10\Details\headlines.cshtml" />
+    <Content Include="Views\Issues\partial\list.cshtml" />
+    <Content Include="Views\L10\Details\rocks.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Priority.cshtml" />
+    <Content Include="Views\Organization\Stats_old.cshtml" />
+    <Content Include="Views\Organization\Stats.cshtml" />
+    <Content Include="Views\Manage\Data.cshtml" />
+    <Content Include="Views\Archive\Users.cshtml" />
+    <Content Include="Views\Accountability\Chart.cshtml" />
+    <Content Include="Views\Quarterly\Modal.cshtml" />
+    <Content Include="Views\L10\Wizard.cshtml" />
+    <Content Include="Views\CDN\Angular.cshtml" />
+    <Content Include="Views\CoreValues\partial\list.cshtml" />
+    <Content Include="Views\Angular\_L10App.cshtml" />
+    <Content Include="Views\Angular\_DateRange.cshtml" />
+    <Content Include="Scripts\jquery\jquery.ba-throttle-debounce.min.js.map">
+      <DependentUpon>jquery.ba-throttle-debounce.min.js</DependentUpon>
+    </Content>
+    <Content Include="Views\GetStarted\Index.cshtml" />
+    <Content Include="Scripts\Angular\MaterialDesign\lf-ng-md-file-input.min.js.map">
+      <DependentUpon>lf-ng-md-file-input.min.js</DependentUpon>
+    </Content>
+    <Content Include="Views\Admin\Meetings.cshtml" />
+    <Content Include="Views\Admin\MeetingsTable.cshtml" />
+    <Content Include="Views\Admin\Signups.cshtml" />
+    <Content Include="Views\Admin\MergeAccounts.cshtml" />
+    <Content Include="Views\L10\partial\HeadlineRow.cshtml" />
+    <Content Include="Views\Headlines\Modal.cshtml" />
+    <Content Include="Views\L10\Details\headlinesList.cshtml" />
+    <Content Include="Views\Headlines\partial\list.cshtml" />
+    <Content Include="Views\Issues\HeadlineIssueModal.cshtml" />
+    <Content Include="Views\L10\GetAdmins.cshtml" />
+    <Content Include="Views\Admin\Events.cshtml" />
+    <Content Include="Views\Notifications\partial\list.cshtml" />
+    <Content Include="Views\Integrations\AddZoomModal.cshtml" />
+    <Content Include="Views\Responsibilities\Sections.cshtml" />
+    <Content Include="Views\Responsibilities\EditSection.cshtml" />
+    <Content Include="Views\Review\Details\BarCharts.cshtml" />
+    <Content Include="Views\Admin\UserInfo.cshtml" />
+    <Content Include="Views\Headlines\CopyHeadline.cshtml" />
+    <Content Include="Views\Archive\L10.cshtml" />
+    <Content Include="Views\Payment\SetACH.cshtml" />
+    <Content Include="Views\Organization\Invites.cshtml" />
+    <Content Include="Views\Issues\EditModal.cshtml" />
+    <Content Include="Views\Audit\Rocks.cshtml" />
+    <Content Include="Views\Audit\Scores.cshtml" />
+    <Content Include="Views\Audit\Measurables.cshtml" />
+    <Content Include="Views\Audit\Roles.cshtml" />
+    <Content Include="Views\L10\EditL10Page.cshtml" />
+    <Content Include="Views\L10\TitlePage.cshtml" />
+    <Content Include="Views\L10\NotesBox.cshtml" />
+    <Content Include="Views\Archive\Table.cshtml" />
+    <Content Include="Views\Archive\Index.cshtml" />
+    <Content Include="Views\Dashboard\_L10TileList.cshtml" />
+    <Content Include="Views\L10\ExternalPage.cshtml" />
+    <None Include="Views\Review\Details\ChartPicker.cshtml" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="wkhtmltox0.dll" />
+    <Content Include="Scripts\bootstrap.min.js.map">
+      <DependentUpon>bootstrap.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\d3\d3.v3.min.js.map">
+      <DependentUpon>d3.v3.js</DependentUpon>
+    </Content>
+    <Content Include="Content\fonts\reports.eot" />
+    <Content Include="Content\fonts\reports.ttf" />
+    <Content Include="Content\fonts\reports.woff" />
+    <Content Include="Content\fonts\new.eot" />
+    <Content Include="Content\fonts\new.ttf" />
+    <Content Include="Content\fonts\new.woff" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\livestamp.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\_RemoveAccountPartial.cshtml" />
+    <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Manage.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Group\Edit.cshtml" />
+    <Content Include="Views\Group\Index.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Organization\Begin.cshtml" />
+    <Content Include="Views\Organization\Create.cshtml" />
+    <Content Include="Views\Organization\Index.cshtml" />
+    <Content Include="Views\Account\Role.cshtml" />
+    <Content Include="Views\Partial\_DragDropItem.cshtml" />
+    <Content Include="Views\Payment\Index.cshtml" />
+    <Content Include="Views\Home\Backend.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DragDropViewModel.cshtml" />
+    <Content Include="Views\Group\Details.cshtml" />
+    <Content Include="Views\Category\Edit.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\Organization\Partials\ManageUsers.cshtml" />
+    <Content Include="Views\Organization\Partials\ManageGroups.cshtml" />
+    <Content Include="Views\User\Manage.cshtml" />
+    <Content Include="Views\Shared\Partial\_Modal.cshtml" />
+    <Content Include="Views\Question\Modal.cshtml" />
+    <Content Include="Views\Shared\ModalError.cshtml" />
+    <Content Include="Views\Shared\Partial\_QuestionTable.cshtml" />
+    <Content Include="Views\User\AddModal.cshtml" />
+    <Content Include="Views\Upload\Image.cshtml" />
+    <Content Include="Views\Question\Admin.cshtml" />
+    <Content Include="Views\Organization\Partials\ManageReviews.cshtml" />
+    <Content Include="Views\Review\Create.cshtml" />
+    <Content Include="Views\Review\Index.cshtml" />
+    <Content Include="Views\Review\Take.cshtml" />
+    <Content Include="Views\Review\Slider.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\LocalizedStringModel.cshtml" />
+    <Content Include="Views\Shared\_ReviewLayout.cshtml" />
+    <Content Include="Views\Review\Feedback.cshtml" />
+    <Content Include="Views\Review\RelativeComparison.cshtml" />
+    <Content Include="Views\Manage\Positions.cshtml" />
+    <Content Include="Views\Shared\Partial\ManageHeader.cshtml" />
+    <Content Include="Views\Position\Modal.cshtml" />
+    <Content Include="Views\Manage\Teams.cshtml" />
+    <Content Include="Views\Team\Modal.cshtml" />
+    <Content Include="Views\Manage\Members.cshtml" />
+    <Content Include="Views\Team\Responsibilities.cshtml" />
+    <Content Include="Views\Responsibilities\Edit.cshtml" />
+    <Content Include="Views\Responsibilities\Modal.cshtml" />
+    <Content Include="Views\Shared\Partial\Footer.cshtml" />
+    <Content Include="Views\Legal\TOS.cshtml" />
+    <Content Include="Views\Legal\Privacy.cshtml" />
+    <Content Include="Views\User\Positions.cshtml" />
+    <Content Include="Views\User\PositionModal.cshtml" />
+    <Content Include="Views\User\Teams.cshtml" />
+    <Content Include="Views\User\TeamModal.cshtml" />
+    <Content Include="Views\Manage\Organization.cshtml" />
+    <Content Include="Views\Team\Edit.cshtml" />
+    <Content Include="Views\Team\AddModal.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\UserPositionViewModel.cshtml" />
+    <Content Include="Views\Reports\Generate.cshtml" />
+    <Content Include="Views\Reports\List.cshtml" />
+    <Content Include="Views\Shared\_Completion.cshtml" />
+    <Content Include="Views\Review\Details.cshtml" />
+    <Content Include="Views\Review\Thumbs.cshtml" />
+    <Content Include="Views\User\EditModal.cshtml" />
+    <Content Include="Views\User\Managers.cshtml" />
+    <Content Include="Views\User\ManagerModal.cshtml" />
+    <Content Include="Views\Shared\_User.cshtml" />
+    <Content Include="Views\Organization\RadialTree.cshtml" />
+    <Content Include="Views\Organization\Tree.cshtml" />
+    <Content Include="Views\Charts\Quad.cshtml" />
+    <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\Template\Edit.cshtml" />
+    <Content Include="Views\Organization\ResendJoin.cshtml" />
+    <Content Include="Views\Account\Profile.cshtml" />
+    <Content Include="Views\Review\ClientDetails.cshtml" />
+    <Content Include="Views\Shared\_UserModel.cshtml" />
+    <Content Include="Views\Account\TestChart.cshtml" />
+    <Content Include="Views\Review\AdditionalReview.cshtml" />
+    <Content Include="Views\Reviews\Update.cshtml" />
+    <Content Include="Views\Reviews\RemoveQuestion.cshtml" />
+    <Content Include="Views\Reviews\AddQuestion.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordWithToken.cshtml" />
+    <Content Include="Views\Reviews\RemoveUser.cshtml" />
+    <Content Include="Views\Review\ClientDetailsPrint.cshtml" />
+    <Content Include="Views\Partial\_QuestionColorTable.cshtml" />
+    <Content Include="Views\Partial\_SupervisorAnswers.cshtml" />
+    <Content Include="Views\Results\Index.cshtml" />
+    <Content Include="Views\Partial\_AnswerTable.cshtml" />
+    <Content Include="Views\Faq\Index.cshtml" />
+    <Content Include="Views\Reviews\IssueDetails.cshtml" />
+    <Content Include="Views\Shared\_Pagination.cshtml" />
+    <Content Include="Views\Manage\UserDetails.cshtml" />
+    <Content Include="Views\Shared\_UserDetails.cshtml" />
+    <Content Include="Views\Issue\Index.cshtml" />
+    <Content Include="Views\Issue\IssueOrganization.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Views\Issue\IssueTeam.cshtml" />
+    <Content Include="Views\Issue\ManagersCustomize.cshtml" />
+    <Content Include="Views\Issue\Customize.cshtml" />
+    <Content Include="Views\Prereview\Customize.cshtml" />
+    <Content Include="Views\Shared\_Customization.cshtml" />
+    <Content Include="Views\Tasks\Index.cshtml" />
+    <Content Include="Views\Shared\_ReportsHeader.cshtml" />
+    <Content Include="Views\Reports\Index1.cshtml" />
+    <Content Include="Views\Shared\_ReviewsHeader.cshtml" />
+    <Content Include="Views\Reviews\Details.cshtml" />
+    <Content Include="Views\Shared\_ExtraTab.cshtml" />
+    <Content Include="Views\Reviews\Outstanding.cshtml" />
+    <Content Include="Views\Statistics\Review.cshtml" />
+    <Content Include="Views\D3\PieChart.cshtml" />
+    <Content Include="Views\Reviews\Edit.cshtml" />
+    <Content Include="Views\Organization\ForceDirected.cshtml" />
+    <Content Include="Scripts\jquery\jquery.qtip.js" />
+    <Content Include="Views\Shared\_ReviewStats.cshtml" />
+    <Content Include="Views\Shared\_HierarchicalEdgeBundling.cshtml" />
+    <Content Include="Views\User\Remove.cshtml" />
+    <Content Include="Views\Manage\Reorganize.cshtml" />
+    <Content Include="Views\Reviews\DueDate.cshtml" />
+    <Content Include="Views\Reviews\Delete.cshtml" />
+    <Content Include="Views\Reviews\Index.cshtml" />
+    <Content Include="Views\Review\GetWantCap.cshtml" />
+    <Content Include="Views\Partial\ThumbTable.cshtml" />
+    <Content Include="Views\Review\Details\Sidebar.cshtml" />
+    <Content Include="Views\Review\Details\MainContent.cshtml" />
+    <Content Include="Views\Review\Details\ChartBuilder.cshtml" />
+    <Content Include="Views\Shared\Partial\Collapsable.cshtml" />
+    <Content Include="Views\Review\Details\Sidebar - Old.cshtml" />
+    <Content Include="Views\Review\Details\Notes.cshtml" />
+    <Content Include="Views\Roles\Modal.cshtml" />
+    <Content Include="Views\Roles\_RoleRow.cshtml" />
+    <Content Include="Views\Review\Details\Feedback.cshtml" />
+    <Content Include="Views\Review\Details\YesNo.cshtml" />
+    <Content Include="Views\Review\Take\GWC.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Tristate.cshtml" />
+    <Content Include="Views\UnitTest\Tristate.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\PositiveNegativeNeutral.cshtml" />
+    <Content Include="Views\Review\Take\Values.cshtml" />
+    <Content Include="Views\Rocks\_RockRow.cshtml" />
+    <Content Include="Views\Rocks\Modal.cshtml" />
+    <Content Include="Views\Review\Take\Rocks.cshtml" />
+    <Content Include="Views\Review\Details\EosEvaluation.cshtml" />
+    <Content Include="Views\Shared\Table.cshtml" />
+    <Content Include="Views\Review\Details\EosClient.cshtml" />
+    <Content Include="Views\Review\Details\GWC.cshtml" />
+    <Content Include="Views\Review\GWCDetails.cshtml" />
+    <Content Include="Views\Review\ValueDetails.cshtml" />
+    <Content Include="Views\Review\RockDetails.cshtml" />
+    <Content Include="Views\Review\Details\_GwcTable.cshtml" />
+    <Content Include="Views\Shared\_ReviewStats2.cshtml" />
+    <Content Include="Views\Review\Details\_ValueTable.cshtml" />
+    <Content Include="Views\Review\Details\_RockTable.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\RockState.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\RockState.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ApproveReject.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\CompleteIncomplete.cshtml" />
+    <Content Include="Views\Rocks\Table.cshtml" />
+    <Content Include="Views\Review\Details\NextSession.cshtml" />
+    <Content Include="Views\Rocks\ModalSingle.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\PositiveNegativeNeutral.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Tristate.cshtml" />
+    <Content Include="Views\Shared\_Picture.cshtml" />
+    <Content Include="Views\Shared\_L10Layout.cshtml" />
+    <Content Include="Views\Todo\CreateTodo.cshtml" />
+    <Content Include="Views\Rocks\CompanyRockModal.cshtml" />
+    <Content Include="Views\UserTemplate\Index.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\FiveState.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\FiveState.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\RockStateThin.cshtml" />
+    <Content Include="Views\Todo\ScorecardTodoModal.cshtml" />
+    <Content Include="Views\Todo\RockTodoModal.cshtml" />
+    <Content Include="Views\Todo\CreateTodoFromIssue.cshtml" />
+    <Content Include="Views\Todo\Previous.cshtml" />
+    <Content Include="Views\Shared\_ResponsibilityGroup.cshtml" />
+    <Content Include="Views\Shared\_Organization.cshtml" />
+    <Content Include="Views\Shared\_Survey.cshtml" />
+    <Content Include="Views\Shared\Survey\Slider.cshtml" />
+    <Content Include="Views\Shared\Survey\Thumbs.cshtml" />
+    <Content Include="Views\Shared\Survey\Feedback.cshtml" />
+    <Content Include="Views\Todo\LinkToExternal.cshtml" />
+    <Content Include="Views\UnitTest\Index.cshtml" />
+    <Content Include="Views\Shared\Partial\_VideoChat.cshtml" />
+    <Content Include="Views\Todo\List.cshtml" />
+    <Content Include="Views\Todo\partial\list.cshtml" />
+    <Content Include="Views\VTO\Index.cshtml" />
+    <Content Include="Views\VTO\Edit.cshtml" />
+    <Content Include="Views\Surveys\Index.cshtml" />
+    <Content Include="Views\Surveys\Edit.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SurveyQuestionGroupModel.cshtml" />
+    <Content Include="Views\Surveys\_SurveyQuestionRow.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SurveyRespondentGroupModel.cshtml" />
+    <Content Include="Views\Surveys\_SurveyRespondentRow.cshtml" />
+    <Content Include="Views\Surveys\Take.cshtml" />
+    <Content Include="Views\TwilioApi\Modal.cshtml" />
+    <Content Include="Views\TwilioApi\_PhoneRow.cshtml" />
+    <Content Include="Views\TwilioApi\Index.cshtml" />
+    <Content Include="Views\Scorecard\partial\listscripts.cshtml" />
+    <Content Include="Views\Rocks\partial\list.cshtml" />
+    <Content Include="Views\Todo\CreateTodoRecurrence.cshtml" />
+    <Content Include="Views\Surveys\Results.cshtml" />
+    <Content Include="Views\Surveys\partial\Radio5Result.cshtml" />
+    <Content Include="Views\Surveys\partial\Radio5Take.cshtml" />
+    <Content Include="Views\Surveys\partial\FeedbackTake.cshtml" />
+    <Content Include="Views\Surveys\partial\FeedbackResult.cshtml" />
+    <Content Include="Views\Surveys\Embedded.cshtml" />
+    <Content Include="Views\UnitTest\Sync.cshtml" />
+    <Content Include="Views\UnitTest\AllPages.cshtml" />
+    <Content Include="Views\UnitTest\EditPage.cshtml" />
+    <Content Include="Views\TileData\UserTodo.cshtml" />
+    <Content Include="Views\TileData\UserScorecard.cshtml" />
+    <Content Include="Views\TileData\UserManage.cshtml" />
+    <Content Include="Views\TileData\UserRock.cshtml" />
+    <Content Include="Views\TileData\UserProfile.cshtml" />
+    <Content Include="Views\Scorecard\partial\tile.cshtml" />
+    <Content Include="Views\UnitTest\Video.cshtml" />
+    <Content Include="Views\Video\Join.cshtml" />
+    <Content Include="Views\UnitTest\SpeechRecog.cshtml" />
+    <Content Include="Views\TileData\UserButtons.cshtml" />
+    <Content Include="Views\TileData\SoftwareUpdates.cshtml" />
+    <Content Include="Views\Upload\ProfilePicture.cshtml" />
+    <Content Include="Views\TileData\L10Rocks.cshtml" />
+    <Content Include="Views\TileData\L10Scorecard.cshtml" />
+    <Content Include="Views\TileData\L10Todos.cshtml" />
+    <Content Include="Views\TileData\L10Issues.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Accessors\Powerpoint\" />
+    <Folder Include="App_Data\" />
+    <Folder Include="Areas\CoreProcess\CamundaFiles\" />
+    <Folder Include="Areas\CoreProcess\Views\Home\" />
+    <Folder Include="Areas\CoreProcess\Views\Process\" />
+    <Folder Include="Areas\CoreProcess\Views\Shared\Partial\" />
+    <Folder Include="Areas\People\Engines\Surveys\Abstract\" />
+    <Folder Include="Areas\RouteDebugger\Content\" />
+    <Folder Include="Areas\RouteDebugger\Scripts\" />
+    <Folder Include="Content\fonts\fonts\" />
+    <Folder Include="External\" />
+    <Folder Include="logs\" />
+    <Folder Include="Models\Frontend\ViewModels\" />
+    <Folder Include="Scripts\Angular\Helpers\Filters\" />
+    <Folder Include="Scripts\Models\" />
+    <Folder Include="Utilities\Migradoc\XYScatter\" />
+    <Folder Include="Views\AngularAccountability\" />
+    <Folder Include="Views\BaseExpensive\" />
+    <Folder Include="Views\Console\" />
+    <Folder Include="Views\Documents\" />
+    <Folder Include="Views\DropDown\" />
+    <Folder Include="Views\HealthCheck\" />
+    <Folder Include="Views\Img\" />
+    <Folder Include="Views\L10Data\" />
+    <Folder Include="Views\L10Details\" />
+    <Folder Include="Views\MeetingData\" />
+    <Folder Include="Views\Members\" />
+    <Folder Include="Views\Migration\" />
+    <Folder Include="Views\Onboard\" />
+    <Folder Include="Views\Scheduler\" />
+    <Folder Include="Views\Session\" />
+    <Folder Include="Views\Su\" />
+    <Folder Include="Views\Svg\" />
+    <Folder Include="Views\Transcript\" />
+    <Folder Include="Views\Url\" />
+    <Folder Include="Views\User\EditorTemplates\" />
+    <Folder Include="Views\VtoData\" />
+    <Folder Include="Views\WebRtc\" />
+    <Folder Include="Views\Wizard\" />
+    <Folder Include="Views\_Angular\" />
+    <Folder Include="x64\" />
+    <Folder Include="x86\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Data.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\ErrorMessageStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessageStrings.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\DisplayNameStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DisplayNameStrings.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\MessageStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessageStrings.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\ConstantStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConstantStrings.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\EmailStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmailStrings.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\ExceptionStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExceptionStrings.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\EmailTypes.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmailTypes.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\MandrillStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MandrillStrings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\ProductStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductStrings.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SoftwareUpdates\20151217.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TractionTools.Utils\TractionTools.Utils.csproj">
+      <Project>{13048a42-672d-4245-a3f9-441386896ef0}</Project>
+      <Name>TractionTools.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\XmlComments.xml</DocumentationFile>
+    <NoWarn>1591,1998,0219,0618,0168</NoWarn>
+    <TransformWebConfigEnabled>False</TransformWebConfigEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\XmlComments.xml</DocumentationFile>
+    <TransformWebConfigEnabled>False</TransformWebConfigEnabled>
+    <NoWarn>1591,1998</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <TransformWebConfigEnabled>False</TransformWebConfigEnabled>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1591,1998,0219,0618,0168</NoWarn>
+    <DocumentationFile>bin\XmlComments.xml</DocumentationFile>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <TransformWebConfigEnabled>False</TransformWebConfigEnabled>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\XmlComments.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AWS|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <TransformWebConfigEnabled>False</TransformWebConfigEnabled>
+    <DocumentationFile>bin\XmlComments.xml</DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AWS|x86'">
+    <OutputPath>bin\</OutputPath>
+    <TransformWebConfigEnabled>False</TransformWebConfigEnabled>
+    <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>bin\XmlComments.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <TransformWebConfigEnabled>False</TransformWebConfigEnabled>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|x86'">
+    <OutputPath>bin\</OutputPath>
+    <TransformWebConfigEnabled>False</TransformWebConfigEnabled>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\XmlComments.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>1591,1998</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|x64'">
+    <OutputPath>bin\</OutputPath>
+    <TransformWebConfigEnabled>False</TransformWebConfigEnabled>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\XmlComments.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AWS|x64'">
+    <OutputPath>bin\</OutputPath>
+    <TransformWebConfigEnabled>False</TransformWebConfigEnabled>
+    <PlatformTarget>x64</PlatformTarget>
+    <DocumentationFile>bin\XmlComments.xml</DocumentationFile>
+    <Optimize>false</Optimize>
+    <NoWarn>1587</NoWarn>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptMapRoot>~\Scripts\</TypeScriptMapRoot>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3751</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://127.0.0.1:80/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>http://radial1.elasticbeanstalk.com/</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <servers defaultServer="">
+            <server name="SelfHostServer" exePath="" cmdArgs="" url="http://localhost:2200/" workingDir="" />
+          </servers>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  -->
+  <Target Name="AfterBuild">
+    <TransformXml Source="web.Base.config" Transform="$(ProjectConfigTransformFileName)" Destination="web.config" />
+  </Target>
+</Project>

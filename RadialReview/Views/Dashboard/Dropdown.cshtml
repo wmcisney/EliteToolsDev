@@ -1,0 +1,187 @@
+﻿@model RadialReview.Models.ViewModels.WorkspaceDropdownVM
+@using RadialReview.Models.Enums
+@{
+	var maxLen = 4;
+	var breakoutMeetings = Model.AllMeetings.NotNull(x => x.Count()) > maxLen;
+	var orderedMeetings = Model.AllMeetings.NotNull(y => y.OrderBy(x => x.StarDate ?? DateTime.MaxValue));
+	var breakoutCustom = Model.CustomWorkspaces.NotNull(x => x.Count()) > maxLen;
+	var custom = Model.CustomWorkspaces;
+
+	var isPrimary = new Func<long, DashboardType, bool>
+	((id, type) => {
+		return Model.PrimaryWorkspace.Type == type && Model.PrimaryWorkspace.WorkspaceId == id;
+	});
+
+	var primaryWorkspaceName =
+	Model.AllMeetings.NotNull(y => y.FirstOrDefault(x => isPrimary(x.Id, DashboardType.L10)).NotNull(x => x.Name)) ??
+	Model.CustomWorkspaces.NotNull(y => y.FirstOrDefault(x => isPrimary(x.Id, DashboardType.Standard)).NotNull(x => x.Name)) ??
+	"Primary Workspace";
+
+	primaryWorkspaceName = Html.Encode(primaryWorkspaceName);
+}
+
+<script>
+	Workspace.openWorkspacesModal = function () {
+				var arr = [{
+					type: "div",
+				text: "<b>Primary Workspace</b>"
+					}, {
+					type: "div",
+				text: "<a class='btn btn-link' href='/' style='text-decoration:underline;'>@(primaryWorkspaceName)</a>"
+			}, {
+					type: "div",
+				text: "<br/><b>Meeting Workspaces</b>"
+			}];
+
+				var workspaceItems = @(Html.ArrayToString(Model.AllMeetings));
+				for (var i = 0; i < workspaceItems.length; i++) {
+					arr.push({
+						type: "div",
+				text: "<a class='btn btn-link' style='text-decoration: underline;' href='/Dashboard/Generate/" + workspaceItems[i].Id+"?type=L10'>" + workspaceItems[i].Name +"</a>"
+					});
+			}
+
+		if (workspaceItems.length == 0) {
+			arr.push({
+				type: "div",
+				text: "<span style='color:#ccc;'><i>No meetings</i></span>"
+			});
+		}
+		arr.push({
+			type: "div",
+			text: "<br/><b>Custom Workspaces</b>"
+		});
+
+		var customWorkspaceItems = @(Html.ArrayToString(Model.CustomWorkspaces));
+		for (var i = 0; i < customWorkspaceItems.length; i++) {
+			arr.push({
+				type: "div",
+				text: "<a class='btn btn-link' style='text-decoration: underline;' href='/Dashboard/Index/" + customWorkspaceItems[i].Id + "'>" + customWorkspaceItems[i].Name +"</a>"
+			});
+		}
+
+
+		if (customWorkspaceItems.length == 0) {
+			arr.push({
+				type: "div",
+				text: "<span style='color:#ccc;'><i>No custom workspaces</i></span>"
+			});
+		}
+
+
+		showModal({
+		title:"Show Workspace",
+			fields: arr,
+			noFooter: true
+		});
+	}
+
+	function initRecalculateWorkspaceDropdownExtendedMenuStyle(e) {
+		debugger;
+	}
+	function recalculateWorkspaceDropdownExtendedMenuStyle(self, items) {
+
+		var width = 253;
+		var windowWidth = $(window).width();
+		var windowHeight = $(window).height();
+
+		function widthOrFallback(n) {
+			if (windowWidth < (n + 1.5) * width && n > 1) {
+				return widthOrFallback(n - 1);
+			} else {
+				$(self).parent().find(".extended-menu").css("width", (width * n + 14) + "px");
+				try {
+					var location = $(self).parent().find(".extended-menu").offset();
+					$(self).parent().find(".extended-menu").css("max-height", (windowHeight - (location.top + 10)) + "px");
+				} catch (e) {
+					console.error(e);
+				}
+
+			}
+		}
+
+		if (items >= 42) {
+			widthOrFallback(12)
+		} else if (items >= 30) {
+			widthOrFallback(6)
+		} else if (items >= 12) {
+			widthOrFallback(4);
+		} else if (items >= 6) {
+			widthOrFallback(3);
+		} else {
+			widthOrFallback(1);
+		}
+	}
+</script>
+
+<li class="dropdown-heading">Primary Workspace</li>
+<li><a href="/">Primary Workspace <span class="glyphicon glyphicon-home selected"></span></a></li>
+
+<li class="divider"></li>
+<li class="dropdown-heading">Meeting Workspaces</li>
+@foreach (var meeting in orderedMeetings.Take(maxLen)) {
+	var primary = isPrimary(meeting.Id, DashboardType.L10);
+	<li class="workspace-dropdown-meeting-@(meeting.Id)">
+		<a href="javascript:void(0)" onclick="Workspace.goToMeetingWorkspace(@meeting.Id)">
+			@(string.IsNullOrWhiteSpace(meeting.Name) ? "-unnamed meeting-" : meeting.Name) &nbsp;
+			<span class="glyphicon glyphicon-star @(meeting.StarDate!=null?"starred":"")"></span>
+			<span class="glyphicon glyphicon-home @(primary?"selected":"")"></span>
+		</a>
+	</li>
+}
+@if (breakoutMeetings) {
+	<li class="dropdown-submenu">
+		<a tabindex="-1" onmouseover="recalculateWorkspaceDropdownExtendedMenuStyle(this,@(orderedMeetings.Skip(maxLen).Count()))">More Meetings<span class="extra-padding-1"></span><span class="extra-padding-2"></span><span class="extra-padding-3"></span></a>
+		<ul class="dropdown-menu extended-menu" style="">
+			@foreach (var meeting in orderedMeetings.Skip(maxLen)) {
+				var primary = isPrimary(meeting.Id, DashboardType.L10);
+				<li class="workspace-dropdown-meeting-@(meeting.Id)">
+					<span class="glyphicon glyphicon-star @(meeting.StarDate!=null?"starred":"")"></span>
+					<span class="glyphicon glyphicon-home @(primary?"selected":"")"></span>
+					<a href="javascript:void(0)" onclick="Workspace.goToMeetingWorkspace(@meeting.Id)">
+						@(string.IsNullOrWhiteSpace(meeting.Name) ? "-unnamed meeting-" : meeting.Name) &nbsp;
+					</a>
+				</li>
+			}
+		</ul>
+	</li>
+}
+@if (orderedMeetings.Count() == 0) {
+	<li>
+		<a class="gray noclick"><small><i>No meeting workspaces</i></small></a>
+	</li>
+}
+<li class="divider"></li>
+<li class="dropdown-heading">Custom Workspaces</li>
+
+@foreach (var c in custom.Take(maxLen)) {
+	var primary = isPrimary(c.Id, DashboardType.Standard);
+	<li>
+		<a class="dashboard_txt_@(c.Id)" href="/Dashboard/Index/@(c.Id)">@(string.IsNullOrWhiteSpace(c.Name) ? "-unnamed-" : c.Name) &nbsp;<span class="glyphicon glyphicon-home @(primary?"selected":"")"></span></a>
+	</li>
+}
+@if (breakoutCustom) {
+	<li class="dropdown-submenu">
+		<a tabindex="-1" onmouseover="recalculateWorkspaceDropdownExtendedMenuStyle(this,@(custom.Skip(maxLen).Count()))">More Custom Workspaces<span class="extra-padding-1"></span><span class="extra-padding-2"></span><span class="extra-padding-3"></span></a>
+		<ul class="dropdown-menu extended-menu" style="">
+			@foreach (var c in custom.Skip(maxLen)) {
+				var primary = isPrimary(c.Id, DashboardType.Standard);
+				<li>
+					<span class="glyphicon glyphicon-home @(primary?"selected":"")"></span>
+					<a class="dashboard_txt_@(c.Id)" href="/Dashboard/Index/@(c.Id)">@(string.IsNullOrWhiteSpace(c.Name)?"-unnamed-":c.Name) &nbsp;</a>
+				</li>
+			}
+		</ul>
+	</li>
+}
+@if (custom.Count() == 0 && !Model.DisplayCreate) {
+	<li>
+		<a class="gray noclick"><small><i>No custom workspaces</i></small></a>
+	</li>
+}
+@if (Model.DisplayCreate) {
+	<li>
+		<a href="#" onclick="Workspace.addPage()">New Workspace  <span class="glyphicon glyphicon-plus-sign add-workspace"></span></a>
+
+	</li>
+}

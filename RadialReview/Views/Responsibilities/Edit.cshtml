@@ -1,0 +1,124 @@
+﻿@model RadialReview.Models.ViewModels.ResponsibilityTablesViewModel
+@using RadialReview.Models.Responsibilities;
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Page = "Edit Questions";
+    ViewBag.ExtraTabs = ExtraTab.Create("Edit Questions", Request.RawUrl);
+    
+}
+
+@section top{
+    <div class="jumbotron">
+        <h1>Manage</h1>
+    </div>
+}
+
+@section header{
+    @Html.Partial("Partial/manageheader")
+}
+@foreach (var table in Model.ResponsibilityTables)
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">Questions for @table.GroupType.ToLower(): <b>@table.Name</b></h2>
+        </div>
+
+        @if (table.Responsibilities.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-condensed" style="margin-bottom:0px">
+                    <tr>
+                        <th class="alignCenter" style="width:10px;">Enabled</th>
+                        <th>Question</th>
+                        <th class="" style="max-width:200px;">Category</th>
+                        <th class="" style="width:89px;">Importance</th>
+                        <th class="alignCenter rightButton">
+                            @if (table.Editable)
+                            {
+                                <a class="btn btn-default fullWidth" onclick="@Html.ShowModal("Add question to " + table.GroupType.ToLower() + ": " + table.Name,
+                Url.Action("Modal", "Responsibilities", new {responsibilityGroupId=table.ResponsibilityGroupId }),
+                Url.Action("Modal", "Responsibilities"),null,"verify")">
+                                    +
+                                </a>
+                            }
+                        </th>
+                    </tr>
+                    @foreach (var r in table.Responsibilities.OrderBy(x => !x.Active).ThenBy(x => x.Category).ThenBy(x => x.Responsibility))
+                    {
+                        <tr class="activatable row_@r.Id @(r.Active?"active":"")">
+                            <td class="alignCenter toggleButton clickable" onclick="toggle(@r.Id)"><span class="activeIcon"></span></td>
+                            <td class="strikable">@r.Responsibility</td>
+                            <td class="">@r.Category</td>
+                            <td class="alignCenter">
+                                @for (int i = 0; i < 5; i++)
+                                {<span style="color: @(((int)r.Weight) > i ? "#3276B1" : "#D3D3D3");" class="glyphicon glyphicon-star@(((int)r.Weight)>i?"":"-empty")"></span>}
+                            </td>
+                            <td class="alignCenter rightButton" style="padding: 2px;">
+                                @if (table.Editable)
+                                {
+                                    <a class="btn btn-primary fullWidth" onclick="@Html.ShowModal("Edit question for " + table.GroupType.ToLower() + ": " + table.Name,
+                        Url.Action("Modal", "Responsibilities", new { id = r.Id }),
+Url.Action("Modal", "Responsibilities"),null,"verify")">
+                                        Edit
+                                    </a>
+                                }
+                            </td>
+
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="panel-body">
+                @if (table.Editable)
+                {
+                    <div class="btn btn-default pull-right" onclick="@Html.ShowModal("Add question to " + table.GroupType.ToLower() + ": " + table.Name,Url.Action("Modal", "Responsibilities", new {responsibilityGroupId=table.ResponsibilityGroupId }),Url.Action("Modal", "Responsibilities"), null, "verify")" style="width:66px;">+</div>
+                    <div style="color: #B6B6B6">No @table.GroupType.ToLower() questions. Click the button to the right to add some.</div>
+                }
+                else
+                {
+                    <div style="color: #B6B6B6">No @table.GroupType.ToLower() questions.</div>
+                }
+            </div>
+        }
+    </div>
+}
+
+@using (Html.BeginScripts())
+{
+    <script>
+        var once = false;
+        function toggle(id) {
+            if (!once) {
+                showAlert("Changing the 'Active' attribute does not update outstanding review. To do this, you'll need to click 'Manage' > 'Review' > 'Details' > 'Add/Remove Question'.", "alert-info", "Info:")
+                once = true;
+            }
+
+            var active = $(".row_" + id).hasClass("active").toString().toLowerCase() == "true";
+
+            $(".row_" + id).toggleClass("active");
+
+            $.ajax({
+                url: "/Responsibilities/ToggleActive/" + id + "?active=" + !active,
+                success: function (data) {
+                    if (data.Error) {
+                        showJsonAlert(data);
+                    } else {
+                        if (data.Object == true) {
+                            $(".row_" + id).addClass("active");
+                        } else {
+                            $(".row_" + id).removeClass("active");
+                        }
+                    }
+                }
+            })
+
+        }
+    </script>
+
+}
+

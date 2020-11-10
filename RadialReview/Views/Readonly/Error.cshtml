@@ -1,0 +1,26 @@
+﻿@model Exception
+@{
+	ViewBag.Title = "Error";
+	Layout = "~/Views/Readonly/_ReadonlyLayout.cshtml";
+}
+
+<h2>An Error Occurred</h2>
+<section style="padding:20px 40px;">
+	@if (Model != null) {
+		<b>Error: </b>@Model.Message
+	} else {
+		<b>Unknown Error.</b>
+	}
+</section>
+
+<br />
+
+<section>
+	We're experiencing higher than expected traffic which may have caused this error.
+	<br />
+	Our team is aware of the issue and we're working to bring the service back up to 100%
+	<br />
+	<br />
+	Meanwhile, read-only mode is turned on to provide you access to your Level 10 meeting data.
+</section>
+

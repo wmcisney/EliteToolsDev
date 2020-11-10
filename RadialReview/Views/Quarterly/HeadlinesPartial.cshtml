@@ -1,0 +1,56 @@
+﻿@model RadialReview.Accessors.PDF.Partial.HeadlinesPartialViewModel
+@{
+	Layout = "~/Views/Quarterly/_TemplatePartial.cshtml";
+}
+
+<style>
+	.headlines-container tr th, .headlines-container tr td {
+		font-size: 11px !important;
+	}
+</style>
+
+@section head {
+
+	<div class="swan-flex">
+		<h1>People Headlines</h1>
+		<!-- RIGHT SWAN SERVICES -->
+		<div>
+			<span>@Html.Encode(Model.Company)</span>
+			<span>
+				<img src="@Model.Image" alt="Swan Services Logo" width="50" height="50">
+			</span>
+		</div>
+	</div>
+	@*<hr />*@
+	<div class="header-separator"></div>
+}
+
+@if (Model.Headlines.Any()) {
+
+	<div style="margin-top: 0px;">
+		<div style="width: 100%;">
+			<table class="headlines-container printout header-always-present">
+				<thead>
+					<tr class="print-color-adjust">
+						<th style="width: 80%">HEADLINES</th>
+						<th>OWNER</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- HEADLINES -->
+					@foreach (var headline in Model.Headlines) {
+						var headlineIndex = (Model.Headlines.IndexOf(headline) + 1) + ". ";
+
+						<tr class="print-color-adjust">
+							<td>@(headlineIndex + headline.Headline)</td>
+							<td>@headline.Owner</td>
+						</tr>
+
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+} else {
+	<div class="empty-listing">No People Headlines.</div>
+}

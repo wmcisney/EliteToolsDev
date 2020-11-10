@@ -1,0 +1,63 @@
+﻿@model RadialReview.Accessors.ArchiveAccessor.ArchiveVM
+@{
+	ViewBag.Title = Model.Title + " Archive";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var hasDetails = Model.Objects != null && Model.Objects.Any(x => !string.IsNullOrEmpty(x.DetailsUrl));
+
+	var auditUrl = ViewBag.IsRadialAdmin ? Model.AuditUrl : "#";
+}
+
+<h2>Archived @Model.Title</h2>
+
+
+<div id="container" class="editFirst"></div>
+
+@using (Html.BeginScripts()) {
+	<script>
+		var detailsSelector = {
+			title: "DetailsUrl",
+			//name: "Notes",
+			contents: function (r) {
+				return "<a class='clickable' href='"+r.DetailsUrl+"' > View&nbsp;Notes </a> ";
+			}
+		}
+	</script>
+
+
+
+	<script>
+
+		var datas = @Html.ArrayToString(Model.Objects);
+
+		var table =DataTable({
+			container: "#container",
+			//title:"@Model.Title",
+			data: datas,
+			clickRemoveTitle: "Are you sure you want to unarchive?",
+			table:{removeText :"<span class='btn btn-xs btn-warning'>Unarchive</span>",},
+			//clickAdd: "/Responsibilities/EditSection/",
+			//clickEdit: "/Responsibilities/EditSection/{0}",
+			//clickReorder:"/Responsibilities/ReorderSection/{0}?oldOrder={1}&newOrder={2}",
+			clickRemove: "@Model.UndeleteUrl",
+			cells:[
+				{ rowNum: true },
+				//{title:"Id",contents:function(r){return r.Id;}},
+				{title:"Name",name:"Title",classes:"fullWidth",contents:function(r){
+					var auditUrl = "@auditUrl";
+					auditUrl = auditUrl.replace("{0}",r.Id);
+					return "<a href='"+auditUrl+"'>"+r.Name+"</a>";
+				}},
+
+				{title:"DeleteTime",name:"Deleted",classes:"",contents:function(r){return "<span class='collapsable'>"+r.DeleteTime+"</span>";}},
+				{title:"Owner",name:"Owner",classes:"",contents:function(r){return "<span class='collapsable'>"+r.Owner+"</span>";}},
+				@if (hasDetails) {
+					@:detailsSelector,
+				}
+				{remove:true}
+				//{contents:function(r){"<a href='/L10/Undelete/"+r.Id+"'>Undelete</a>";}},
+			]
+		});
+
+		//table.setData(datas);
+	</script>
+}

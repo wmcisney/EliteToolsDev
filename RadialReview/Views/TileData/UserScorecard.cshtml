@@ -1,0 +1,55 @@
+﻿
+<div class="review smallBreak2 loading tiny" style2="min-height:30px;">
+	<div class="scorecard-heading heading tile-title tile-title-3">
+		<span class="handle">Scorecard</span>
+		<span class="tile-buttons">
+			<a href="javascript:void(0)" onclick="exportScorecardUserScorecardTile()" class="tile-button tile-button-download"><span class="glyphicon glyphicon-download-alt" title="Download"></span></a>
+			<a href="javascript:void(0)" onclick="goToUserDetails()" class="tile-button tile-button-view-all" title="View All"><span class="glyphicon glyphicon-th-large"></span></a>
+			@*<a href="javascript:void(0)" class="tile-button tile-button-add-new issuesModal" data-method="CreateIssue" data-showusers="false" data-recurrence="@Model" title="Create New"><span class="glyphicon glyphicon-plus-sign"></span></a>*@
+			<a href="javascript:void(0)" class="tile-button tile-button-add-new scorecardModal" data-showusers="false" title="Create New"><span class="glyphicon glyphicon-plus-sign"></span></a>
+		</span>
+	</div><div class="specialDiv tile hidden-width-1 user-scorecard-tile" fix-head-scroller="top" fix-head-parent >
+		@{ Html.RenderPartial("~/Views/Measurable/partial/list.cshtml", new ViewDataDictionary(){
+    {"AddHeaders", false},
+    {"AddController", false},
+    {"ElasticInput", true},
+    {"DisableName", true},
+    {"ViewParent",".tile" },
+    {"RecurrenceId", -1},
+    {"Localization", Html.Organization().Settings.NumberFormat.Angular() },
+    { "ForceMin", (ViewBag.NumberOfWeeks??13)*7 }
+}); }
+</div><div class="tile visible-width-1 user-scorecard-tile">
+	@{Html.RenderPartial("~/Views/Scorecard/Partial/tile.cshtml", new ViewDataDictionary(){
+    {"AddHeaders",false},
+    {"AddController",false},
+    {"ViewParent",".tile" },
+    {"DisableName",true},
+    {"RecurrenceId", -1},
+});}<div ng-show="model.Scorecard===undefined" class="gray alignCenter" elem-ready="functions.reload(model.Scorecard===undefined)">Please wait</div>
+</div>
+</div>
+
+<script>
+	var exportScorecardUserScorecardTile = function() {
+		var start = new Date();
+		start.setDate(start.getDate() - 90);
+		var end = new Date();
+		end.setDate(end.getDate() + 7);
+
+		showModal({
+			icon:{title:"Export range"},
+			fields: [{ type: "date", text: "Start", name: "start", value: start }, { type: "date", text: "End", name: "end" , value: end}],
+			success: function (d) {
+				//window.open("/Export/UserScorecard?type=csv&start=" + (+new Date(d.start)) + "&end=" +(+new Date(d.end)), '_blank');
+				$.ajax({
+					url: "/Export/UserScorecard/?type=csv&start=" + (+new Date(d.start)) + "&end=" + (+new Date(d.end))+"&connectionId="+RealTime.connectionId,
+					success: function (a) {
+						showAlert(a);
+					}
+				});
+			}
+		});
+	}
+
+</script>

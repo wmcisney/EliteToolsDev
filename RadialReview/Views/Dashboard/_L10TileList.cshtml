@@ -1,0 +1,27 @@
+﻿@model List<RadialReview.Controllers.DashboardController.DashboardVM.L10>
+
+@foreach (var i in Model.OrderBy(x => x.StarDate)) {
+	<li class="dropdown-submenu">
+		<a tabindex="-1" href="#">@i.Text&nbsp;<span class="extra-padding-1"></span><span class="extra-padding-2"></span><span class="extra-padding-3"></span></a>
+		<ul class="dropdown-menu">
+			<li><a onclick="createTile('/TileData/L10Scorecard/@i.Value','Url',@i.Value)">Scorecard</a></li>
+			<li><a onclick="createTile('/TileData/L10Headlines/@i.Value','Url',@i.Value)">People Headlines</a></li>
+			<li><a onclick="createTile('/TileData/L10Rocks/@i.Value','Url',@i.Value)">Rocks</a></li>
+			<li><a onclick="createTile('/TileData/L10Todos/@i.Value','Url',@i.Value)">To-do list</a></li>
+			<li><a onclick="createTile('/TileData/L10Issues/@i.Value','Url',@i.Value)">Issues</a></li>
+			<li><a onclick="createTile('/TileData/L10SolvedIssues/@i.Value','Url',@i.Value)">Recently Solved Issues</a></li>
+
+			<li><a onclick="createTile('/TileData/L10Stats/@i.Value','Url',@i.Value)">Stats</a></li>
+			<li class="dropdown-submenu">
+				<a tabindex="-1" href="#" @(i.Notes.Any() ? "" : "disabled")> @(new HtmlString(i.Notes.Any() ? "Notes" : "<small class='gray'><i>No notes</i></small>")) <span class="extra-padding-1"></span><span class="extra-padding-2"></span><span class="extra-padding-3"></span></a>
+				@if (i.Notes.Any()) {
+					<ul class="dropdown-menu" style="">
+						@foreach (var n in i.Notes) {
+							<li><a onclick="createTile('/TileData/L10Notes/@n.Value','Url',@n.Value)">@n.Text</a></li>
+						}
+					</ul>
+				}
+			</li>
+		</ul>
+	</li>
+}

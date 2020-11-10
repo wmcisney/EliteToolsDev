@@ -1,0 +1,53 @@
+﻿@model RadialReview.Accessors.PDF.Partial.IssuesPartialViewModel
+@{
+	Layout = "~/Views/Quarterly/_TemplatePartial.cshtml";
+}
+<style>
+	.issues-container tr th, .headlines-container tr td {
+		font-size: 11px !important;
+	}
+</style>
+
+
+@section head {
+
+	<div class="swan-flex">
+		<h1>Issues</h1>
+		<!-- RIGHT SWAN SERVICES -->
+		<div>
+			<span>@Html.Encode(Model.Company)</span>
+			<span>
+				<img src="@Model.Image" alt="Swan Services Logo" width="50" height="50">
+			</span>
+		</div>
+	</div>
+	@*<hr />*@
+	<div class="header-separator"></div>
+}
+@if (Model.Issues.Any()) {
+	<div style="margin-top: 0;">
+		<div style="width: 100%;">
+			<table class="issues-container printout header-always-present">
+				<thead>
+					<tr class="print-color-adjust">
+						<th style="width: 80%">ISSUES</th>
+						<th>OWNER</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- ISSUES -->
+					@foreach (var issue in Model.Issues) {
+						var issueIndex = issue.Number + ". ";
+
+						<tr class="print-color-adjust">
+							<td class="number-pad">@(issueIndex + issue.Issues)</td>
+							<td>@issue.Owner</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+} else {
+	<div class="empty-listing">No Issues.</div>
+}

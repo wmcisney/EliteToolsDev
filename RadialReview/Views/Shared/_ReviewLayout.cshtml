@@ -1,0 +1,146 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section top{
+    @RenderSection("top")
+}
+
+@section header{
+    @RenderSection("header")
+}
+
+@using (var styles = Html.BeginStyles())
+{
+    <style>
+        .star {
+            color: #F7F7F7;
+            left: 13px;
+            top: 0px;
+            position: absolute;
+            -webkit-text-stroke: 1px #bbb;
+        }
+
+        .red {
+            color: #FFAEAE;
+            -webkit-text-stroke: 1px #B94A48;
+        }
+
+        hr {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+        /*.slider {
+            padding-top:10px;
+        }*/
+
+        .side {
+            padding-top: 25px;
+            text-align: center;
+            display: inline-block;
+        }
+
+        h4.question {
+            padding: 0px 0px 0px 0px;
+            margin: 0px;
+        }
+
+        .row.question {
+            padding-bottom: 15px;
+        }
+    </style>
+}
+
+
+<div class="startHiddenGroup">
+    <div class="row startHidden">
+        @Html.AlertBoxDismissable((string)ViewBag.Message, (string)ViewBag.AlertType, (string)ViewBag.AlertMessage)
+
+		<div class="col-md-3 sidebar1  col-md-push-9 noPadLeft noPadRight" style=" position: relative;">
+			<div class="sidebar-contents1">
+				@RenderSection("sidebar")
+			</div>
+		</div>
+        <div class="col-md-9 col-md-pull-3">
+            <div class="review2">
+                @using (var form = Html.BeginForm("Take", "Review", FormMethod.Post, new { id = "form" }))
+                {
+                    <input type="hidden" name="reviewId" value="@ViewBag.ReviewId" />
+                    <input type="hidden" name="page" value="@ViewBag.Page" />
+                    @RenderBody()
+                    <br />
+                    <div class="row startHidden">
+                        <div class="col-md-12 alignCenter">
+                            @if (ViewBag.NoSubmit == null)
+                            {
+                                if (ViewBag.Page != 0)
+                                {
+                                    <input type="submit" name="back" class="btn btn-default btn-lg submitButton" value="Back" />
+                                }
+                                <input type="submit" class="btn btn-primary btn-lg submitButton" value="Next" />
+                                <div class="subtext hover">(You can always come back to this @Html.ReviewName().ToLower() later!)</div>
+                            }
+                            @*else
+                                {
+                                    <input type="submit" class="btn btn-primary btn-lg" value="@RadialReview.Properties.DisplayNameStrings.submit" />
+                                    <input type="submit" class="btn btn-info btn-lg" value="@RadialReview.Properties.DisplayNameStrings.skip" />
+                                }*@
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="smallBreak"></div>
+            <div class="smallBreak"></div>
+        </div>
+
+    </div>
+</div>
+
+@using (Html.BeginScripts())
+{
+    @*if (ViewBag.NoSubmit == null)
+    {
+        <script>
+            //$(function() {
+            //    document.getElementsByClassName('submitButton')[0].onclick = function() {
+            //        window.btn_clicked = true; /*or use addEventListener ↑ */
+            //    };
+            //    $(window).beforeunload(function() {
+            //        if (!window.btn_clicked) {
+            //            return 'Are you sure you want to leave this page? Without clicking Back or Next, your changes will be lost.';
+            //        }
+            //    });/*
+            //    window.onbeforeunload = function() {
+            //        if (!window.btn_clicked) {
+            //            return 'Are you sure you want to leave this page? Without clicking Back or Next, your changes will be lost.';
+            //        }
+            //    };*/
+            //});
+            $(".changeable").change(function () {
+                reviewChanges = true;
+            });
+
+            var onleaving= function () {
+            	if (reviewChanges) {
+
+                    return 'Are you sure you want to leave this page? Without clicking Back or Next, your changes will be lost.';
+                }
+            };
+
+            $(document).ready(function () {
+                $('.submitButton').on('mousedown', stopNavigate);
+                $('.submitButton').on('mouseleave', function () {
+                    $(window).on('beforeunload', onleaving)
+                });
+            });
+
+            $(window).on('beforeunload', onleaving);
+
+
+            function stopNavigate() {
+                $(window).off('beforeunload');
+            }
+
+        </script>
+    }*@
+}

@@ -1,0 +1,17 @@
+﻿
+<div class="review smallBreak2 loading tiny" style2="min-height:30px;">
+    <div class="todo-heading heading tile-title"><span class="handle">Roles</span>
+	<span class="tile-buttons">
+		<a href="javascript:void(0)" onclick="goToUserDetails()" class="tile-button tile-button-view-all" title="View All"><span class="glyphicon glyphicon-th-large"></span></a>
+		@*<a href="javascript:void(0)" class="tile-button tile-button-add-new todoModal" data-method="CreateTodoRecurrence" data-id="@(Model)" data-context="L10" data-recurrenceId="@Model" title="Create New"><span class="glyphicon glyphicon-plus-sign"></span></a>*@
+	</span>
+</div>
+    <div class="tile">
+        @{ Html.RenderPartial("~/Views/Roles/partial/list.cshtml", new ViewDataDictionary(){
+		        {"AddHeaders", false},
+		        {"AddController", false},
+	       }); }<div ng-show="(model.Roles)===undefined" class="gray alignCenter" elem-ready="functions.reload((model.Roles)===undefined)">Please wait</div>
+    </div>
+</div>
+
+

@@ -1,0 +1,43 @@
+﻿<md-toolbar class="md-table-toolbar md-default" ng-hide="filter.show == true">
+	<div class="md-toolbar-tools">
+		<span>Rocks</span>
+		<span flex></span>
+		<md-button class="md-icon-button add-btn rockModal" data-controller="L10" data-method="AddRockModal" data-hidemeetings="true" data-meetingId="{{::recurrenceId}}" title="Add Rock" aria-label="Add Rock">
+			<md-tooltip md-direction="left">
+				Add Rock
+			</md-tooltip>
+			<md-icon>add</md-icon>
+		</md-button>
+	</div>
+</md-toolbar>
+
+@{Html.RenderPartial("~/Views/Rocks/partial/list.cshtml", new ViewDataDictionary(){
+				{"AddHeaders", false},
+				{"AddController", false},
+				{"AddDatePicker", false},
+				{"UsePopup", true},
+				{"RockName", Html.Organization().NotNull(x => x.Settings.NotNull(y => y.RockName.NotNull(z => z.ToLower())))},
+				{"Filter",""}
+				});}
+@*@using (Html.BeginScripts()) {
+	<script>
+		$("body").on("click", ".addRockModal", function () {
+			var m = $(this).data("recurrence");
+			//$scope.functions.showModal("Add Rock", "/L10/AddRockModal?meetingId=" + $scope.recurrenceId, "/L10/AddRockModal", null, function (x) {
+			//	if (x.SelectPage == "false" && x["Object.Title"] == "") {
+			//		return "Title required";
+			//	}
+			//});
+			showModal('Add Rock', '/L10/AddRockModal?meetingId=' + m, '/L10/AddRockModal/');
+		});
+	</script>
+}*@
+
+<style>
+	.milestone-duedate .add-on {
+		display: none;
+	}
+	#modal .modal-header {
+		border-bottom: 0 none !important;
+	}
+</style>

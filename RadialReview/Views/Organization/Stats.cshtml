@@ -1,0 +1,46 @@
+﻿@model RadialReview.Controllers.OrganizationController.OrgStatsSummary
+@using RadialReview.Models.Enums
+@{
+    ViewBag.FullWidth = true;  
+
+}
+
+<div class="clearfix"></div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h2 style="color: orange"><b> Stats</b></h2>
+        <h4>Server Time : <span style="color:orange"><b> @DateTime.UtcNow.ToString()</b></span></h4>        
+    </div>  
+</div>
+<div class="clearfix"></div>
+<div class="row"> 
+    <div class="col-sm-12">
+        <table>
+            @foreach (var type in Enum.GetValues(typeof(AccountType)))
+            {
+            <tr>
+                <td style="color: orange;text-align:right;">@(((AccountType)type == AccountType.Demo ? "Trial" : "" + (AccountType)type)) :</td>
+                @*<td style="text-align:right; padding-left:10px">@Model.Count(x => x.Status == (AccountType)type)</td>*@
+                <td style="text-align:right; padding-left:10px">@Model.Statistic.SingleOrDefault(x => x.AccountType == (AccountType)type).NotNull(x => x.Count)</td>
+            </tr>
+            }
+            <tr style="border-top:1px solid orange;">
+                <td style="color: orange;text-align:right;" title="Paying+Demo+Implementer">PTI :</td>
+                @*<td style="text-align:right; padding-left:10px">@Model.Count(x => x.Status == AccountType.Demo || x.Status == AccountType.Paying || x.Status == AccountType.Implementer)</td>*@
+                <td style="text-align:right; padding-left:10px">@Model.Statistic.Where(x => x.AccountType == AccountType.Demo || x.AccountType == AccountType.Paying || x.AccountType == AccountType.Implementer).Select(x => x.Count).Sum()</td>
+            </tr>
+            <tr style="border-top:1px solid orange;">
+                <td style="color: orange;text-align:right;" title="Paying+Demo">PT : </td>
+                @*<td style="text-align:right; padding-left:10px">@Model.Count(x => x.Status == AccountType.Demo || x.Status == AccountType.Paying)</td>*@
+                <td style="text-align:right; padding-left:10px">@Model.Statistic.Where(x => x.AccountType == AccountType.Demo || x.AccountType == AccountType.Paying).Select(x => x.Count).Sum()</td>
+            </tr>
+                <tr style="border-top:1px solid orange">
+                    <td style="color: orange;text-align:right;">Total : </td>                    
+                    <td style="text-align:right; padding-left:10px">@Model.Statistic.Select(x => x.Count).Sum()</td>
+                </tr>
+        </table>
+    </div>
+</div>
+
+<div class="clearfix"></div>

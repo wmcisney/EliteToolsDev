@@ -1,0 +1,8 @@
+﻿@model RadialReview.Models.ViewModels.DragDropItem
+
+<li class="dragableDragDropItem @Model.Classes modifiable" id="@Model.Id" title="@Model.AltText">
+    <div class="dragDropItem">
+        <img data-src="holder.js" class="img-polaroid userImage" alt="@Model.AltText" src="@Model.ImageUrl" />
+        <div class="displayName">@Model.DisplayName</div>
+    </div>
+</li>

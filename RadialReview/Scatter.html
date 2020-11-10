@@ -1,0 +1,172 @@
+﻿<html>
+<head>
+    <title>Scatter Test</title>
+    <script src="~/Scripts/d3/d3.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="Scripts/jquery.svg.js"></script>
+    <script src="Scripts/jquery.svgdom.js"></script>
+    <link href="Content/Chart/Chart.css" rel="stylesheet" />
+    <script src="Scripts/d3/Plot.js"></script>
+    <style>
+        #chart{
+            height:500px;
+            width:500px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chart">
+
+    </div>
+
+    <div id="legend" style="float:right">
+
+    </div>
+
+    <input id="date1" type="range" min="557957600000" max="2057957600000" step="31556926000" /><br />
+    <input id="date2" type="range" min="557957600000" max="2057957600000" step="31556926000" /><br />
+    <input id="date3" type="range" min="557957600000" max="2057957600000" step="31556926000" />
+    <article style="padding:50px 20px">
+        <div id="slider"></div>
+    </article>
+
+
+    <select id="xDim"></select>
+    <select id="yDim"></select>
+
+    <div id="filters"></div><br />
+    <div id="groups">
+        <label>Users</label>
+        <input class='group' type='checkbox' checked data-class='user-*' />
+        <label>About</label>
+        <input class='group' type='checkbox' checked data-class='about-*' />
+        <label>Reviews</label>
+        <input class='group' type='checkbox' checked data-class='reviews-*' />
+
+    </div>
+
+
+    <script>
+        var chart = new ScatterChart("chart");
+
+        var tooltip = d3.select("body").append("div")
+                           .attr("class", "tooltip")
+                           .style("opacity", 0);
+
+
+        function tooltipFunc(scatterDataPoint, xDimId, yDimId) {
+            var x = scatterDataPoint.Dimensions[xDimId];
+            var y = scatterDataPoint.Dimensions[yDimId];
+            return (x.Value / x.Denominator).toFixed(2) + ", " + (y.Value / y.Denominator).toFixed(2);
+        }
+
+        function mouseover(d, chart) {
+            tooltip.transition()
+                 .duration(200)
+                 .style("opacity", .9);
+            tooltip.html(function (a) {
+                return tooltipFunc(d, chart.xDimId, chart.yDimId);
+            }).style("left", (d3.event.pageX + 5) + "px")
+              .style("top", (d3.event.pageY - 28) + "px");
+        }
+
+        function mouseout(d, chart) {
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        }
+
+        function legendF(legendData)
+        {
+            $("#legend").html("<ul></ul>");
+            for(var i in legendData)
+            {
+                $("#legend ul").append("<li>" + legendData[i].Name + "</li>");
+            }
+        }
+
+
+        var data;
+        var time = new Date(757957600000);
+
+        function update(reset) {
+            var date1 = new Date(parseInt($("#date1").val()));
+            var date2 = new Date(parseInt($("#date2").val()));
+            var date3 = new Date(parseInt($("#date3").val()));
+            
+            var groups = [$(".group:checked").map(function () { return $(this).data("class"); })];
+
+            chart.Plot(data, {
+                mouseout: mouseout,
+                mouseover: mouseover,
+                animate: true,
+                reset: reset,
+                xDimensionId: $("#xDim").val(),
+                yDimensionId: $("#yDim").val(),
+                startTime: Math.min(date1, date2),//new Date(parseInt($("#slider").val())),
+                endTime: Math.max(date1, date2),//new Date(parseInt($("#date").val()))
+                time: date3,//new Date(parseInt($("#date").val()))
+                groups: groups,
+                legendFunc: legendF
+            });
+        }
+
+        chart.Pull("/Data/ReviewScatter/50?reviewsId=69", null, function (dat) {
+            data = dat;
+            for (var key in dat.Dimensions) {
+                var item = dat.Dimensions[key];
+                $("#xDim").append("<option value=\"" + item.Id + "\">" + item.Name + "</option>")
+                $("#yDim").append("<option value=\"" + item.Id + "\">" + item.Name + "</option>")
+            }
+
+            for (var i = 0; i < dat.Filters.length; i++) {
+                var filter = dat.Filters[i];
+                var checked = "";
+                if (filter.On)
+                    checked = "checked";
+                $("#filters").append("<label>" + filter.Name + "</label><input class='filters' type='checkbox' " + checked + " data-class='" + filter.Class + "'/>");
+            }
+
+            for (var i = 0; i < dat.Groups.length; i++) {
+                var group = dat.Groups[i];
+                var checked = "";
+                if (group.On)
+                    checked = "checked";
+                $("#groups").append("<label>" + group.Name + "</label><input class='group' type='checkbox' " + checked + " data-class='" + group.Class + "'/>");
+            }
+
+            update(true);
+
+
+            $(".date").attr("min", this.GetDate(data.MinDate).getTime() - 86400000);
+            $(".date").attr("max", this.GetDate(data.MaxDate).getTime() + 86400000);
+            /*$(".date")
+            $(".date")*/
+
+            $("#date1").change(function () { update(false); });
+            $("#date2").change(function () { update(false); });
+            $("#date3").change(function () { update(false); });
+            $("#xDim").change(function () { update(false); });
+            $("#yDim").change(function () { update(false); });
+
+            $(".filters").change(function () {
+                if ($(this).is(':checked')) {
+                    $("." + $(this).data("class")).addClass("on");
+                } else {
+                    $("." + $(this).data("class")).removeClass("on");
+                }
+            });
+
+            $(".group").change(function () { update(false); })
+        });
+
+
+
+
+
+
+    </script>
+</body>
+
+
+</html>

@@ -1,0 +1,374 @@
+﻿using Hangfire;
+using Microsoft.AspNet.SignalR;
+using NHibernate;
+using RadialReview.Crosscutting.Hooks;
+using RadialReview.Crosscutting.Schedulers;
+using RadialReview.Exceptions;
+using RadialReview.Hangfire;
+using RadialReview.Hubs;
+using RadialReview.Models;
+using RadialReview.Models.Angular.Scorecard;
+using RadialReview.Models.Issues;
+using RadialReview.Models.L10;
+using RadialReview.Models.Scorecard;
+using RadialReview.Models.Todo;
+using RadialReview.Utilities;
+using RadialReview.Utilities.DataTypes;
+using RadialReview.Utilities.Hooks;
+//using ListExtensions = WebGrease.Css.Extensions.ListExtensions;
+//using System.Web.WebPages.Html;
+using RadialReview.Utilities.RealTime;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace RadialReview.Accessors {
+	public partial class L10Accessor : BaseAccessor {
+		#region Attendees
+		public static List<UserOrganizationModel> GetAttendees(UserOrganizationModel caller, long recurrenceId) {
+			using (var s = HibernateSession.GetCurrentSession()) {
+				using (var tx = s.BeginTransaction()) {
+					using (var rt = RealTimeUtility.Create()) {
+						var perms = PermissionsUtility.Create(s, caller).ViewL10Recurrence(recurrenceId);
+
+						var usersRecur = s.QueryOver<L10Recurrence.L10Recurrence_Attendee>().Where(x => x.DeleteTime == null && x.L10Recurrence.Id == recurrenceId)
+							.Fetch(x => x.User).Eager
+							.List().ToList();
+						var users = usersRecur.Select(x => x.User).ToList();
+						foreach (var u in users) {
+							try {
+								var a = u.GetName();
+							} catch (Exception) {
+
+							}
+						}
+						return users;
+					}
+				}
+			}
+		}
+
+
+		public static void OrderAngularMeasurable(UserOrganizationModel caller, long measurableId, long recurrenceId, int oldOrder, int newOrder) {
+			using (var s = HibernateSession.GetCurrentSession()) {
+				using (var tx = s.BeginTransaction()) {
+					using (var rt = RealTimeUtility.Create()) {
+						var perms = PermissionsUtility.Create(s, caller);
+						perms.EditL10Recurrence(recurrenceId);
+						if (measurableId > 0) {
+							perms.EditMeasurable(measurableId);
+						}
+
+						var recurMeasureables = s.QueryOver<L10Recurrence.L10Recurrence_Measurable>()
+										.Where(x => x.L10Recurrence.Id == recurrenceId && x.DeleteTime == null)
+										.List().ToList();
+						recurMeasureables = recurMeasureables.Where(x => x.Measurable == null || x.Measurable.DeleteTime == null).ToList();
+
+						if (measurableId < 0) { //Dividers are negative..
+							measurableId = -1 * measurableId;
+						}
+
+						var ctx = Reordering.Create(recurMeasureables, measurableId, recurrenceId, oldOrder, newOrder, x => x._Ordering, x => (x.Measurable == null) ? x.Id : x.Measurable.Id);
+						ctx.ApplyReorder(rt, s, (id, order, item) => AngularMeasurable.Create(item));
+
+						tx.Commit();
+						s.Flush();
+					}
+				}
+			}
+		}
+
+		public static async Task AddAttendee(UserOrganizationModel caller, long recurrenceId, long userorgid) {
+			using (var s = HibernateSession.GetCurrentSession()) {
+				using (var tx = s.BeginTransaction()) {
+					using (var rt = RealTimeUtility.Create()) {
+						var perms = PermissionsUtility.Create(s, caller);
+						await AddAttendee(s, perms, rt, recurrenceId, userorgid);
+						tx.Commit();
+						s.Flush();
+					}
+
+				}
+			}
+		}
+
+		public static async Task AddAttendee(ISession s, PermissionsUtility perms, RealTimeUtility rt, long recurrenceId, long userorgid) {
+			perms.AdminL10Recurrence(recurrenceId);
+			perms.ViewUserOrganization(userorgid, false);
+			var user = s.Get<UserOrganizationModel>(userorgid);
+			var caller = perms.GetCaller();
+
+			var existing = s.QueryOver<L10Recurrence.L10Recurrence_Attendee>().Where(x => x.DeleteTime == null && x.User.Id == userorgid && x.L10Recurrence.Id == recurrenceId).List().ToList();
+			if (existing.Any()) {
+				throw new PermissionsException("User is already an attendee.");
+			}
+
+			var recur = s.Get<L10Recurrence>(recurrenceId);
+			//recur.Pristine = false;
+			await L10Accessor.Depristine_Unsafe(s, caller, recur);
+			s.Update(recur);
+
+			var attendee = new L10Recurrence.L10Recurrence_Attendee() {
+				L10Recurrence = recur,
+				User = user,
+			};
+
+			s.Save(attendee);
+
+			if (caller.Organization.Settings.DisableUpgradeUsers && user.EvalOnly) {
+				throw new PermissionsException("This user is set to participate in " + Config.ReviewName() + " only.");
+			}
+
+			if (user.EvalOnly) {
+				perms.CanUpgradeUser(user.Id);
+				user.EvalOnly = false;
+				s.Update(user);
+				user.UpdateCache(s);
+			}
+
+			var curr = _GetCurrentL10Meeting(s, perms, recurrenceId, true, false, false);
+			if (curr != null) {
+				s.Save(new L10Meeting.L10Meeting_Attendee() {
+					L10Meeting = curr,
+					User = user,
+				});
+			}
+
+			await HooksRegistry.Each<IMeetingEvents>((ses, x) => x.AddAttendee(ses, recurrenceId, user, attendee));
+		}
+
+		public class VtoSharable {
+			public bool CanShareVto { get; set; }
+			public string ErrorMessage { get; set; }
+		}
+		public static VtoSharable IsVtoSharable(UserOrganizationModel caller, long? recurrenceId = null) {
+			using (var s = HibernateSession.GetCurrentSession()) {
+				using (var tx = s.BeginTransaction()) {
+					var orgId = caller.Organization.Id;
+					var anySharable = s.QueryOver<L10Recurrence>()
+										.Where(x => x.DeleteTime == null && x.OrganizationId == orgId && x.Id != recurrenceId)
+										.Select(x => x.ShareVto, x => x.Name, x => x.Id)
+										.List<object[]>()
+										.Select(x => new {
+											Shared = ((bool?)x[0]) ?? false,
+											Name = (string)x[1],
+											Id = (long)x[2]
+										}).ToList();
+					var onlyShared = anySharable.FirstOrDefault(x => x.Shared);
+					var output = new VtoSharable() {
+						CanShareVto = onlyShared == null,
+						ErrorMessage = onlyShared.NotNull(x => "You can only share one V/TO. Unshare the V/TO associated with <a href='/l10/edit/" + x.Id + "'>" + x.Name + "</a>.")
+					};
+					return output;
+				}
+			}
+		}
+
+		//public static Task<bool> ReorderL10Recurrence(UserOrganizationModel caller,long userId, long recurrenceId, int oldOrder, int newOrder) {
+
+		//    using (var s = HibernateSession.GetCurrentSession()) {
+		//        using (var tx = s.BeginTransaction()) {
+		//            var perms = PermissionsUtility.Create(s, caller);
+		//            perms.Self(userId).ViewL10Recurrence(recurrenceId);
+
+		//            var existingl10s = GetVisibleL10Meetings_Tiny(s, perms, userId, false, false);
+		//            var res = s.QueryOver<L10RecurrenceOrder>().Where(x => x.UserId == userId).List().ToList();
+		//            var selected = res.FirstOrDefault(x => x.RecurrenceId == recurrenceId);
+
+
+		//            Reordering.Create(res, pageId, found.L10RecurrenceId, oldOrder, newOrder, x => x._Ordering, x => x.Id)
+		//                      .ApplyReorder(s);
+
+
+		//        }
+		//    }
+		//}
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+		public static async Task RemoveAttendee(ISession s, PermissionsUtility perms, RealTimeUtility rt, long recurrenceId, long userorgid) {
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+			perms.AdminL10Recurrence(recurrenceId);
+			perms.ViewUserOrganization(userorgid, false);
+			var user = s.Get<UserOrganizationModel>(userorgid);
+
+			var existing = s.QueryOver<L10Recurrence.L10Recurrence_Attendee>().Where(x => x.DeleteTime == null && x.User.Id == userorgid && x.L10Recurrence.Id == recurrenceId).List().ToList();
+			if (!existing.Any()) {
+				throw new PermissionsException("User is not an attendee.");
+			}
+
+
+			var curr = _GetCurrentL10Meeting(s, perms, recurrenceId, true, false, false);
+			if (curr != null) {
+				var curAttendee = s.QueryOver<L10Meeting.L10Meeting_Attendee>().Where(x => x.DeleteTime == null && x.User.Id == userorgid && x.L10Meeting.Id == curr.Id).List().ToList();
+
+				foreach (var e in curAttendee) {
+					e.DeleteTime = DateTime.UtcNow;
+					s.Update(e);
+				}
+			}
+			foreach (var e in existing) {
+				e.DeleteTime = DateTime.UtcNow;
+				s.Update(e);
+			}
+
+			await HooksRegistry.Each<IMeetingEvents>((ses, x) => x.RemoveAttendee(ses, recurrenceId, userorgid));
+		}
+
+
+		public static async Task RemoveAttendee(UserOrganizationModel caller, long recurrenceId, long userorgid) {
+			using (var s = HibernateSession.GetCurrentSession()) {
+				using (var tx = s.BeginTransaction()) {
+					using (var rt = RealTimeUtility.Create()) {
+						var perms = PermissionsUtility.Create(s, caller);
+						await RemoveAttendee(s, perms, rt, recurrenceId, userorgid);
+						tx.Commit();
+						s.Flush();
+					}
+				}
+			}
+		}
+
+
+		public static long GuessUserId(IssueModel issueModel, long deflt = 0) {
+			try {
+				using (var s = HibernateSession.GetCurrentSession()) {
+					using (var tx = s.BeginTransaction()) {
+						if (issueModel == null) {
+							return deflt;
+						}
+
+						if (issueModel.ForModel != null && issueModel.ForModel.ToLower() == "issuemodel" && issueModel.Id == issueModel.ForModelId) {
+							return deflt;
+						}
+
+						var found = GetModel_Unsafe(s, issueModel.ForModel, issueModel.ForModelId);
+						if (found == null) {
+							return deflt;
+						}
+
+						if (found is MeasurableModel) {
+							return ((MeasurableModel)found).AccountableUserId;
+						}
+
+						if (found is TodoModel) {
+							return ((TodoModel)found).AccountableUserId;
+						}
+
+						if (found is IssueModel) {
+							return GuessUserId((IssueModel)found, deflt);
+						}
+
+						return deflt;
+					}
+				}
+			} catch (Exception) {
+				return deflt;
+			}
+		}
+
+		public class L10StarDate {
+			public long RecurrenceId { get; set; }
+			public DateTime StarDate { get; set; }
+		}
+
+		public static async Task<List<L10StarDate>> GetStarredRecurrences(UserOrganizationModel caller, long userId) {
+			using (var s = HibernateSession.GetCurrentSession()) {
+				using (var tx = s.BeginTransaction()) {
+					var perms = PermissionsUtility.Create(s, caller);
+					return await GetStarredRecurrences(s, perms, userId);
+				}
+			}
+		}
+
+		public static async Task<List<L10StarDate>> GetStarredRecurrences(ISession s, PermissionsUtility perms, long userId) {
+			perms.Self(userId);
+			return s.QueryOver<L10Recurrence.L10Recurrence_Attendee>()
+					.Where(x => x.DeleteTime == null && x.StarDate != null && x.User.Id == userId)
+					.Select(x => x.L10Recurrence.Id, x => x.StarDate)
+					.List<object[]>()
+					.Select(x => new L10StarDate {
+						StarDate = ((DateTime?)x[1]).Value,
+						RecurrenceId = (long)x[0]
+					}).ToList();
+		}
+
+		public static async Task AddStarToMeeting(UserOrganizationModel caller, long recurrenceId, long userid, bool starred) {
+			using (var s = HibernateSession.GetCurrentSession()) {
+				using (var tx = s.BeginTransaction()) {
+					var perms = PermissionsUtility.Create(s, caller);
+					perms.ViewL10Recurrence(recurrenceId);
+					perms.Self(userid);
+
+					var found = s.QueryOver<L10Recurrence.L10Recurrence_Attendee>()
+						.Where(x => x.L10Recurrence.Id == recurrenceId && x.DeleteTime == null && x.User.Id == userid)
+						.List().ToList();
+
+					if (!found.Any()) {
+						throw new PermissionsException("Not an attendee");
+					}
+
+					DateTime? now = DateTime.UtcNow;
+					foreach (var f in found) {
+						f.StarDate = starred ? now : null;
+						s.Update(f);
+					}
+					tx.Commit();
+					s.Flush();
+				}
+			}
+
+
+		}
+
+		public static DefaultDictionary<long, DateTime?> GetStarredMeetingsLookup_Unsafe(ISession s, long userId) {
+			return s.QueryOver<L10Recurrence.L10Recurrence_Attendee>()
+				.Where(x => x.DeleteTime == null && x.User.Id == userId && x.StarDate != null)
+				.Select(x => x.L10Recurrence.Id, x => x.StarDate)
+				.List<object[]>()
+				.ToDefaultDictionary(x => (long)x[0], x => (DateTime?)x[1], x => null);
+		}
+
+
+		#endregion
+
+		public static async Task NotifyOthersOfMeeting(UserOrganizationModel caller, long recurrenceId) {
+			Scheduler.Enqueue(() => NotifyOthersOfMeeting_Hangfire(caller.Id, recurrenceId));
+		}
+
+
+		[Queue(HangfireQueues.Immediate.NOTIFY_MEETING_START)]
+		[AutomaticRetry(Attempts = 0)]
+		public static async Task NotifyOthersOfMeeting_Hangfire(long callerId, long recurrenceId) {
+			try {
+				using (var s = HibernateSession.GetCurrentSession()) {
+					using (var tx = s.BeginTransaction()) {
+						var caller = s.Get<UserOrganizationModel>(callerId);
+						var perms = PermissionsUtility.Create(s, caller);
+						perms.ViewL10Recurrence(recurrenceId);
+
+						var recurName = s.Get<L10Recurrence>(recurrenceId).Name;
+
+						UserOrganizationModel uoAlias = null;
+						UserModel uAlias = null;
+						var attendees = s.QueryOver<L10Recurrence.L10Recurrence_Attendee>()
+							.JoinAlias(x => x.User, () => uoAlias)
+							.JoinAlias(x => uoAlias.User, () => uAlias)
+							.Where(x => x.DeleteTime == null && x.L10Recurrence.Id == recurrenceId)
+							.Select(x => uoAlias.Id, x => uAlias.UserName)
+							.List<object[]>()
+							.Select(x => new {
+								UserId = (long)x[0],
+								Email = (string)x[1]
+							}).ToList();
+
+						var hub = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+						var group = hub.Clients.Users(attendees.Select(x => x.Email).ToList());
+						group.NotifyOfMeetingStart(recurrenceId, recurName);
+					}
+				}
+			} catch (Exception) {
+				int a = 0;
+			}
+		}
+	}
+}

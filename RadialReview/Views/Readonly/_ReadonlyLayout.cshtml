@@ -1,0 +1,179 @@
+﻿@using Microsoft.AspNet.Identity
+@using RadialReview.Properties
+@using RadialReview
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>[READ-ONLY] Elite Tools</title>
+	<link rel="SHORTCUT ICON" href="https://elitetools.s3.us-east-2.amazonaws.com/img/favicon.ico" />
+
+	<style>
+		html {
+			width: 100%;
+			font-family: sans-serif;
+		}
+
+		a {
+		}
+
+		body {
+			padding: 30px;
+			padding-top: 60px;
+			margin: 0px;
+			background-color: #eee;
+		}
+
+		blockquote {
+			background-color: white;
+			border: 1px solid orange;
+			border-left: 6px solid orange;
+			padding: 10px;
+			color: gray;
+			font-family: sans-serif;
+			margin-left: 0px;
+			margin-right: 0;
+		}
+
+		#logo, .link, .navbar-header, ul, .navbar-collapse {
+			display: inline;
+		}
+
+
+		.container.body-navbar {
+			width: 100%;
+			background-color: #444;
+			color: white;
+			height: 50px;
+			position: fixed;
+			left: 0px;
+			right: 0px;
+			top: 0px;
+			z-index: 1;
+		}
+
+			.container.body-navbar a {
+				color: white;
+				padding-right: 40px;
+			}
+
+		.body-content {
+		}
+
+		section {
+			background-color: white;
+			padding: 40px;
+		}
+
+		li {
+			display: inline-block;
+		}
+
+		.readonly-indicator {
+			opacity: 1;
+			display: inline;
+			position: fixed;
+			top: 15px;
+			left: 50%;
+			color: orange;
+			text-align: center;
+			margin-left: -76px;
+			/* width: 60px; */
+		}
+
+		table {
+			border-spacing: 0px;
+			border-collapse: collapse;
+			display: inline-block;
+		}
+
+			table.hover tr:hover td {
+				background-color: rgba(255, 165, 0, .5);
+			}
+
+			table td {
+				white-space: nowrap;
+				padding: 2px;
+				padding-right: 8px;
+			}
+
+			table th {
+				text-align: left;
+			}
+
+			table.border td, table.border th {
+				border: 1px solid gray;
+				border-spacing: 0px;
+			}
+
+		.x-scroll {
+			white-space: nowrap;
+			overflow-x: auto;
+		}
+
+		.gray {
+			color: rgba(0,0,0,.5);
+		}
+
+		.noselect {
+			-webkit-touch-callout: none; /* iOS Safari */
+			-webkit-user-select: none; /* Safari */
+			-khtml-user-select: none; /* Konqueror HTML */
+			-moz-user-select: none; /* Firefox */
+			-ms-user-select: none; /* Internet Explorer/Edge */
+			user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+		}
+	</style>
+
+</head>
+<body id="body">
+	<div id="wrap">
+		<div id="main">
+			@if (!(ViewBag.NoTitleBar ?? false)) {
+				<div class="navbar navbar-inverse navbar-fixed-top">
+					<div class="container body-navbar">
+						<div class="navbar-header" style="float:left;">
+							<div id="logo">
+								<div class="link">
+									<span style="z-index: 1000001; position: relative; top: -2px;">
+										<img src="/Content/img/Elite_Tools_Logo_Small_Vertical_Wht_B2.png" height="85" style="">
+									</span>
+								</div>
+							</div>
+
+						</div>
+						<div class="navbar-collapse collapse">
+							<ul class="nav navbar-nav" style="float:left">
+								@if (Request.IsAuthenticated) {
+									<li>
+										<a href="@Url.Action("Index", "Readonly",new { area = "" })">
+											L10
+										</a>
+									</li>
+								}
+							</ul>
+							<ul style="float:right">
+
+								<li>
+									<a href="/account/login">(Log off)</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="readonly-indicator">[READ-ONLY MODE]</div>
+			}
+
+			<blockquote>
+				Elite Tools is experiencing higher-than expected traffic. We've turned on read-only mode while we fix it. We apologize for the disruption.
+			</blockquote>
+
+			<div class="container body-content">
+				@RenderBody()
+			</div>
+		</div>
+	</div>
+</body>
+</html>

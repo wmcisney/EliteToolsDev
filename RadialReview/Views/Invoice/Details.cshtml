@@ -1,0 +1,305 @@
+﻿@model List<RadialReview.Models.InvoiceModel>
+
+@{
+	ViewBag.Title = "Invoice Details";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section top{
+	<div class="jumbotron">
+		<h1>Invoices</h1>
+	</div>
+}
+<style>
+	.invoice-container {
+		position: relative;
+		z-index: 0;
+	}
+
+	.invoice-box {
+		max-width: 800px;
+		margin: auto;
+		padding: 30px;
+		border: 1px solid #eee;
+		box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+		font-size: 16px;
+		line-height: 24px;
+		font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+		color: #555;
+		background-color: #fefefe;
+		padding-bottom: 90px;
+		margin-bottom: 15px;
+	}
+
+		.invoice-box table {
+			width: 100%;
+			line-height: inherit;
+			text-align: left;
+		}
+
+			.invoice-box table td {
+				padding: 5px;
+				vertical-align: top;
+			}
+
+			.invoice-box table tr td:nth-child(2) {
+				text-align: right;
+			}
+
+			.invoice-box table tr.top table td {
+				padding-bottom: 20px;
+			}
+
+				.invoice-box table tr.top table td.title {
+					font-size: 45px;
+					line-height: 45px;
+					color: #333;
+				}
+
+			.invoice-box table tr.information table td {
+				padding-bottom: 40px;
+			}
+
+			.invoice-box table tr.heading td {
+				background: #eee;
+				border-bottom: 1px solid #ddd;
+				font-weight: bold;
+			}
+
+			.invoice-box table tr.details td {
+				padding-bottom: 20px;
+			}
+
+			.invoice-box table tr.item td {
+				border-bottom: 1px solid #eee;
+			}
+
+			.invoice-box table tr.item.last td {
+				border-bottom: none;
+			}
+
+			.invoice-box table tr.total td:nth-child(2) {
+				border-top: 2px solid #eee;
+				font-weight: bold;
+			}
+
+	@@media only screen and (max-width: 600px) {
+		.invoice-box table tr.top table td {
+			width: 100%;
+			display: block;
+			text-align: center;
+		}
+
+		.invoice-box table tr.information table td {
+			width: 100%;
+			display: block;
+			text-align: center;
+		}
+	}
+
+	.headW {
+		min-width: 85px;
+		display: inline-block;
+		color: #333;
+		font-size: 14px;
+	}
+
+		.headW.gray {
+			color: rgba(0, 0, 0, 0.5) !important;
+		}
+
+	/** RTL **/
+	.rtl {
+		direction: rtl;
+		font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+	}
+
+		.rtl table {
+			text-align: right;
+		}
+
+			.rtl table tr td:nth-child(2) {
+				text-align: left;
+			}
+
+	@@media print {
+		.invoice-box {
+			border: none;
+		}
+
+		.noPrint {
+			display: none !important;
+		}
+	}
+
+	.paid {
+		color: lightgray;
+		transform: rotate(-25deg);
+		font-weight: bold;
+		display: inline-block;
+		font-size: 60px;
+		position: absolute;
+		left: calc(50% - 67px);
+		text-align: center;
+		top: 80px;
+	}
+
+	.unpaid {
+		color: darkred;
+		padding: 0px 50px;
+		border: 5px solid darkred;
+		border-radius: 8px;
+		transform: rotate(-25deg);
+		font-weight: bold;
+		display: inline-block;
+		font-size: 40px;
+		position: absolute;
+		left: calc(50% - 115px);
+		text-align: center;
+		top: 70px;
+		opacity: 0.4;
+	}
+
+	.negDollar {
+		position: relative;
+		right: -5px;
+	}
+
+	.enterCard {
+		float: right;
+		position: relative;
+		top: 30px;
+	}
+
+	.none {
+		font-style: italic;
+		opacity: .5;
+		padding-right: 10px;
+	}
+
+	.print-hint {
+		page-break-inside: avoid;
+	}
+
+	@@media (min-width: 1048px) {
+		.backBtn {
+			position: fixed;
+			top: 59px;
+			left: 11px;
+		}
+	}
+</style>
+
+<div class="pull-right noPrint backBtn btn btn-default" style="margin-right: -16px;z-index:1">
+	@Html.ActionLink("Back to list", "List")
+</div>
+@foreach (var m in Model) {
+	<div class="invoice-container">
+		@if (!m.AnythingDue()) {
+			<div class="paid noPrint">PAID</div>
+		} else {
+			<div class="unpaid noPrint">UNPAID</div>
+		}
+		<div class="invoice-box">
+			<table cellpadding="0" cellspacing="0" class="print-hint">
+				<tr class="top">
+					<td colspan="4">
+						<table>
+							<tr>
+								<td class="title">
+									<img src="~/Content/img/TRACTION-TOOLS_large_stacked_2c.png" style="width:100%; max-width:200px;width:200px; margin-left: -20px;margin-top: -20px;">
+								</td>
+								<td>
+									Invoice Id <span class="headW gray">@(m.TransactionId ?? ("" + m.Id)) </span><br>
+									Issued <span class="headW gray">@m.CreateTime.ToShortDateString() </span><br>
+									Due <span class="headW gray">@m.InvoiceDueDate.ToShortDateString() </span>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+				<tr class="information">
+					<td colspan="4">
+						<table>
+							<tr>
+								<td>
+									Elite Tools<br>
+									95 Highland Ave.,<br>
+									Suite 300.<br>
+									Bethlehem, PA 18017
+								</td>
+
+								<td>
+									@m.Organization.GetName()<br>
+									@m.EmailAddress
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+				@*<tr class="heading">
+						<td>Payment Method</td>
+						<td>Check #</td>
+					</tr>
+					<tr class="details">
+						<td>Check</td><td>1000</td>
+					</tr>*@
+
+				<tr class="heading">
+					<td>Item</td>
+					<td>Rate</td>
+					<td class="alignCenter">Qty.</td>
+					<td class="alignRight">Price</td>
+				</tr>
+				@foreach (var i in m.InvoiceItems) {
+					<tr class="item">
+						<td>@i.Name</td>
+						<td class="@(i.PricePerItem<0?"negDollar":"")">@string.Format("{0:C}", i.PricePerItem)</td>
+						<td class="alignCenter">@i.Quantity</td>
+						<td class="alignRight @(i.AmountDue<0?"negDollar":"")">@string.Format("{0:C}", i.AmountDue)</td>
+					</tr>
+				}
+
+				<tr class="total">
+					<td></td>
+					<td></td>
+					<td></td>
+					<td class="alignRight">
+						Total: @string.Format("{0:C}", m.AmountDue)
+					</td>
+				</tr>
+			</table>
+			@if (m._InvoiceUserItems != null && m._InvoiceUserItems.Any()) {
+				<table class="print-hint invoiced-user-listing" style="margin-top:60px;">
+					<thead>
+						<tr class="heading">
+							<td>User</td>
+							<td>Products</td>
+							<td class="alignRight" style="width: 130px;">Date Started</td>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var i in m._InvoiceUserItems.OrderBy(x=>x.Name)) {
+							<tr class="item">
+								<td><a href="/user/details/@i.UserOrganizationId">@(string.IsNullOrWhiteSpace(i.Name) ? i.Email : i.Name)</a></td>
+								<td style="font-size: 80%;">@(!string.IsNullOrWhiteSpace(i.Description) ? new MvcHtmlString(i.Description) : new MvcHtmlString("<span class='none'>none</span>"))</td>
+								<td class="alignRight">@(i.UserAttachTime.NotNull(x => x.Value.ToString("MM/dd/yyyy")) ?? "--")</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			}
+			@if (m.AnythingDue()) {
+				<div class="enterCard btn btn-info noPrint"><a href="/manage/payment">Enter payment information.</a></div>
+			}
+		</div>
+	</div>
+
+}
+@using (Html.BeginScripts()) {
+	<script>
+		$(".invoiced-user-listing").tablesorter({ sortList: [[0, 0]] });
+	</script>
+}

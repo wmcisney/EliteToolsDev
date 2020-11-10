@@ -1,0 +1,37 @@
+﻿@model List<RadialReview.Controllers.NotificationController.NotificationViewModel>
+
+@{
+	ViewBag.Title = "Notifications";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section top{
+	<div class="jumbotron">
+		<h1>Notifications</h1>
+	</div>
+}
+
+<h2 class="pull-left">Notifications</h2>
+<div class="pull-right" style="padding-top:22px;">
+	@if (ViewBag.page != 0) {
+		<a href="/notification?page=@(ViewBag.page - 1)&count=@ViewBag.count" class="btn btn-default">Back</a>
+	}
+	<a href="/notification?page=@(ViewBag.page + 1)&count=@ViewBag.count" class="btn btn-primary btn-invert @(Model.Count != ViewBag.count?"btn-disabled":"")">Next</a>
+
+</div>
+<div class="review clearfix" style="clear:both; padding-top: 50px;">
+	@{
+		Html.RenderPartial("Modal", Model);
+	}
+
+</div>
+<br />
+
+<style>
+	.btn-disabled {
+		border-color: lightgray !important;
+		pointer-events: none;
+		color: lightgray !important;
+	}
+</style>

@@ -1,0 +1,573 @@
+﻿@using Mandrill.Models
+@using RadialReview.Models.UserModels
+@model RadialReview.Models.ViewModels.OrgMembersViewModel
+
+@{
+	ViewBag.Title = "Members";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Page = "Members";
+	//ViewBag.FullWidth = true;
+
+	var lookup = new Dictionary<WebHookEventType, Tuple<string, string, int>>(){
+		{WebHookEventType.Click,Tuple.Create("Awaiting Response. Resend Email?","strokeRed resendEmail red",2)},
+		{WebHookEventType.Deferral,Tuple.Create("Awaiting Response. Resend Email?","strokeRed resendEmail red",2)},
+		{WebHookEventType.Hard_bounce,Tuple.Create("Email address invalid. Click here to fix.","strokeOrange invalidEmail",0)},
+		{WebHookEventType.Inbound,Tuple.Create("Awaiting Response. Resend Email?","strokeRed resendEmail red",2)},
+		{WebHookEventType.Open,Tuple.Create("Awaiting Response. Resend Email?","strokeRed resendEmail red",2)},
+		{WebHookEventType.Reject,Tuple.Create("Email address invalid. Click here to fix.","strokeOrange invalidEmail",0)},
+		{WebHookEventType.Send,Tuple.Create("Awaiting Response. Resend Email?","strokeRed resendEmail red",2)},
+		{WebHookEventType.Soft_bounce,Tuple.Create("Awaiting Response. Resend Email?","strokeRed resendEmail red",2)},
+		{WebHookEventType.Spam,Tuple.Create("Email address invalid. Click here to fix.","strokeOrange invalidEmail",0)},
+		{WebHookEventType.Unsub,Tuple.Create("Email address invalid. Click here to fix.","strokeOrange invalidEmail",0)},
+};
+
+	var invalidCount = Model.Users.Count(x => x.EmailEvent.HasValue && lookup[x.EmailEvent.Value].Item2.Contains("invalidEmail"));
+	var resendCount = Model.Users.Count(x => !x.Verified && !(x.EmailEvent.HasValue && lookup[x.EmailEvent.Value].Item2.Contains("invalidEmail")));
+	var unsentCount = Model.Users.Count(x => !x.EmailSent);
+
+}
+
+@section top{
+	<div class="jumbotron">
+		<h1>Manage</h1>
+	</div>
+}
+
+@section header{
+	@Html.Partial("Partial/manageheader")
+}
+
+@if (invalidCount > 0) {
+	@Html.AlertBoxDismissable(@"Invitations could not be delivered to " + invalidCount + " user".Pluralize(invalidCount) + ". Email addresses were incorrect. Click <span class='nohover strokeOrange invalidEmail glyphicon glyphicon-envelope'></span> to try another address.", "alert-danger", "Warning:")
+} else if (unsentCount > 0) {
+	@Html.AlertBoxDismissable(@"Invitations not sent to " + unsentCount + " user".Pluralize(unsentCount) + ". Click <span class='btn btn-xs btn-default nohover' style='position: relative;top: -1px;'>Send Invites</span> or <span class='nohover glyphicon glyphicon-envelope glyphicon-exclamation-sign1 red strokeRed unsentEmail clickable icon'></span> to issue invitations.", "alert-warning", "Warning:")
+} else {
+	@Html.AlertBoxDismissable(@"Add users to " + RadialReview.Properties.ProductStrings.ProductName + ", click the <span class='btn btn-xs btn-default nohover' style='position: relative;top: -1px;'>Add</span> button.", "alert-info", "Info:")
+
+}
+
+@using (Html.BeginStyles()) {
+	<style>
+		.alert .btn:hover {
+			background-color: white;
+			border-color: #CCCCCC;
+		}
+
+		tr.managing {
+		}
+
+		tr.notManaging {
+			background-color: #F1F1F1;
+		}
+
+		.viewEdit {
+			opacity: .1;
+		}
+
+		span:hover .viewEdit {
+			opacity: 1;
+		}
+
+		.filter-table .quick {
+			margin-left: 0.5em;
+			font-size: 0.8em;
+			text-decoration: none;
+		}
+
+		.fitler-table .quick:hover {
+			text-decoration: underline;
+		}
+
+		td.alt {
+			background-color: #ffc;
+			background-color: rgba(255, 255, 0, 0.2);
+		}
+
+		.userType[data-type='Standard']:before {
+			content: "s";
+		}
+
+		.userType[data-type='EmailBlackList']:before {
+			content: "b";
+		}
+
+		.userType[data-type='PlaceholderOnly']:before {
+			content: "p";
+		}
+
+		.userType[data-type='LeadershipTeamMember']:before {
+			content: "l";
+		}
+
+		.userType[data-type='AccountContact']:before {
+			content: "c";
+		}
+
+		.userType[data-enabled='true']:before {
+			text-transform: lowercase;
+			color: #333;
+		}
+
+		.body-full-width .body-content {
+			padding: 84px;
+			width: 1170px !important;
+		}
+
+		.userType[data-enabled='false']:before {
+			color: lightgray;
+		}
+
+		.userroles {
+			text-align: right;
+		}
+
+		@@media screen and (max-width: 400px) {
+			.filter-resize-tiny {
+				display: none;
+			}
+		}
+	</style>
+	@Styles.Render("~/Content/ManageCSS")
+}
+
+@using (Html.BeginScripts()) {
+	@Scripts.Render("~/bundles/Manage")
+	<script>
+		function deleteUser(id) {
+			showModal({
+				title: "Are you sure?",
+				icon: "danger",
+				push: "/User/Remove",
+				fields: { name: "UserId", value: id, type: "hidden" },
+				success: function () {
+					$('.row_' + id).remove();
+					UnstoreJsonAlert();
+				},
+			});
+		}
+
+		function afterResend(data) {
+			if (data.Object) {
+				console.log(data.Object);
+				var row = $('.row_' + data.Object.UserOrganizationId);
+				var name = data.Object.FirstName + " " + data.Object.LastName;
+				var email = data.Object.Email;
+				row.find(".nameField").attr("title", name);
+				row.find(".nameField a").text(name);
+				row.find(".emailField").attr("title", email);
+				row.find(".emailField a").text(email);
+			}
+		}
+
+		function SendEmails() {
+			$("#send").prop("disabled", true);
+			$.ajax({
+				url: "/Nexus/SendAllEmails",
+				success: function (data) {
+					StoreJsonAlert(data);
+					location.reload();
+				}
+			});
+		}
+
+		var managingOrganization = @(Model.ManagingOrganization.ToString().ToLower());
+		var canUpgradeUsers = @(Model.CanUpgradeUsers.ToString().ToLower());
+
+		function EditUser(id) {
+			var fields = [{
+				name: "IsManager",
+				text: "Is a supervisor",
+				type: "hidden",
+				value: $("#permissions_" + id).attr("data-ismanager"),
+			},{
+				name:"UserId",
+				type:"hidden",
+				value:id
+			}];
+
+			if (managingOrganization) {
+				fields.push({
+					name: "ManagingOrganization",
+					text: "Is an admin",
+					type: "checkbox",
+					value: $("#permissions_" + id).attr("data-isadmin")
+				});
+			}
+
+			if (window.Products.Review){
+				if (canUpgradeUsers){
+					fields.push({
+						name: "EvalOnly",
+						text: "@RadialReview.Utilities.Config.ReviewName() only",
+						type: "checkbox",
+						value: $("#permissions_" + id).attr("data-evalonly")
+					});
+				}else{
+					if ($("#permissions_" + id).attr("data-evalonly")=="True"){
+						fields.push({
+							text: "This user is @RadialReview.Utilities.Config.ReviewName() only",
+							type: "span",
+							classes:"gray"
+						});
+					}
+				}
+			}
+
+			var pid = id;
+			showModal({
+				title: "Edit Permissions",
+				icon: "info",
+				fields: fields,
+				pushUrl: "@Url.Action("EditModal", "User")",
+				labelColumnClass: "col-sm-6",
+				valueColumnClass: "col-sm-6",
+				complete: function (d,form) {
+					var override = false;
+					if(typeof(d.Object.ManagingOrganization)!=="undefined"){
+						$("#permissions_" + pid).attr("data-isadmin",d.Object.ManagingOrganization?"True":"False");
+						override = d.Object.ManagingOrganization?"True":false;
+					}
+					$("#permissions_" + pid).attr("data-ismanager",override||(d.Object.IsManager?"True":"False"));
+
+					var eval =$("#permissions_" + id).attr("data-evalonly");
+					if (d.Object.EvalOnly==true)
+						eval="True";
+					else if (d.Object.EvalOnly==false)
+						eval = "False";
+					$("#permissions_" + pid).attr("data-evalonly",eval );
+					$("#permissions_" + pid).attr("title",null);
+
+				}
+			});
+		}
+
+		function editUserDetails(id){
+			showModal("Edit User","@Url.Action("EditUserDetails", "User")/"+id,"@Url.Action("EditUserDetails", "User")/"+id,null,null,null,null,"enctype=\"multipart/form-data\"");
+		}
+
+		function ResendEmails() {
+			$("#send").prop("disabled", true);
+			$.ajax({
+				url: "/Nexus/ResendAllEmails",
+				success: function (data) {
+					StoreJsonAlert(data);
+					location.reload();
+				}
+			});
+		}
+
+		function setUserType(self){
+			var userId = $(self).closest(".record-row").data("id");
+			var type = $(self).data("type");
+			var enabled =$(self).data("enabled");
+
+			$.ajax("/User/ToggleUserType?type="+type+"&user="+userId+"&enabled="+!enabled,{
+				success:function(data){
+					$(self).attr("data-enabled",data);
+					$(self).data("enabled",data);
+				}
+			});
+		}
+
+		function checkAddUser(a,b){
+			var modal = $("#modal");
+			var err = "";
+			var required = [];
+
+			if (modal.find("#FirstName").val()=="")
+				required.push("First name");
+			if (modal.find("#LastName").val()=="")
+				required.push("Last name");
+			if (modal.find("#Email").val()=="" && !modal.find(".placeholder-box").is(":checked"))
+				required.push("Email");
+
+			if (required.length==1){
+				return required[0]+" is required.";
+			}else if (required.length>1){
+				for(var i=0;i<required.length-1;i++){
+					var r = required[i];
+					if (i>0)
+						r = r.toLowerCase();
+					err+=r+", ";
+				}
+				err+=" and "+required[i].toLowerCase()+ " are required.";
+				return err;
+			}
+			return true;
+		}
+
+		$(function () {
+			$(".tablefilter").filterTable({ inputSelector: '#input-filter' });
+
+			$("table").tablesorter({
+				headers: {
+					1: { sorter: 'attr' },
+					2: { sorter: 'attr' }
+				},
+				sortForce: [[0, 1]],
+				sortStable: true,
+			});
+		});
+	</script>
+}
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-2 hidden-sm hidden-xs noPadLeft">
+				<h3 class="panel-title alignCenter" style="padding-top:8px;">Manage Members</h3>
+			</div>
+			<div class="col-sm-12 col-md-10">
+				<table class="fullWidth">
+					<tr>
+						<td class="filter-resize-tiny">
+							<input id="input-filter" style="display: inline-block;" type="text" class="form-control" placeholder="Filter by name, position, @RadialReview.Utilities.Config.ManagerName().ToLower() or email..." />
+						</td>
+						<td style="width: @(ViewBag.ShowAddClient==true?"186px":"210px"); padding-left: 8px; padding-top: 1px; text-align: center;">
+							<div class="btn-group">
+								<button type="button" class="btn btn-default dropdown-toggle plus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="send">
+									Send invites <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu alignRight dropdown-menu-right" style="width:320px;">
+									<li>
+										<a href="#" id="resendButton" class="" onclick="SendEmails()">
+											<span class="glyphicon glyphicon-envelope unsentEmail pull-left"></span>
+											Invite all yet-to-be invited users
+										</a>
+									</li>
+									@if (Model.Users.Any(p => p.EmailSent) || !Model.Organization.SendEmailImmediately) {
+										<li>
+											<a href="#" id="sendButton" class="" onclick="ResendEmails()">
+												<span class="glyphicon glyphicon-envelope resendEmail pull-left"></span>
+												Resend invite to users that have not joined
+											</a>
+										</li>
+									}
+								</ul>
+							</div>
+							@if ((ViewBag.CanAddUsers ?? true) == true) {
+								if (ViewBag.ShowAddClient == true) {
+									<div class="btn-group">
+										<button type="button" class="btn btn-default plus dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add<span class="caret"></span></button>
+										<ul class="dropdown-menu dropdown-menu-right">
+											<li><a href="#" onclick="@Html.ShowModal("Add user", "/User/AddModal", "/nexus/AddManagedUserToOrganization", preSubmitCheck: "checkAddUser")"><span class="glyphicon glyphicon-user gray"></span> Add Member</a></li>
+											<li><a href="#" onclick="@Html.ShowModal("Add client", "/User/AddModal?isClient=true", "/nexus/AddManagedUserToOrganization")"><span class="glyphicon glyphicon-globe gray"></span> Add Client</a></li>
+										</ul>
+									</div>
+								} else {
+									<button type="button" class="btn btn-default plus" aria-haspopup="true" aria-expanded="false"
+											onclick="@Html.ShowModal("Add user", "/User/AddModal", "/nexus/AddManagedUserToOrganization", preSubmitCheck: "checkAddUser")">
+										Add User
+									</button>
+								}
+							}
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="table-responsive" style="clear: both;top: -1px;position: relative;">
+		<table class="table table-condensed table-hover tablesorter tablefilter">
+			<thead>
+				<tr>
+					<th class="hidden"></th>
+					<th style="width:15px;" class="alignCenter  noPadLeft"></th>
+					<th style="width:15px;" class="alignCenter  noPadLeft"></th>
+					<th style="width:15px;" class="alignCenter  noPadLeft"></th>
+					<th style="width:15px;" class="alignCenter  noPadLeft"></th>
+					<th style="width:15px;" class="alignCenter  noPadLeft"></th>
+					<th style="width:1px">Name</th>
+					<th style="width:100%">Email</th>
+					<th style="width:10px"></th>
+					<th style="min-width:10px" class="NalignCenter">Positions</th>
+					<th style="min-width:40px" class="NalignCenter">Teams</th>
+					<th style="min-width:10px" class="NalignCenter">@RadialReview.Utilities.Config.ManagerName()s</th>
+					@if (Model.CanRemoveUsers || Model.CanEditUserDetails || Model.ManagingOrganization || Model.Users.Any(x => x.ForceCanDelete)) {
+						<th style="min-width:41px" class="alignCenter"></th>
+					}
+					@if (ViewBag.IsRadialAdmin ?? false) {
+						<th style="min-width: 107px;"></th>
+					}
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var p in Model.Users.OrderByDescending(x => x.Managing).ThenBy(x => x.Name)) {
+					<tr class="@(p.Managing?"managing":"grayRow") row_@(p.Id) record-row" data-id="@p.Id">
+						<td class="hidden">@(p.Managing ? 1 : 0)</td>
+						<td class="alignCenter noselect  noPadLeft">
+							@{
+								var isplaceholder = p.Roles.Any(x => x.RoleType == UserRoleType.PlaceholderOnly);
+								//Icon
+								string attrs = "";
+								var title = "";
+								var sort = "0";
+								if (p.IsClient) {
+									title = "A client";
+									sort = "0";
+								} else {
+									if (p.Manager) {
+										if (p.Admin) {
+											title = "An admin";
+											sort = "1";
+										} else {
+											title = "A supervisor";
+											sort = "2";
+										}
+									} else {
+										title = "Not a supervisor";
+										sort = "3";
+									}
+								}
+								if (isplaceholder) {
+									title = "Placeholder User";
+									sort = "4";
+								}
+
+								if (p.EvalOnly) {
+									title += " &amp; people tools only";
+								}
+
+								attrs = @"title=""" + title + @""" data-sort=""" + sort + @"""";
+								if (p.Managing && !p.IsClient) {
+									attrs += @" style=""cursor:pointer;"" onclick=""EditUser(" + p.Id + @")""";
+								}
+							}
+
+							<span data-permicon="@(!p.IsClient)" id="permissions_@p.Id" data-evalonly="@p.EvalOnly" data-isclient="@p.IsClient" data-ismanager="@p.Manager" data-isadmin="@p.Admin" data-isplaceholder="@(isplaceholder)" @(new HtmlString(attrs))></span>
+						</td>
+						<td class="alignCenter noselect noPadLeft" data-isplaceholder="@(isplaceholder)">
+							@if (p.Verified || (!p.Managing && !Model.ManagingOrganization)) {
+								if (p.Verified) {
+									<span title="Joined." class="glyphicon glyphicon-ok-sign strokeGray gray" data-sort="6"></span>
+								} else {
+									<span title="Has not joined." class="glyphicon glyphicon-envelope strokeGray gray" data-sort="5"></span>
+								}
+							} else {
+								if (p.EmailSent) {
+									if (p.EmailEvent.HasValue) {
+										<span data-sort="@(lookup[p.EmailEvent.Value].Item3)" title="@(lookup[p.EmailEvent.Value].Item1)" class="glyphicon glyphicon-envelope @(lookup[p.EmailEvent.Value].Item2) clickable icon" onclick="@Html.ShowModal("Resend Email", "/Organization/ResendJoin/" + p.Id, "/Organization/ResendJoin/" + p.Id,onComplete:"afterResend")"></span>
+									} else {
+										<span data-sort="2" title="Awaiting Response. Click here to resend email." class="glyphicon glyphicon-envelope strokeRed resendEmail red clickable icon" onclick="@Html.ShowModal("Resend Email", "/Organization/ResendJoin/" + p.Id, "/Organization/ResendJoin/" + p.Id, onComplete: "afterResend")"></span>
+									}
+								} else {
+									<span data-sort="1" class="glyphicon glyphicon-envelope glyphicon-exclamation-sign1 red strokeRed unsentEmail clickable icon" title="Invitation not sent. Click here to send." onclick="@Html.ShowModal("Send Email", "/Organization/ResendJoin/" + p.Id, "/Organization/ResendJoin/" + p.Id,preSubmitCheck:"checkAddUser", onComplete: "afterResend")"></span>
+								}
+							}
+						</td>
+						<td class="alignCenter" title="Individual Quarterly @Html.Organization().Settings.RockName">
+							<a href="~/Manage/UserDetails/@p.Id">@p.NumRocks</a>
+						</td>
+						<td class="alignCenter" title="Individual Roles">
+							<a href="~/Manage/UserDetails/@p.Id">@p.NumRoles</a>
+						</td>
+						<td class="alignCenter" title="Scorecard Measurables">
+							<a href="~/Manage/UserDetails/@p.Id">@p.NumMeasurables</a>
+						</td>
+						<td class="noOverflow nameField" style="max-width: 160px;" title="@p.Name">
+							<a href="~/Manage/UserDetails/@p.Id">@p.Name</a>
+						</td>
+						<td class="noOverflow emailField" style="max-width: 150px;" title="@p.Email">
+							<a href="~/Manage/UserDetails/@p.Id" class="">@p.Email</a>
+						</td>
+						<td>
+							<a class="icon fontastic-icon-flow-tree" href="/accountability/chart?user=@p.Id"></a>
+						</td>
+						<td class="NalignCenter noOverflow" style="max-width: 200px;">
+							@if (!p.IsClient) {
+								<a href="@Url.Action("Positions", "User", new { id = p.Id })" class="fullWidth">
+									@Html.EditFirstButton(p.PositionTitles, p.Managing)
+								</a>
+							} else {
+								<span class="gray" title="Clients have no positions">N/A</span>
+							}
+						</td>
+						<td class="NalignCenter noOverflow" style="max-widthh: 80px;">
+							<a href="@Url.Action("Teams","User",new {id = p.Id})" class="fullWidth">
+								@Html.EditFirstButton(p.TeamsTitles, p.Managing)
+							</a>
+						</td>
+						<td class="NalignCenter noOverflow" style="max-widthh: 180px;">
+							@if (!p.IsClient) {
+								<a href="@Url.Action("Managers", "User", new { id = p.Id })" class="">
+									@Html.EditFirstButton(p.ManagersTitles, p.Managing)
+								</a>
+							} else {
+								<span class="gray" title="Clients have no @RadialReview.Utilities.Config.ManagerName()s">N/A</span>
+							}
+						</td>
+						@if (Model.CanRemoveUsers || Model.ManagingOrganization || p.ForceCanDelete || Model.CanEditUserDetails) {
+							<td>
+								@if (Model.CanEditUserDetails) {
+									<span onclick="editUserDetails(@p.Id)" class="glyphicon glyphicon-edit clickable gray"></span>
+								}
+								@if (p.Managing || Model.CanRemoveUsers || p.ForceCanDelete) {
+									<span data-sort="1" onclick="deleteUser(@p.Id)" class="glyphicon glyphicon-trash clickable gray"></span>
+								}
+							</td>
+						}
+						@if (ViewBag.IsRadialAdmin ?? false) {
+							var score = 0;
+							var v2StatusColor = "lightgray";
+							if (p.V2Status == RadialReview.Models.UserModels.V2StatusBar.ShowAllowSignup) {
+								v2StatusColor = "green";
+							} else if (p.V2Status == RadialReview.Models.UserModels.V2StatusBar.ShowDoNotAllowSignup) {
+								v2StatusColor = "goldenrod";
+							}
+							<td class="userroles">
+								@try {
+
+									<span onclick="toggleV2Status(this)" title="@p.V2Status" data-id="@p.Id" data-status="@p.V2Status" style="cursor:pointer;color:@(v2StatusColor)" title="V2 Status">(v2)</span>
+		
+									foreach (var item in System.Enum.GetValues(typeof(UserRoleType))) {
+												var fi = (UserRoleType)item;
+												var any = p.Roles.Any(x => x.RoleType == fi);
+												score += any ? (int)fi : 0;
+										<span class="userType userType-@fi.ToString() clickable" data-type="@fi.ToString()" data-id="@p.Id" data-enabled="@any.ToJavascript()" onclick="setUserType(this)" title="@fi.ToString()"></span>
+									}
+									<span class="hidden">@(-score)</span>
+									<a href="/account/setasuser?id=@p.Email" style="color:lightcoral" title="Set As User...">(sa)</a>
+								} catch (Exception e) {
+
+								}
+							</td>
+						}
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+@using (Html.BeginScripts()) {
+	if (ViewBag.IsRadialAdmin ?? false) {
+		<script>
+			function toggleV2Status(row) {
+				var id = $(row).attr("data-id");
+				var status = $(row).attr("data-status");
+				var color = "lightgray";
+				console.log(status);
+				if (status == "ShowAllowSignup") {
+					status = "ShowDoNotAllowSignup";
+					color = "goldenrod";
+				} else if (status == "ShowDoNotAllowSignup") {
+					status = "DoNotShow";
+					color = "lightgray";
+				} else {
+					status = "ShowAllowSignup";
+					color = "green";
+				}
+
+				$.ajax({
+					url: "/v2020/setstatus/" + id + "?status=" + status,
+					success: function (res) {
+						debugger;
+						$(row).attr("data-status", status);
+						$(row).attr("title", status);
+						$(row).css("color", color);
+					}
+				})
+
+			}
+		</script>
+	}
+}

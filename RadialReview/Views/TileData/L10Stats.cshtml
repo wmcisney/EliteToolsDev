@@ -1,0 +1,133 @@
+﻿@model long
+@{
+	var guid = Html.NewGuid();
+}
+<div class="review smallBreak2 loading tiny @guid" style2="min-height:30px;">
+	<div class="l10-stats-heading heading" style="@(ViewBag.HeadingStyle)" data-style="@(ViewBag.HeadingStyle)">
+		<span class="handle">@(ViewBag.Name ?? "Level 10") - Stats&nbsp;</span>
+	</div>
+	<div class="no-data gray hidden">No data</div>
+	<div style="min-height:166px!important;height: calc(100% - 40px);position:relative;">
+		<div id="chart_@guid" style="top:0;bottom:0;left:0;right:0;position:absolute;"></div>
+		@*<l10-stats-tile class="" tt-url="/L10/StatsLine/@Model" on-click="click(row, index, series, options)"></l10-stats-tile>*@
+	</div>
+</div>
+
+<style>
+	.no-data {
+		position: relative;
+		height: 0px;
+		margin-left: auto;
+		margin-right: auto;
+		text-align: center;
+		padding-top: 20px;
+		width: 120px;
+		margin-bottom: -30px;
+	}
+
+	.@guid .mg-active-datapoint tspan:nth-of-type(4) {
+		font-weight: bold;
+	}
+
+	.@guid svg{
+	    margin-top: -19px;
+		margin-left: -11px;
+	}
+
+</style>
+
+
+<link href="~/Content/Chart/metric-graphics.css" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,700" rel="stylesheet" type="text/css">
+
+<script src="~/Scripts/d3/d3.v4.12.2.js"></script>
+<script src="~/Scripts/Charts/metrics-graphics.js"></script>
+
+<script>
+	function @(guid)() {
+		$.ajax({
+			url: "/L10/StatsLine/@Model",
+			success: function (obj) {
+				var data = [obj.data.issue, obj.data.todo, obj.data.rating];
+				for (var i = 0; i < data.length; i++) {
+					var line = data[i];
+					for (var j = 0; j < line.length; j++) {
+						line[j].x = new Date(line[j].x);
+					}
+				}
+				var chart = {
+					data: data,
+					//width: "100%",
+					//height: 200,
+					linked:true,
+					full_width: true,
+					full_height: true,
+					xax_count:13,
+					//right: 40,
+					x_accessor: "x",
+					y_accessor: "y",
+					target: '#chart_@guid',
+					legend: ['Issues Solved', 'To-dos Completed', 'Meeting Rating'],
+					legend_target: '.legend'
+				};
+
+				
+				MG.data_graphic(chart);
+
+				if (!chart.data || chart.data.every(function (x) { return x.length == 0; })) {
+					$(".@guid .hidden").removeClass("hidden");
+				}
+
+				function throttle(func, wait, options) {
+					var context, args, result;
+					var timeout = null;
+					var previous = 0;
+					if (!options) options = {};
+					var later = function () {
+						previous = options.leading === false ? 0 : Date.now();
+						timeout = null;
+						result = func.apply(context, args);
+						if (!timeout) context = args = null;
+					};
+					return function () {
+						var now = Date.now();
+						if (!previous && options.leading === false) previous = now;
+						var remaining = wait - (now - previous);
+						context = this;
+						args = arguments;
+						if (remaining <= 0 || remaining > wait) {
+							if (timeout) {
+								clearTimeout(timeout);
+								timeout = null;
+							}
+							previous = now;
+							result = func.apply(context, args);
+							if (!timeout) context = args = null;
+						} else if (!timeout && options.trailing !== false) {
+							timeout = setTimeout(later, remaining);
+						}
+						return result;
+					};
+				};
+
+				$(window).on("resize", throttle(function () {
+					console.log("resize")
+					MG.data_graphic(chart);
+				}, 500));
+
+				$(".@guid").closest("li").on("resize-tile", throttle(function () {
+					setTimeout(function () {
+						console.log("resize-tile")
+						MG.data_graphic(chart);
+					}, 700);
+				}, 500));
+			}
+		});
+
+		
+	}
+
+	@(guid)();
+</script>
+

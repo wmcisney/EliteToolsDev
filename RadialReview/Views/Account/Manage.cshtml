@@ -1,0 +1,197 @@
+﻿@using RadialReview.Models;
+@using Microsoft.AspNet.Identity;
+@model RadialReview.Models.ViewModels.ProfileViewModel
+
+@{
+	ViewBag.Title = "Manage Account";
+}
+
+@*<p class="text-success">@ViewBag.StatusMessage</p>*@
+@if (!string.IsNullOrWhiteSpace(ViewBag.StatusMessage)) {
+	@Html.AlertBoxDismissable((string)ViewBag.StatusMessage, (string)ViewBag.AlertType, ViewBag.AlertType != "alert-danger" ? "Success" : "Warning")
+	<br />
+}
+
+<p>You're logged in as <strong>@User.Identity.GetUserName()</strong>.</p>
+
+<div class="row">
+	<div class="col-md-8">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Profile</h3>
+			</div>
+			<div class="panel-body">
+				@using (Html.BeginForm("Manage", "Account", FormMethod.Post)) {
+					@Html.AntiForgeryToken()
+					<div class="row">
+						<div class="col-md-3">  First Name:</div>
+						<div class="col-md-9">  @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control" })</div>
+					</div>
+					<div class="smallBreak"></div>
+					<div class="row">
+						<div class="col-md-3">  Last Name:</div>
+						<div class="col-md-9">  @Html.TextBoxFor(x => x.LastName, new { @class = "form-control" })</div>
+					</div>
+					<div class="smallBreak"></div>
+					<div class="row smallBreak">
+						<div class="col-md-3">  To-Do Email send time:</div>
+						<div class="col-md-9">  @Html.DropDownListFor(x => x.SendTodoTime, Model.PossibleTimes, new { @class = "form-control time-zone-adj" })</div>
+					</div>
+					<div class="row smallBreak2">
+						<div class="col-md-3">  Color blindness:</div>
+						<div class="col-md-9">  @Html.EnumDropDownListFor(x => x.ColorMode, new { @class = "form-control" })</div>
+					</div>
+					<div class="row smallBreak">
+						<div class="col-md-3">  Show color on scorecard:</div>
+						<div class="col-md-9">  @Html.CheckBoxFor(x => x.ShowScorecardColors, new { @class = "checkbox" })</div>
+					</div>
+					<div class="row smallBreak">
+						<div class="col-md-3">  Reverse my scorecard:</div>
+						<div class="col-md-9">  @Html.CheckBoxFor(x => x.ReverseScorecard, new { @class = "checkbox" })</div>
+					</div>
+					<div class="row smallBreak">
+						<div class="col-md-3">  Disable Tips:</div>
+						<div class="col-md-9">  @Html.CheckBoxFor(x => x.DisableTips, new { @class = "checkbox" })</div>
+					</div>
+					<div class="row">
+						<div class="col-md-offset-2 col-md-10">
+							<div class="row alignCenter">
+								<button class="btn btn-default col-md-3 col-md-offset-4" value="Save">Save</button>
+							</div>
+						</div>
+					</div>
+
+				}
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Password</h3>
+			</div>
+			<div class="panel-body">
+				@if (ViewBag.HasLocalPassword) {
+					@Html.Partial("_ChangePasswordPartial", (RadialReview.Models.ManageUserViewModel)Model.Manage, new ViewDataDictionary())
+				} else {
+					@Html.Partial("_SetPasswordPartial", (RadialReview.Models.ManageUserViewModel)Model.Manage, new ViewDataDictionary())
+				}
+
+
+				@*<section id="externalLogins">
+						@Html.Action("RemoveAccountList")
+						@Html.Partial("_ExternalLoginsListPartial", new { Action = "LinkLogin", ReturnUrl = ViewBag.ReturnUrl })
+					</section>*@
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Profile Image</h3>
+			</div>
+			<div class="panel-body alignCenter">
+				@Html.Partial("~/Views/Upload/Image.cshtml", new RadialReview.Models.ViewModels.ImageUploadViewModel() {
+					   ForType = RadialReview.Models.Enums.UploadType.ProfileImage.ToString(),
+					   ImageUrl = Model.ImageUrl,
+					   UploadUrl = "/upload/image/" + Model.UserId,
+					   DeleteUrl = "/upload/deleteUserImage/" + Model.UserId
+					   /*Width = 200,
+					   Height = 200,*/
+				   })
+			</div>
+		</div>
+	</div>
+	@if (Model.LoggedIn) {
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Manage Texting Actions</h3>
+
+				</div>
+				<div class="panel-body alignCenter" id="personalTodo">
+					@if (Model.PersonalTextNumber == null) {
+						<div class="btn btn-success" onclick="@Html.ShowModal("Add Texting Action","/TwilioApi/Modal?recurrenceId=-2&todoOnly=true","/TwilioApi/Modal",null,null,"textingModal")"><span style="top: 2px;" class="glyphicon glyphicon-phone l10-texting-actions"></span> Setup Individual Text-a-Todo™ </div>
+					} else {
+						<h3 title="Individual Text-a-Todo™ Number">@Model.ServerTextNumber</h3>
+								<h5 class="" title="Your phone number">@Model.PersonalTextNumber <span class="clickable gray" style="width:0px;display:inline-block;font-size:80%" onclick="deleteNumber(@Model.PhoneActionId)">Delete</span></h5>
+					}
+					<br />
+					<br />
+					<div onclick="window.location = '/phone';" class="btn btn-warning">Manage Other Texting Actions</div>
+				</div>
+			</div>
+		</div>
+			}
+
+</div>
+
+<div class="row">
+
+	@*<div class="col-md-6">
+			@Html.Partial("~/Views/Upload/Image.cshtml", new RadialReview.Models.ViewModels.ImageUploadViewModel() {
+					ForType=RadialReview.Models.Enums.UploadType.ProfileImage.ToString(),
+					Url=ViewBag.ImageUrl,
+					Width=200,
+					Height=200,
+			})
+		</div>*@
+</div>
+
+
+@section Scripts {
+	<script>
+		function deleteNumber(id) {
+			if (!id) {
+				showAlert("Unknown action");
+			} else {
+				$.ajax({
+					url: "/twilioApi/RemoveAction/" + id,
+					success: function (d) {
+						$("#personalTodo").html("<div class=\"btn btn-success\" onclick=\"@Html.ShowModal("Add Texting Action","/TwilioApi/Modal?recurrenceId=-2&todoOnly=true","/TwilioApi/Modal")\"><span style=\"top: 2px;\" class=\"glyphicon glyphicon-phone l10-texting-actions\"></span> Set Up</div>")
+					}
+				});
+			}
+		}
+
+		function textingModal(data) {
+			if (!data.Error) {
+				var message = data.Message.replace(" '", " '<b>").replace("' to ", "</b>' to ");//.replace(" to activate.","</b> to activate.");
+
+				showModal({
+					icon: "info",
+					title: message
+				});
+			}
+		}
+
+		$(function () {
+
+			var offset = Time.tzoffset() / 60;
+			var selected = $(".time-zone-adj").val();
+			var tzName = Time.localTimeZoneName();
+
+			$(".time-zone-adj option").each(function () {
+				var v = +$(this).val();
+				if (v != -1) {
+					var adj = ((v - offset) + 48) % 24;
+					$(this).data("local-tz", adj);
+					$(this).html(Time.to12HourFormat(adj) + " " + tzName);
+				}
+			});
+
+			var options = $(".time-zone-adj option");
+			options.detach().sort(function (a, b) {
+				var astts = $(a).data('local-tz');
+				var bstts = $(b).data('local-tz')
+				//return astts - bstts;
+				return (astts > bstts) ? (astts > bstts) ? 1 : 0 : -1;
+			});
+
+			$(".time-zone-adj").append(options);
+
+			$(".time-zone-adj").val(selected);
+
+		});
+
+	</script>
+	@Scripts.Render("~/bundles/jqueryval")
+}

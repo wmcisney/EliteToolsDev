@@ -1,0 +1,62 @@
+﻿@model RadialReview.Models.ViewModels.AdditionalReviewViewModel
+@{
+    ViewBag.Title = "Additional Review";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="review">
+    <h3>That's the end of the @Html.ReviewName().ToLower()!</h3>
+    @if (Model.Possible.Count > 0)
+    {
+        <h4>But you may optionally evaluate more users:</h4>
+        using (Html.BeginForm())
+        {
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.Page)
+            <p>
+                @Html.ListBoxFor(x => x.Users, Model.Possible.OrderBy(x => x.Text), new { @class = "select2", style = "max-width:600px;width:100%;", multiple ="",placeholder="Begin typing a name..."})
+            </p>
+            <button class="btn btn-primary">Add to @Html.ReviewName()</button>
+            <a href="/" class="btn btn-default">Exit</a>
+        }
+    }
+    else
+    {
+        <a href="/" class="btn btn-default">Exit</a>
+    }
+</div>
+
+
+@using (Html.BeginScripts())
+{
+	<script>
+		$(function() {
+			$(".select2").focus();
+		});
+
+
+		$(".select2").select2({
+			/*matcher: function (term, text) {
+				var split = text.text.split("(")[0].split(" ");
+				if (!term || !term.term)
+					return false;
+				var t = term.term.toUpperCase();
+				for (var i = 0; i < split.length; i++) {
+					var s = split[i].toUpperCase();
+					if ($.trim(s) == '')
+						continue;
+					if (s.indexOf(t) == 0)
+						return true;
+				}
+				return null;
+			}*/
+		});
+	</script>
+}
+@using (Html.BeginStyles()) {
+	<style>
+		body,html{
+			background-color:#eee;
+		}
+	</style>
+}

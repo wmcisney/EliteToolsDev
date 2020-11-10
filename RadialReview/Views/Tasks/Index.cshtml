@@ -1,0 +1,104 @@
+﻿@using RadialReview.Models.Enums
+@model RadialReview.Controllers.TaskVM
+
+@{
+	ViewBag.Title = "Tasks";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	//ViewBag.Subheading = "All your pending tasks.";
+}
+
+@section top{
+	<div class="jumbotron alignCenter">
+		<div><h1>Tasks</h1></div>
+	</div>
+}
+
+@using (Html.BeginStyles())
+{
+	<style>
+		.pill.todo {
+			color: gray;
+		}
+	</style>
+}
+
+
+@if (Model.Tasks.Any())
+{
+	foreach (var type in Model.Tasks.Select(x => x.Type).OrderByDescending(x => (int)x).Distinct())
+	{
+		<div class="panel panel-primary">
+
+			@*<div class="panel-heading">
+				@type Tasks:
+			</div>*@
+			<div class="table-responsive">
+				<table class="table table-condensed table-hover">
+					@if (type != TaskType.Profile)
+					{
+						<thead>
+							<tr>
+								<th class="" style="width:75px"></th>
+								<th >Title:</th>
+								
+								@if (type == RadialReview.Models.Enums.TaskType.Review)
+								{
+									<th class="alignCenter">Completion</th>
+								}
+								else if (type == RadialReview.Models.Enums.TaskType.Prereview)
+								{
+									<th class="alignCenter">@Html.ReviewName() Links</th>
+								}
+								<th class="alignCenter">Due</th>
+							</tr>
+						</thead>
+					}
+					<tbody class="">
+						@foreach (var t in Model.Tasks.Where(x => x.Type == type).OrderBy(x => x.DueDate))
+						{
+							<tr class="clickable " onclick="location.href='@Model.GetUrl(t)'">
+								@if (type != TaskType.Profile){
+									<td>
+										@{
+											var clzz = "label label-default";
+											var txt = "TODO";
+										}
+										@if (t.DueDate < DateTime.UtcNow){
+											clzz = "label label-primary";
+											txt = "OVERDUE";
+										}
+										<span class="@clzz" style="display: block;">@txt</span>
+
+									</td>
+								}
+
+								<td class="table-hover-underline">@t.Name</td>
+								@if (type == RadialReview.Models.Enums.TaskType.Review)
+								{
+									<td class="alignCenter" style="width:120px;">@Html.Partial("_Completion", t.Completion)</td>
+								}
+								else if (type == RadialReview.Models.Enums.TaskType.Prereview)
+								{
+									<td class="alignCenter" style="width:120px;">@t.Count</td>
+								}
+								@if (type != TaskType.Profile)
+								{
+									<td class="alignCenter" style="width: 120px;">@t.DueDate.SafeSubtract(TimeSpan.FromDays(1)).ToShortDateString()</td>
+								}
+
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	}
+}
+else
+{
+	<div class="panel panel-primary">
+		<div class="panel-body alignCenter gray">
+			No pending tasks right now.
+		</div>
+	</div>
+}

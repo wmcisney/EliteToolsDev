@@ -1,0 +1,29 @@
+﻿@model Tuple<bool, bool>
+@{
+	Layout = null;
+	var start = Model.Item1;
+	var join = Model.Item2;
+
+}
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Scripts/test/SiganlRTestSuite.js"></script>
+<script src="~/Scripts/Main/alerts.js"></script>
+<script>
+	initializeSignalrShim();
+</script>
+<script src="~/Scripts/Main/radial.js"></script>
+<script src="~/Scripts/Main/realtime.js"></script>
+<label>SuccesStart</label><input id="successStart" type="checkbox" @(start ? "checked" : "") />
+<label>SuccesJoin</label><input id="successJoin" type="checkbox" @(join ? "checked" : "") />
+
+<button onclick="simulateSpike(this)">Spike</button>
+<button onclick="simulateConnect(this)">Connect</button>
+<button onclick="simulateDisconnect(this)">Disconnect</button>
+<span id="overlay-offline-container" style="background-color:darkblue;display:none;float: right;color: white;padding: 2px 10px;">OFFLINE</span>
+<code></code>
+
+
+
+<script>
+</script>

@@ -1,0 +1,504 @@
+﻿
+.rocks-container {
+	margin-bottom: 24px;
+
+
+	&.rocks-combine .company-rock-container {
+		display: none;
+	}
+
+	.rock-row.rock-type-company .message {
+		text-shadow: 0px 0px 0px hsl(43, 100%, 50%);
+	}
+
+	.rocks-item {
+		padding: 5px;
+		width: 400px;
+		height: 220px;
+		margin-top: 10px;
+		text-align: center;
+		position: relative;
+	}
+
+	.message {
+		font-size: 16px;
+		padding-left: 42px;
+		padding-bottom: 6px;
+		text-shadow: 0px 0px 0px hsl(27, 8%, 23%);
+	}
+
+	.rocks-item .owner {
+		text-align: right;
+		color: #B2B2B2;
+		position: absolute;
+		left: 0;
+		right: 10px;
+		bottom: 5px;
+		font-size: 12px;
+
+		.lbl {
+			color: lightgray;
+		}
+	}
+
+
+	.owner {
+		font-size: 14px;
+		position: relative;
+		top: -7px;
+		text-transform: uppercase;
+		left: -4px;
+	}
+}
+
+.company-rock-container {
+	.owner {
+		font-size: 17px;
+	}
+
+	.message {
+		padding-left: 0px;
+		width: 100%;
+		padding-bottom: 0px;
+	}
+
+	td.picture {
+		width: 42px;
+	}
+}
+
+.rocks-container {
+	.picture-container {
+		width: 30px;
+		height: 30px;
+		border: 1px solid #DDD;
+		padding: 1px;
+		margin: 0px 6px;
+	}
+	/*tr:first-child {
+		border-bottom: 1px solid #f0f0f0;
+	}*/
+	tr:not(:last-child) td {
+		border-bottom: 1px solid #f0f0f0;
+	}
+
+	tr:not(:last-child) td:last-child {
+		border-bottom: 1px solid #2C77BA;
+	}
+
+	tr:nth-child(2) td.currentBlue {
+		border-top-left-radius: 6px;
+		border-top-right-radius: 6px;
+		border-top: none;
+	}
+
+	tr:last-child td.currentBlue {
+		border-bottom-left-radius: 6px;
+		border-bottom-right-radius: 6px;
+		border-bottom: none;
+	}
+
+	td.currentBlue {
+		background-color: #2C77BA;
+		border-bottom: 1px solid #2C77BA;
+		text-align: center;
+		width: 46px;
+		min-width: 46px;
+		padding: 6px;
+		vertical-align: top;
+		padding-top: 5px;
+	}
+
+	.rock-state-holder {
+		vertical-align: top;
+		line-height: 0.5;
+		padding: 2px;
+	}
+
+	.component {
+		margin-bottom: 12px;
+		padding: 6px 6px 6px 1px;
+		box-shadow: 0px 3px 6px -1px rgba(0, 0, 0, 0.2);
+		border: 1px solid rgb(208, 208, 208);
+		margin: 5px;
+	}
+
+	.rock-row {
+		.rock-title {
+			cursor: pointer;
+		}
+
+		&.selected .rock-title {
+			font-weight: bold;
+		}
+	}
+}
+
+
+.completion-percentage {
+	padding-right: 1px;
+	padding-top: 4px;
+
+	.ratio,
+	.percentage {
+		font-size: 16px;
+		display: inline-block;
+		font-weight: bold;
+		color: #444;
+		text-align: right;
+		padding-right: 11px;
+	}
+
+	.percentage {
+		text-align: right;
+	}
+}
+
+.company-rocks-heading {
+	/*font-weight: bold;*/
+	text-transform: uppercase;
+	font-size: 20px;
+	height: 22px;
+	position: relative;
+	top: -4px;
+	left: 4px;
+	color: rgba(137, 112, 0, 0.9);
+}
+
+.company-rock-container .completion-percentage .ratio,
+.company-rock-container .completion-percentage .percentage {
+	color: rgba(137, 112, 0, 0.9);
+}
+
+.company-rocks-heading-container {
+	height: 28px;
+}
+
+.company-rock-container .component {
+	background-color: #F7EFD5;
+	/* border-color: #69A779; */
+	color: #897000;
+	border: 1px solid #8A7104;
+	border-top-color: #B3A77F;
+	border-left-color: #A29051;
+	border-style: solid;
+	border-right-color: #A29051;
+	border-radius: 3px;
+	padding: 3px;
+	padding-bottom: 6px;
+	box-shadow: 0px 9px 22px -8px rgba(0, 0, 0, 0.42);
+}
+
+.rocks {
+	.page-header.listing {
+		margin-top: -28px;
+		padding-top: 26px;
+		background-color: #eee;
+		z-index: 11;
+		box-shadow: 0 4px 2px -2px rgba(128, 128, 128, 0.2);
+	}
+
+	.fixed-pos {
+		position: relative;
+		width: 100%;
+	}
+
+	.page-header {
+		margin-top: 0px;
+		margin: 5px 0;
+	}
+
+	.rock-group .message {
+		max-width: ~"calc(100% - 275px)";
+	}
+
+	.page-header.details > h4 {
+		margin-bottom: -7px;
+	}
+}
+
+.rock-title {
+	z-index: 1;
+	position: relative;
+}
+
+.milestone-marker-container {
+	position: relative;
+	//top: -5px;
+	margin-bottom: 7px;
+
+	.pre-line, .post-line {
+		height: 1px;
+		position: absolute;
+		background-color: #d6d6d6;
+		top: 4px;
+	}
+
+	.due-line {
+		height: 10px;
+		width: 2px;
+		background-color: #797979;
+		position: relative;
+		margin-left: -1px;
+		top: 0px;
+	}
+
+	.milestone-date-container, .milestone-date-marker {
+		position: absolute;
+		height: 5px;
+		border: 1px solid #d6d6d6;
+		border-radius: 3px;
+		left: 5%;
+		top: 2px;
+	}
+
+	.milestone-date-container {
+		background-color: #f7f7f7;
+	}
+
+	.milestone-date-marker {
+		background-color: #e8e8ff;
+		border-top-right-radius: 0px;
+		border-bottom-right-radius: 0px;
+		border-color: #c2cbdc;
+
+		&.past-due.status-NotDone,
+		&.past-due.status-0 {
+			background-color: #f1d9d8;
+			border-color: #D9534F;
+		}
+
+		&.status-Done,
+		&.status-8 {
+			background-color: #e2f7e6;
+		}
+	}
+
+	.milestone-marker {
+		position: absolute;
+		width: 10px;
+		height: 10px;
+		border-radius: 7px;
+		background-color: #f7f7f7;
+		border: 1px solid #d6d6d6;
+		top: 0px;
+		display: inline-block;
+		cursor: pointer;
+		z-index: 1;
+		margin-left: -5px; // half width
+		z-index: 3;
+
+		&:hover, &.mouseover {
+			width: 12px;
+			height: 12px;
+			border: 1px solid #d6d6d6;
+			margin-top: -1px;
+			margin-left: -6px; // half width
+			z-index: 4;
+		}
+
+		&.status-8,
+		&.status-Done {
+			background-color: #e2f7e6;
+			border: 1px solid #449D44;
+			z-index: 1;
+
+			&:hover, &.mouseover {
+				border: 1px solid #449D44;
+				z-index: 4;
+			}
+		}
+
+		&.past-due.status-NotDone,
+		&.past-due.status-0 {
+			&:not(.rock-is-done) {
+				background-color: #f1d9d8;
+				border: 1px solid #D9534F;
+			}
+
+			z-index: 2;
+
+			&:hover, &.mouseover {
+				background-color: #f1d9d8;
+				border: 1px solid #D9534F;
+				z-index: 4;
+			}
+		}
+
+		&.rock-duedate-marker {
+			width: 6px;
+			height: 12px;
+			border-radius: 0px;
+		}
+	}
+}
+
+.rock-details {
+
+
+	h4 {
+		margin-top: 0px;
+		/*margin-bottom: 10px;*/
+		min-height: 30px;
+		padding-bottom: 6px;
+		/*border-bottom: 1px solid #eee;*/
+	}
+
+	.component {
+		margin-bottom: 10px;
+
+		&:empty:after {
+			color: #ddd;
+			content: "Click a Rock to see its details.";
+		}
+	}
+
+	.details {
+		border: 1px solid #E8E8E8;
+		padding: 0 1px 0 0;
+		color: #666;
+		font-size: 12px;
+		background-color: #FcFcFc;
+		width: 100%;
+		resize: vertical;
+		height: 116px;
+		min-height: 116px;
+	}
+
+	.button-bar .todoButton {
+		color: #5E5E5E;
+		top: 1px;
+		opacity: 1;
+		transition: all .4s ease;
+	}
+
+	.milestone-heading {
+	}
+
+	.milestone-table {
+		min-height: 40px;
+		width: 100%;
+		margin-left: 8px;
+		display: inline-block;
+		overflow-y: auto;
+
+		&:empty:after {
+			content: "No milestones.";
+			padding: 10px;
+			color: #ddd;
+		}
+
+		.milestone-status-cell {
+			width: 20px;
+		}
+
+		.milestone-duedate-cell .milestone-duedate.overdue input {
+			color: #D9534F;
+		}
+
+		.milestone-delete-cell {
+			width: 20px;
+		}
+
+		.milestone-name-cell {
+			width: 60%;
+		}
+
+		.milestone-name {
+			color: #666;
+			cursor: pointer;
+		}
+
+		.milestone.mouseover .milestone-name {
+			text-decoration: underline;
+		}
+
+		.milestone-duedate-cell {
+			width: 100px;
+			min-width: 100px;
+
+			input {
+				text-align: right;
+				padding-right: 10px;
+			}
+		}
+	}
+
+	.add-milestone-button {
+		float: right;
+		//margin-top: 16px;
+	}
+
+	.add-on {
+		display: none;
+	}
+
+	.rock-duedate .date {
+		width: 100px;
+		display: inline-block;
+
+
+		input {
+			text-align: left;
+			padding-left: 12px;
+			-webkit-box-shadow: none;
+			-box-shadow: none;
+			color: #767F99;
+			cursor: pointer;
+			border: 0px;
+		}
+	}
+
+	.client-date {
+		border: none;
+		padding: 0px;
+		box-shadow: none;
+		//text-align: right;
+		color: #767F99;
+		cursor: pointer;
+		height: inherit;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	.message-input {
+		width: 100%;
+		outline: none;
+		border: none;
+		border-bottom: 2px solid #005ed7;
+		margin-top: -1px;
+		color: black !important;
+		resize: vertical;
+		overflow: auto;
+	}
+
+	.message:hover {
+		border-top: 1px solid transparent;
+		border-bottom: 1px solid #005ed7;
+	}
+}
+
+.rock-empty-holder:after {
+	content: "Click 'Add Rock' to create a rock";
+}
+
+@media(max-width:767px) {
+	.rocks-container .message {
+		font-size: 13px;
+		padding-top: 0px;
+		padding-bottom: 0px;
+		padding-left: 9px;
+		padding-bottom: 7px;
+	}
+
+	.company-rock-container .message {
+		padding-left: 0px;
+	}
+
+	.rocks .l10-page-title {
+		color: rgba(0, 0, 0, 0);
+		height: 15px;
+	}
+}

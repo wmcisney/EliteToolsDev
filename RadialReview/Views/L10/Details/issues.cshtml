@@ -1,0 +1,23 @@
+﻿<md-toolbar class="md-table-toolbar md-default" ng-hide="filter.show == true">
+    <div class="md-toolbar-tools">
+        <span>Issues</span>
+        <span flex></span>
+        <span class="issuesModal add-btn" data-method="CreateIssue" data-recurrence="{{::recurrenceId}}">
+            <md-button class="md-icon-button" aria-label="Add Issue">
+                <md-tooltip md-direction="left">
+                    Add Issue
+                </md-tooltip>
+                <md-icon>add</md-icon>
+            </md-button>
+        </span>
+    </div>
+</md-toolbar>
+@{ Html.RenderPartial("~/Views/Issues/Partial/list.cshtml", new ViewDataDictionary(){
+		{"AddHeaders", false},
+		{"AddController", false},
+		{"UsePopup",true},
+		{"AddCompletion", true},
+		{"IncludeOwner", true},
+		{"Filter"," | filter:filters.byRange('CompleteTime',model.dataDateRange.startDate,model.dataDateRange.endDate)" /*| filter: filters.applyFilters()"*/}
+
+	}); }

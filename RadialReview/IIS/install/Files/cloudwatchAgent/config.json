@@ -1,0 +1,125 @@
+{
+	"logs": {
+		"logs_collected": {
+			"files": {
+				"collect_list": [
+					{
+						"file_path": "C:\\\\inetpub\\\\logs\\LogFiles\\\\W3SVC1\\\\*",
+						"log_group_name": "TractionTools.v1.5.log.group",
+						"log_stream_name": "IIS.logs"
+					},
+					{
+						"file_path": "C:\\\\logs\\\\*",
+						"log_group_name": "TractionTools.v1.5.log.group",
+						"log_stream_name": "Machine.{instance_id}.logs"
+					}
+				]
+			},
+			"windows_events": {
+				"collect_list": [
+					{
+						"event_format": "xml",
+						"event_levels": [
+							"VERBOSE",
+							"INFORMATION",
+							"WARNING",
+							"ERROR",
+							"CRITICAL"
+						],
+						"event_name": "System",
+						"log_group_name": "TractionTools.v1.5.log.group",
+						"log_stream_name": "System.{instance_id}.logs"
+					},
+					{
+						"event_format": "xml",
+						"event_levels": [
+							"VERBOSE",
+							"INFORMATION",
+							"WARNING",
+							"ERROR",
+							"CRITICAL"
+						],
+						"event_name": "AppTractionTools",
+						"log_group_name": "TractionTools.v1.5.log.group",
+						"log_stream_name": "AppTractionTools.{instance_id}.logs"
+					}
+				]
+			}
+		}
+	},
+	"metrics": {
+		"append_dimensions": {
+			"AutoScalingGroupName": "${aws:AutoScalingGroupName}",
+			"ImageId": "${aws:ImageId}",
+			"InstanceId": "${aws:InstanceId}",
+			"InstanceType": "${aws:InstanceType}"
+		},
+		"metrics_collected": {
+			"LogicalDisk": {
+				"measurement": [
+					"% Free Space"
+				],
+				"metrics_collection_interval": 10,
+				"resources": [
+					"*"
+				]
+			},
+			"Memory": {
+				"measurement": [
+					"% Committed Bytes In Use"
+				],
+				"metrics_collection_interval": 10
+			},
+			"Paging File": {
+				"measurement": [
+					"% Usage"
+				],
+				"metrics_collection_interval": 10,
+				"resources": [
+					"*"
+				]
+			},
+			"PhysicalDisk": {
+				"measurement": [
+					"% Disk Time",
+					"Disk Write Bytes/sec",
+					"Disk Read Bytes/sec",
+					"Disk Writes/sec",
+					"Disk Reads/sec"
+				],
+				"metrics_collection_interval": 10,
+				"resources": [
+					"*"
+				]
+			},
+			"Processor": {
+				"measurement": [
+					"% User Time",
+					"% Idle Time",
+					"% Interrupt Time"
+				],
+				"metrics_collection_interval": 10,
+				"resources": [
+					"*"
+				]
+			},
+			"TCPv4": {
+				"measurement": [
+					"Connections Established"
+				],
+				"metrics_collection_interval": 10
+			},
+			"TCPv6": {
+				"measurement": [
+					"Connections Established"
+				],
+				"metrics_collection_interval": 10
+			},
+			"statsd": {
+				"metrics_aggregation_interval": 60,
+				"metrics_collection_interval": 10,
+				"service_address": ":8125"
+			}
+		}
+	}
+}
